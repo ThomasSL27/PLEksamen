@@ -1,26 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
 @import "tailwindcss";
 
+/* =========================================
+   1) Design tokens (farver + base theme)
+   ========================================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Ensartet mørk baggrund (matcher fx main bg-[#111]) */
+  --background: #111111;
+  --foreground: #ededed;
+
+  /* Brand-farver */
+  --brand-orange: #FF6B00;
+  --brand-orange-light: #FFD8B1;
+
+  /*
+    Fixed nav i TheNav: py-8 + logo h-20 (ca. 9rem samlet).
+    Bruges til padding-top på sidens indhold, så det ikke ligger under navbaren.
+  */
+  --nav-height: 9rem;
 }
 
-@theme inline {
+/* =========================================
+   2) Tailwind v4 theme mapping
+   ========================================= */
+@theme {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-orange-brand: var(--brand-orange);
+  --color-orange-soft: var(--brand-orange-light);
+
+  /* Overskriver Tailwind sans, så hele sitet bruger samme font */
+  --font-sans: "Host Grotesk", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* =========================================
+   3) Globale base styles
+   ========================================= */
+@layer base {
+  /*
+    Både html og body skal have samme baggrund — ellers kan “huller” (fx under fixed nav)
+    afsløre browserens default eller andre lag og ligne en forkert farve (fx blålig tone).
+  */
+  html {
+    background-color: var(--background);
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    /* Sætter baggrund og font globalt, så komponenter er konsistente */
+    background-color: var(--background);
+    font-family: var(--font-sans);
+    @apply antialiased;
+  }
+
+  /* Stor hero-overskrift som standard */
+  h1 {
+    @apply font-bold uppercase tracking-tighter leading-none text-white;
+    @apply text-[3rem] md:text-[7rem] lg:text-[9rem];
+  }
+
+  /* Markerer ord i span med brand-farve i overskrifter */
+  :is(h1, h2, h3, h4, h5) span {
+    @apply text-orange-brand;
+  }
+
+  /* Sekundær overskrift */
+  h2 {
+    @apply mb-6 font-black uppercase tracking-tighter leading-none text-white;
+    @apply text-[1.5rem] md:text-[2rem] lg:text-[3rem];
+  }
+
+  p {
+    @apply text-white leading-relaxed mb-4;
+  }
+
+  /* Ens hover-opførsel på links */
+  a {
+    @apply transition-colors duration-200 hover:text-orange-brand;
+  }
 }
