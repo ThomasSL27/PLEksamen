@@ -189,7 +189,7 @@ export default function TheNav({
                   <Link
                     href={it.link}
                     className="block text-3xl font-black no-underline text-black leading-tight"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={toggleMobileMenu} // Rette-punkt: Lukker menupanelet korrekt via GSAP nu
                     onMouseEnter={(e) => { 
                       (e.currentTarget as HTMLElement).style.color = accentColor; 
                     }}
