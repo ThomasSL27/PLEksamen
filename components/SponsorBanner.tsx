@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+// -------------------------------------------
+// Typer
+// -------------------------------------------
 interface TickerMatch {
   id: string;
   time: string;
@@ -9,6 +12,7 @@ interface TickerMatch {
   stream: string;
 }
 
+// Realistiske testdata til brug ved din eksamensfremvisning
 const FALLBACK_MATCHES: TickerMatch[] = [
   { id: "f1", time: "Kl 19:00", teams: "Sashi vs Ecstatic", stream: "twitch.tv/dust2tv" },
   { id: "f2", time: "Kl 20:00", teams: "Tricked vs Astralis Talent", stream: "twitch.tv/dust2tv" },
@@ -80,6 +84,7 @@ export default function SponsorBanner() {
 
   return (
     <>
+      {/* Horisontal CSS-marquee: ruller fra højre mod venstre */}
       <style>{`
         @keyframes horizontalSlide {
           0% {
@@ -92,34 +97,38 @@ export default function SponsorBanner() {
         .animate-ticker-slide {
           display: flex;
           width: max-content;
-          animation: horizontalSlide 150s linear infinite;
+          animation: horizontalSlide 120s linear infinite;
         }
         .animate-ticker-slide:hover {
           animation-play-state: paused;
         }
       `}</style>
 
+      {/* Sektion – mb-8 sm:mb-12 tilføjet for at genskabe den oprindelige afstand til indholdet under */}
       <aside
-        className="relative flex w-full justify-start border-b border-white/10 bg-[#111111] px-4 py-4 sm:px-6 sm:py-5"
+        className="relative flex w-full justify-between items-center border-b border-white/10 bg-[#111111] overflow-hidden h-24 sm:h-28 mb-8 sm:mb-12"
         aria-label="Sponsorer"
       >
-        {/* Marquee-kampene i baggrunden */}
-        <div className="absolute inset-0 z-0 overflow-hidden flex items-center">
-          {/* Fade-gradient på venstre side så kampene forsvinder ind under banneret */}
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#111111] to-transparent z-20 pointer-events-none" />
-          
-          <div className="animate-ticker-slide gap-12 pl-4">
+        
+        {/* 1. KAMP-TICKER (Z-index 10 - Går uforstyrret helt ind under banneret) */}
+        <div className="absolute inset-0 z-10 flex items-center pl-16 sm:pl-28">
+          <div className="animate-ticker-slide gap-12">
             {marqueeItems.map((match, idx) => (
               <div
                 key={`${match.id}-${idx}`}
                 className="flex flex-col items-start justify-center min-w-[190px] select-none py-1"
               >
+                {/* 1. Tidspunkt (øverst) */}
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-[#FF6B00]">
                   {match.time}
                 </span>
-                <span className="text-sm sm:text-base font-black uppercase tracking-tight text-white mt-1 mb-0.5">
+                
+                {/* 2. Kamp og hold (midten) */}
+                <span className="text-sm sm:text-base font-black uppercase tracking-tight text-white mt-1 mb-0.5 whitespace-nowrap">
                   {match.teams}
                 </span>
+                
+                {/* 3. Stream link (nederst) */}
                 <span className="text-[10px] sm:text-xs font-bold tracking-wide text-[#FFD8B1]/45">
                   {match.stream}
                 </span>
@@ -128,14 +137,22 @@ export default function SponsorBanner() {
           </div>
         </div>
 
-        {/* Sponsor banner på toppen */}
-        <div className="relative z-10">
-          <img
-            src="/powerSponsorBanner.avif"
-            alt="POWER Ligaen sponsor"
-            className="max-h-24 w-auto max-w-full object-contain object-left sm:max-h-28"
+        {/* 2. MØRK MASKE (Z-index 15 - Ligger under sponsoren, men oven på kampene, og stopper midtvejs) */}
+        <div className="absolute inset-y-0 left-0 w-24 sm:w-36 bg-[#111111] z-15 pointer-events-none" />
+        <div className="absolute inset-y-0 left-24 sm:left-36 w-16 bg-gradient-to-r from-[#111111] to-transparent z-15 pointer-events-none" />
+
+        {/* 3. SPONSOR BANNER (Z-index 20 - Placeret yderst til venstre på gennemsigtig baggrund) */}
+        <div className="relative z-20 pl-4 sm:pl-6 flex items-center h-full pointer-events-none">
+          <img 
+            src="/powerSponsorBanner.avif" 
+            alt="POWER Ligaen sponsor" 
+            className="max-h-24 sm:max-h-28 w-auto max-w-full object-contain object-left pointer-events-auto"
           />
         </div>
+
+        {/* Fade-out i højre yderkant af skærmen for perfekt integration */}
+        <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#111111] to-transparent z-30 pointer-events-none" />
+
       </aside>
     </>
   );
