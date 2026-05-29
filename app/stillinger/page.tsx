@@ -52,8 +52,8 @@ function SwissPool({
 }) {
   return (
     <div className="flex flex-col gap-2 w-full">
-      <div className="border border-[#FF6B00]/15 rounded-xl p-3 bg-gradient-to-b from-[#1a1a1a] to-[#0c0c0c] shadow-2xl">
-        <h3 className="text-center text-[10px] font-black text-[#FF6B00] mb-3 uppercase tracking-widest border-b border-[#FF6B00]/10 pb-1.5">
+      <div className="border border-orange-brand/15 rounded-xl p-3 bg-gradient-to-b from-card to-card-deep shadow-2xl">
+        <h3 className="text-center text-[10px] font-black text-orange-brand mb-3 uppercase tracking-widest border-b border-orange-brand/10 pb-1.5">
           {title}
         </h3>
         
@@ -67,7 +67,7 @@ function SwissPool({
           {matches.map((m, i) => (
             <div
               key={i}
-              className="flex items-center justify-between gap-3 bg-[#111111]/60 border border-[#FF6B00]/5 hover:border-[#FF6B00]/30 p-2 rounded-lg transition-all duration-300"
+              className="flex items-center justify-between gap-3 bg-background/60 border border-orange-brand/5 hover:border-orange-brand/30 p-2 rounded-lg transition-all duration-300"
             >
               <div className="h-7 w-7 flex items-center justify-center shrink-0">
                 {m.team1?.logoUrl ? (
@@ -82,7 +82,7 @@ function SwissPool({
                 )}
               </div>
 
-              <span className="text-[9px] font-black text-[#FF6B00]/40 select-none">VS</span>
+              <span className="text-[9px] font-black text-orange-brand/40 select-none">VS</span>
 
               <div className="h-7 w-7 flex items-center justify-center shrink-0">
                 {m.team2?.logoUrl ? (
@@ -114,7 +114,7 @@ function FinalSelection({
   isWinner: boolean;
 }) {
   const borderColor = isWinner ? "border-green-500/30" : "border-red-500/20";
-  const glowShadow = isWinner ? "shadow-[0_0_20px_rgba(34,197,94,0.05)] bg-gradient-to-b from-[#1a2d1d] to-[#111111]" : "shadow-none bg-[#1a1a1a]/40";
+  const glowShadow = isWinner ? "shadow-[0_0_20px_rgba(34,197,94,0.05)] bg-gradient-to-b from-winner to-background" : "shadow-none bg-card/40";
   const badgeColor = isWinner ? "bg-green-500/10 text-green-400 border-green-500/20" : "bg-red-500/10 text-red-500 border-red-500/20";
 
   return (
@@ -160,18 +160,18 @@ function StandingTable({
 }) {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between border-b border-[#FF6B00]/10 pb-2">
+      <div className="flex items-center justify-between border-b border-orange-brand/10 pb-2">
         <h3 className="text-sm font-black text-white uppercase tracking-tight">
           {title}
         </h3>
-        <span className="text-[10px] font-bold text-[#FFD8B1]/45 uppercase tracking-wide">
+        <span className="text-[10px] font-bold text-orange-soft/45 uppercase tracking-wide">
           Sæson Status
         </span>
       </div>
 
-      <div className="border border-[#FF6B00]/10 rounded-xl overflow-hidden bg-gradient-to-b from-[#1a1a1a]/80 to-[#121212]/80 shadow-2xl">
+      <div className="border border-orange-brand/10 rounded-xl overflow-hidden bg-gradient-to-b from-card/80 to-medium/80 shadow-2xl">
         <table className="w-full text-left text-xs">
-          <thead className="text-[#FF6B00] uppercase border-b border-[#FF6B00]/10 bg-[#FF6B00]/5 select-none">
+          <thead className="text-orange-brand uppercase border-b border-orange-brand/10 bg-orange-brand/5 select-none">
             <tr>
               <th className="p-3 w-10 text-center font-black">#</th>
               <th className="p-3">Hold</th>
@@ -185,9 +185,9 @@ function StandingTable({
             {standings.map((s, i) => (
               <tr
                 key={i}
-                className="border-b border-white/[0.02] hover:bg-[#FF6B00]/5 transition-colors duration-200"
+                className="border-b border-white/[0.02] hover:bg-orange-brand/5 transition-colors duration-200"
               >
-                <td className="p-3 text-center font-black text-[#FF6B00]">
+                <td className="p-3 text-center font-black text-orange-brand">
                   {i + 1}
                 </td>
                 <td className="p-3 flex items-center gap-3">
@@ -202,10 +202,10 @@ function StandingTable({
                     {s.team.name}
                   </span>
                 </td>
-                <td className="p-3 text-center text-[#FFD8B1]/80 font-semibold">{s.matches}</td>
-                <td className="p-3 text-center text-[#FFD8B1]/80 font-semibold">{s.wins}</td>
-                <td className="p-3 text-center text-[#FFD8B1]/80 font-semibold">{s.rd}</td>
-                <td className="p-3 text-right font-black pr-4 text-[#FF6B00]">{s.points}</td>
+                <td className="p-3 text-center text-orange-soft/80 font-semibold">{s.matches}</td>
+                <td className="p-3 text-center text-orange-soft/80 font-semibold">{s.wins}</td>
+                <td className="p-3 text-center text-orange-soft/80 font-semibold">{s.rd}</td>
+                <td className="p-3 text-right font-black pr-4 text-orange-brand">{s.points}</td>
               </tr>
             ))}
           </tbody>
@@ -254,10 +254,10 @@ export default function SwissStillinger() {
 
   if (state.status === "loading") {
     return (
-      <main className="min-h-screen bg-[#111111] flex items-center justify-center">
+      <main className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#FF6B00]/20 border-t-[#FF6B00]" />
-          <p className="text-sm text-[#FFD8B1]/60">Henter stillinger for {SEASON_NAME}...</p>
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-brand/20 border-t-orange-brand" />
+          <p className="text-sm text-orange-soft/60">Henter stillinger for {SEASON_NAME}...</p>
         </div>
       </main>
     );
@@ -265,7 +265,7 @@ export default function SwissStillinger() {
 
   if (state.status === "error") {
     return (
-      <main className="min-h-screen bg-[#111111] flex items-center justify-center p-8">
+      <main className="min-h-screen bg-background flex items-center justify-center p-8">
         <p className="text-sm text-red-500">FEJL: {state.message}</p>
       </main>
     );
@@ -279,29 +279,29 @@ export default function SwissStillinger() {
   });
 
   return (
-    <main className="min-h-screen bg-[#111111] text-white font-sans overflow-hidden relative">
+    <main className="min-h-screen bg-background text-white font-sans overflow-hidden relative">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-[#FF6B00] opacity-[0.03] blur-3xl" />
-        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-[#FF6B00] opacity-[0.03] blur-3xl" />
+        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
+        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-10">
         
         {/* HEADER */}
         <header className="mb-12">
-          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-[#FF6B00] sm:text-xs">
+          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Power Ligaen • {SEASON_NAME}
           </p>
           <h1 className="text-4xl font-black uppercase leading-none tracking-tighter text-white sm:text-5xl md:text-6xl">
             Stillinger
           </h1>
-          <div className="mt-2 h-0.5 w-16 rounded-full bg-[#FF6B00] sm:w-20" />
+          <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand sm:w-20" />
         </header>
 
         {/* SWISS SYSTEM BRACKET */}
         <section className="mb-20">
           <div className="mb-6">
-            <h2 className="text-xs font-black uppercase tracking-widest text-[#FF6B00] sm:text-sm">
+            <h2 className="text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
               Swiss Bracket Status
             </h2>
           </div>
@@ -314,8 +314,8 @@ export default function SwissStillinger() {
                 onClick={() => setMobileRound(idx)}
                 className={`flex-shrink-0 px-4 py-2.5 rounded-lg text-xs font-black uppercase tracking-wide transition-all border ${
                   mobileRound === idx
-                    ? "bg-[#FF6B00] text-[#111111] border-[#FF6B00]"
-                    : "bg-[#161616] text-[#FFD8B1]/45 border-[#FF6B00]/10 hover:border-[#FF6B00]/30"
+                    ? "bg-orange-brand text-background border-orange-brand"
+                    : "bg-input text-orange-soft/45 border-orange-brand/10 hover:border-orange-brand/30"
                 }`}
               >
                 {roundName}

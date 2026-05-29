@@ -120,13 +120,13 @@ function FeaturedTeam({
   const activePlayers = team.players.filter((p) => p !== coach);
 
   return (
-    <section className="mb-10 overflow-hidden rounded-2xl border border-[#FF6B00]/25 bg-gradient-to-br from-[#1a1a1a] to-[#0c0c0c] shadow-2xl">
+    <section className="mb-10 overflow-hidden rounded-2xl border border-orange-brand/25 bg-gradient-to-br from-card to-card-deep shadow-2xl">
       {/* Header */}
-      <div className="relative border-b border-[#FF6B00]/15 bg-gradient-to-r from-[#FF6B00]/10 to-transparent p-6 sm:p-8">
+      <div className="relative border-b border-orange-brand/15 bg-gradient-to-r from-orange-brand/10 to-transparent p-6 sm:p-8">
         <button
           onClick={onClose}
           aria-label="Luk holdvisning"
-          className="absolute right-6 top-6 flex h-9 w-9 items-center justify-center rounded-full border border-[#FF6B00]/20 bg-[#111111] text-[#FFD8B1]/60 transition-all hover:border-[#FF6B00]/50 hover:text-white"
+          className="absolute right-6 top-6 flex h-9 w-9 items-center justify-center rounded-full border border-orange-brand/20 bg-background text-orange-soft/60 transition-all hover:border-orange-brand/50 hover:text-white"
         >
           <svg
             className="h-4 w-4"
@@ -145,24 +145,24 @@ function FeaturedTeam({
               <img
                 src={team.logoUrl}
                 alt={`${team.name} logo`}
-                className="h-full w-full object-contain drop-shadow-[0_0_15px_rgba(255,107,0,0.15)]"
+                className="h-full w-full object-contain drop-shadow-[0_0_15px_rgba(var(--brand-orange-rgb),0.15)]"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center rounded-xl bg-[#FF6B00]/10 border border-[#FF6B00]/20">
-                <span className="text-3xl font-black text-[#FF6B00]">
+              <div className="flex h-full w-full items-center justify-center rounded-xl bg-orange-brand/10 border border-orange-brand/20">
+                <span className="text-3xl font-black text-orange-brand">
                   {(team.shortName || team.name).charAt(0)}
                 </span>
               </div>
             )}
           </div>
           <div>
-            <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-[#FF6B00] sm:text-xs">
+            <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
               {team.division} • {SEASON_NAME}
             </p>
             <h2 className="text-3xl font-black uppercase leading-none tracking-tighter text-white sm:text-4xl">
               {team.name}
             </h2>
-            <p className="mt-1.5 text-xs text-[#FFD8B1]/60">
+            <p className="mt-1.5 text-xs text-orange-soft/60">
               {activePlayers.length} spillere{coach ? " • 1 træner" : ""}
             </p>
           </div>
@@ -171,7 +171,7 @@ function FeaturedTeam({
 
       {/* Spillere */}
       <div className="p-6">
-        <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-[#FF6B00] sm:text-sm">
+        <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
           Spillere
         </h3>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 md:gap-4">
@@ -193,12 +193,12 @@ function FeaturedTeam({
 
         {/* Træner */}
         {coach && (
-          <div className="mt-8 border-t border-[#FF6B00]/10 pt-5">
-            <h3 className="mb-3 text-xs font-black uppercase tracking-widest text-[#FF6B00] sm:text-sm">
+          <div className="mt-8 border-t border-orange-brand/10 pt-5">
+            <h3 className="mb-3 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
               Træner
             </h3>
-            <div className="inline-flex items-center gap-3 rounded-lg border border-[#FF6B00]/20 bg-[#1a1a1a]/50 p-3.5 transition-all hover:border-[#FF6B00]/40">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md bg-gradient-to-br from-[#FF6B00]/20 to-[#FF6B00]/5">
+            <div className="inline-flex items-center gap-3 rounded-lg border border-orange-brand/20 bg-card/50 p-3.5 transition-all hover:border-orange-brand/40">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md bg-gradient-to-br from-orange-brand/20 to-orange-brand/5">
                 {coach.image ? (
                   <img
                     src={coach.image}
@@ -206,27 +206,27 @@ function FeaturedTeam({
                     className="h-full w-full object-cover object-top"
                   />
                 ) : (
-                  <DefaultPlayerIcon className="h-6 w-6 text-[#FF6B00]/40" />
+                  <DefaultPlayerIcon className="h-6 w-6 text-orange-brand/40" />
                 )}
               </div>
               <div>
                 <p className="text-sm font-bold text-white">{coach.nickname}</p>
                 {coach.name && (
-                  <p className="text-[10px] text-[#FFD8B1]/50">{coach.name}</p>
+                  <p className="text-[10px] text-orange-soft/50">{coach.name}</p>
                 )}
                 <div className="mt-1 flex items-center gap-2">
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-[#FF6B00]">
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-orange-brand">
                     Coach
                   </p>
                   {coach.age && (
-                    <span className="text-[9px] text-[#FFD8B1]/40">{coach.age} år</span>
+                    <span className="text-[9px] text-orange-soft/40">{coach.age} år</span>
                   )}
                   {coach.twitter && (
                     <a
                       href={getTwitterUrl(coach.twitter)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#FFD8B1]/40 transition-colors hover:text-white"
+                      className="text-orange-soft/40 transition-colors hover:text-white"
                     >
                       <XTwitterIcon className="h-3 w-3" />
                     </a>
@@ -239,17 +239,17 @@ function FeaturedTeam({
 
         {/* Reserves */}
         {activePlayers.length > 5 && (
-          <div className="mt-6 border-t border-[#FF6B00]/10 pt-5">
-            <h3 className="mb-3 text-xs font-black uppercase tracking-widest text-[#FF6B00]/60 sm:text-sm">
+          <div className="mt-6 border-t border-orange-brand/10 pt-5">
+            <h3 className="mb-3 text-xs font-black uppercase tracking-widest text-orange-brand/60 sm:text-sm">
               Udskiftere
             </h3>
             <div className="flex flex-wrap gap-2">
               {activePlayers.slice(5).map((player, idx) => (
                 <div
                   key={`sub-${player.nickname}-${idx}`}
-                  className="flex items-center gap-3 rounded-lg border border-[#FF6B00]/10 bg-[#1a1a1a]/40 px-3.5 py-2.5"
+                  className="flex items-center gap-3 rounded-lg border border-orange-brand/10 bg-card/40 px-3.5 py-2.5"
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded bg-gradient-to-br from-[#FF6B00]/15 to-transparent">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded bg-gradient-to-br from-orange-brand/15 to-transparent">
                     {player.image ? (
                       <img
                         src={player.image}
@@ -257,7 +257,7 @@ function FeaturedTeam({
                         className="h-full w-full object-cover object-top"
                       />
                     ) : (
-                      <DefaultPlayerIcon className="h-4 w-4 text-[#FF6B00]/30" />
+                      <DefaultPlayerIcon className="h-4 w-4 text-orange-brand/30" />
                     )}
                   </div>
                   <div>
@@ -266,7 +266,7 @@ function FeaturedTeam({
                     </span>
                     <div className="flex items-center gap-2">
                       {player.age && (
-                        <span className="text-[9px] text-[#FFD8B1]/40">
+                        <span className="text-[9px] text-orange-soft/40">
                           {player.age} år
                         </span>
                       )}
@@ -275,7 +275,7 @@ function FeaturedTeam({
                           href={getTwitterUrl(player.twitter)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[#FFD8B1]/30 hover:text-white"
+                          className="text-orange-soft/30 hover:text-white"
                         >
                           <XTwitterIcon className="h-2.5 w-2.5" />
                         </a>
@@ -309,8 +309,8 @@ function TeamButton({
       onClick={onClick}
       className={`group flex flex-col items-center justify-between rounded-xl border p-4 transition-all duration-300 w-28 sm:w-36 ${
         isActive
-          ? "border-[#FF6B00] bg-[#FF6B00]/10 shadow-[0_0_16px_rgba(255,107,0,0.15)]"
-          : "border-[#FF6B00]/10 bg-[#1a1a1a] hover:border-[#FF6B00]/40 hover:bg-[#222222]"
+          ? "border-orange-brand bg-orange-brand/10 shadow-[0_0_16px_rgba(var(--brand-orange-rgb),0.15)]"
+          : "border-orange-brand/10 bg-card hover:border-orange-brand/40 hover:bg-card-hover"
       }`}
     >
       <div className="relative h-12 w-12 sm:h-16 sm:w-16 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-105">
@@ -323,7 +323,7 @@ function TeamButton({
             }`}
           />
         ) : (
-          <span className={`text-xl font-black ${isActive ? 'text-[#FF6B00]' : 'text-[#FFD8B1]/50'}`}>
+          <span className={`text-xl font-black ${isActive ? 'text-orange-brand' : 'text-orange-soft/50'}`}>
             {team.shortName.substring(0, 3).toUpperCase()}
           </span>
         )}
@@ -331,7 +331,7 @@ function TeamButton({
 
       <span
         className={`text-2xs sm:text-xs font-black uppercase tracking-wider text-center truncate w-full transition-colors duration-300 ${
-          isActive ? "text-[#FF6B00]" : "text-white group-hover:text-[#FF6B00]"
+          isActive ? "text-orange-brand" : "text-white group-hover:text-orange-brand"
         }`}
       >
         {team.shortName || team.name}
@@ -373,9 +373,9 @@ function SeasonFilter({
     <div ref={dropdownRef} className="relative inline-block">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-lg border border-[#FF6B00]/30 bg-gradient-to-r from-[#FF6B00]/10 to-transparent px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-[#FFD8B1] transition-all hover:border-[#FF6B00]/50 hover:bg-[#FF6B00]/15 sm:px-5 sm:py-3"
+        className="flex items-center gap-2 rounded-lg border border-orange-brand/30 bg-gradient-to-r from-orange-brand/10 to-transparent px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-orange-soft transition-all hover:border-orange-brand/50 hover:bg-orange-brand/15 sm:px-5 sm:py-3"
       >
-        <span className="text-[10px] text-[#FF6B00] sm:text-xs">FILTER</span>
+        <span className="text-[10px] text-orange-brand sm:text-xs">FILTER</span>
         <ChevronIcon
           className={`h-4 w-4 transition-transform duration-300 ${
             isOpen ? "rotate-180" : ""
@@ -384,7 +384,7 @@ function SeasonFilter({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-lg border border-[#FF6B00]/30 bg-[#0d0d0d] shadow-2xl">
+        <div className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-lg border border-orange-brand/30 bg-surface shadow-2xl">
           <div className="max-h-96 overflow-y-auto">
             {seasons.map((season, idx) => (
               <button
@@ -395,8 +395,8 @@ function SeasonFilter({
                 }}
                 className={`block w-full px-4 py-3 text-left text-sm transition-all ${
                   selectedSeason.name === season.name
-                    ? "border-l-2 border-[#FF6B00] bg-[#FF6B00]/10 font-bold text-white"
-                    : "border-l-2 border-transparent text-[#FFD8B1]/70 hover:bg-[#1a1a1a] hover:text-[#FFD8B1]"
+                    ? "border-l-2 border-orange-brand bg-orange-brand/10 font-bold text-white"
+                    : "border-l-2 border-transparent text-orange-soft/70 hover:bg-card hover:text-orange-soft"
                 }`}
               >
                 {season.name}
@@ -504,22 +504,22 @@ export default function HoldPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#111111]">
+    <main className="min-h-screen bg-background">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-[#FF6B00] opacity-[0.04] blur-3xl" />
-        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-[#FF6B00] opacity-[0.03] blur-3xl" />
+        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-orange-brand opacity-[0.04] blur-3xl" />
+        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-10">
         <header className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
           <div>
-            <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-[#FF6B00] sm:text-xs">
+            <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
               Power Ligaen • {SEASON_NAME}
             </p>
             <h1 className="text-4xl font-black uppercase leading-none tracking-tighter text-white sm:text-5xl md:text-6xl">
               Hold
             </h1>
-            <div className="mt-2 h-0.5 w-16 rounded-full bg-[#FF6B00] sm:w-20" />
+            <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand sm:w-20" />
           </div>
 
           {state.status === "ok" && (
@@ -534,8 +534,8 @@ export default function HoldPage() {
         {state.status === "loading" && (
           <div className="flex items-center justify-center py-32">
             <div className="flex flex-col items-center gap-3">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#FF6B00]/20 border-t-[#FF6B00]" />
-              <p className="text-sm text-[#FFD8B1]/60">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-brand/20 border-t-orange-brand" />
+              <p className="text-sm text-orange-soft/60">
                 Henter hold for {SEASON_NAME}…
               </p>
             </div>
@@ -548,7 +548,7 @@ export default function HoldPage() {
               <p className="text-sm text-red-400">FEJL: {state.message}</p>
               <button
                 onClick={() => window.location.reload()}
-                className="mt-3 rounded-full bg-[#FF6B00] px-4 py-1.5 text-xs font-bold text-[#111111]"
+                className="mt-3 rounded-full bg-orange-brand px-4 py-1.5 text-xs font-bold text-background"
               >
                 Prøv igen
               </button>
@@ -564,17 +564,17 @@ export default function HoldPage() {
                 onClose={() => setSelectedTeam(null)}
               />
             ) : (
-              <div className="mb-8 rounded-lg border border-[#FF6B00]/10 bg-[#1a1a1a] p-8 text-center">
-                <p className="text-sm text-[#FFD8B1]/40">
+              <div className="mb-8 rounded-lg border border-orange-brand/10 bg-card p-8 text-center">
+                <p className="text-sm text-orange-soft/40">
                   Vælg et hold nedenfor for at se holdopstillingen
                 </p>
               </div>
             )}
 
             <section>
-              <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-[#FF6B00] sm:text-sm">
+              <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
                 {state.divisionName}{" "}
-                <span className="font-medium normal-case text-[#FFD8B1]/45">
+                <span className="font-medium normal-case text-orange-soft/45">
                   ({state.teams.length} hold)
                 </span>
               </h3>

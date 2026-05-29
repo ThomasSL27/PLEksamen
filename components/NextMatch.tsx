@@ -62,7 +62,7 @@ function PlayerShowcase({
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center pb-12 transition-transform duration-500 group-hover:scale-110">
-            <DefaultPlayerIcon className="h-20 w-20 text-[#FF6B00]/20 animate-pulse" />
+            <DefaultPlayerIcon className="h-20 w-20 text-orange-brand/20 animate-pulse" />
           </div>
         )}
       </div>
@@ -70,7 +70,7 @@ function PlayerShowcase({
       {/* Holdnavn under spilleren med Scramble-reference */}
       <span
         ref={textRef}
-        className="mt-4 text-xs sm:text-sm font-black uppercase tracking-widest text-[#FFD8B1]/90 transition-colors duration-300 group-hover:text-[#FF6B00] z-20 h-5 overflow-hidden block select-none"
+        className="mt-4 text-xs sm:text-sm font-black uppercase tracking-widest text-orange-soft/90 transition-colors duration-300 group-hover:text-orange-brand z-20 h-5 overflow-hidden block select-none"
       >
         {teamName}
       </span>
@@ -214,8 +214,8 @@ export default function NextMatch() {
   if (!players) {
     return (
       <div className="w-full max-w-[480px] p-6 text-sm flex items-center gap-3">
-        <div className="h-4 w-4 animate-spin rounded-full border border-[#FF6B00]/20 border-t-[#FF6B00]" />
-        <span className="text-[#FFD8B1]/65">Henter næste kamp...</span>
+        <div className="h-4 w-4 animate-spin rounded-full border border-orange-brand/20 border-t-orange-brand" />
+        <span className="text-orange-soft/65">Henter næste kamp...</span>
       </div>
     );
   }
@@ -224,9 +224,9 @@ export default function NextMatch() {
     <div className="w-full max-w-[560px] text-white">
       
       {/* Sektion Info – Nu placeret HELT uden for linket for at undgå at dingle/skubbe sig under hover */}
-      <div className="mb-4 flex items-end justify-between gap-4 border-b border-[#FF6B00]/10 pb-3 select-none">
+      <div className="mb-4 flex items-end justify-between gap-4 border-b border-orange-brand/10 pb-3 select-none">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#FF6B00]">POWER Ligaen</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-brand">POWER Ligaen</p>
           <h2 className="text-xl font-black uppercase tracking-tight text-white m-0">Næste kamp</h2>
         </div>
       </div>
@@ -247,7 +247,7 @@ export default function NextMatch() {
             <PlayerShowcase {...players.a} textRef={teamARef} />
 
             {/* Svævende VS-indikator */}
-            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-[#FF6B00]/25 bg-[#111111] text-xs font-black text-[#FF6B00] sm:h-12 sm:w-12 z-25">
+            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-orange-brand/25 bg-background text-xs font-black text-orange-brand sm:h-12 sm:w-12 z-25">
               <span ref={vsTextRef} className="select-none inline-block">
                 (VS)
               </span>

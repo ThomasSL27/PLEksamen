@@ -77,14 +77,14 @@ function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
 
   return (
     <Link href={`/kampe/${match._id}`} className="block">
-      <div className="group overflow-hidden rounded-xl border border-[#FF6B00]/10 bg-[#1a1a1a] p-5 transition-all duration-300 hover:border-[#FF6B00]/40 hover:bg-[#222222] cursor-pointer">
+      <div className="group overflow-hidden rounded-xl border border-orange-brand/10 bg-card p-5 transition-all duration-300 hover:border-orange-brand/40 hover:bg-card-hover cursor-pointer">
         <div className="flex items-center justify-between gap-4 text-center">
           
           {/* Hold 1 */}
           <div className="flex flex-1 flex-col items-center">
             <div
               className={`relative h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center mb-3 transition-all duration-300 group-hover:scale-110 ${
-                isT1Winner ? "drop-shadow-[0_0_12px_rgba(255,107,0,0.6)]" : "opacity-80 group-hover:opacity-100"
+                isT1Winner ? "drop-shadow-[0_0_12px_rgba(var(--brand-orange-rgb),0.6)]" : "opacity-80 group-hover:opacity-100"
               }`}
             >
               <img
@@ -95,7 +95,7 @@ function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
             </div>
             <span 
               className={`text-xs sm:text-sm font-black uppercase truncate w-full transition-colors duration-300 ${
-                isT1Winner ? "text-[#FF6B00]" : "text-white"
+                isT1Winner ? "text-orange-brand" : "text-white"
               }`}
             >
               {t1.shortName}
@@ -107,21 +107,21 @@ function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
             <div className="flex items-center gap-2">
               <span
                 className={`text-2xl font-black tracking-tight ${
-                  isT1Winner ? "text-[#FF6B00]" : "text-white"
+                  isT1Winner ? "text-orange-brand" : "text-white"
                 }`}
               >
                 {match.team1Score ?? 0}
               </span>
-              <span className="text-[#FF6B00]/40 text-lg font-black">-</span>
+              <span className="text-orange-brand/40 text-lg font-black">-</span>
               <span
                 className={`text-2xl font-black tracking-tight ${
-                  isT2Winner ? "text-[#FF6B00]" : "text-white"
+                  isT2Winner ? "text-orange-brand" : "text-white"
                 }`}
               >
                 {match.team2Score ?? 0}
               </span>
             </div>
-            <span className="mt-1 rounded-full bg-[#FF6B00]/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-[#FF6B00]">
+            <span className="mt-1 rounded-full bg-orange-brand/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-orange-brand">
               {match.state === "complete" || match.status === "finished"
                 ? "Slut"
                 : "LIVE"}
@@ -132,7 +132,7 @@ function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
           <div className="flex flex-1 flex-col items-center">
             <div
               className={`relative h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center mb-3 transition-all duration-300 group-hover:scale-110 ${
-                isT2Winner ? "drop-shadow-[0_0_12px_rgba(255,107,0,0.6)]" : "opacity-80 group-hover:opacity-100"
+                isT2Winner ? "drop-shadow-[0_0_12px_rgba(var(--brand-orange-rgb),0.6)]" : "opacity-80 group-hover:opacity-100"
               }`}
             >
               <img
@@ -143,7 +143,7 @@ function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
             </div>
             <span 
               className={`text-xs sm:text-sm font-black uppercase truncate w-full transition-colors duration-300 ${
-                isT2Winner ? "text-[#FF6B00]" : "text-white"
+                isT2Winner ? "text-orange-brand" : "text-white"
               }`}
             >
               {t2.shortName}
@@ -189,9 +189,9 @@ function SeasonFilter({
     <div ref={dropdownRef} className="relative inline-block">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-lg border border-[#FF6B00]/30 bg-gradient-to-r from-[#FF6B00]/10 to-transparent px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-[#FFD8B1] transition-all hover:border-[#FF6B00]/50 hover:bg-[#FF6B00]/15 sm:px-5 sm:py-3"
+        className="flex items-center gap-2 rounded-lg border border-orange-brand/30 bg-gradient-to-r from-orange-brand/10 to-transparent px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-orange-soft transition-all hover:border-orange-brand/50 hover:bg-orange-brand/15 sm:px-5 sm:py-3"
       >
-        <span className="text-[10px] text-[#FF6B00] sm:text-xs">FILTER</span>
+        <span className="text-[10px] text-orange-brand sm:text-xs">FILTER</span>
         <ChevronIcon
           className={`h-4 w-4 transition-transform duration-300 ${
             isOpen ? "rotate-180" : ""
@@ -200,7 +200,7 @@ function SeasonFilter({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-lg border border-[#FF6B00]/30 bg-[#0d0d0d] shadow-2xl">
+        <div className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-lg border border-orange-brand/30 bg-surface shadow-2xl">
           <div className="max-h-96 overflow-y-auto">
             {seasons.map((season, idx) => (
               <button
@@ -211,8 +211,8 @@ function SeasonFilter({
                 }}
                 className={`block w-full px-4 py-3 text-left text-sm transition-all ${
                   selectedSeason.name === season.name
-                    ? "border-l-2 border-[#FF6B00] bg-[#FF6B00]/10 font-bold text-white"
-                    : "border-l-2 border-transparent text-[#FFD8B1]/70 hover:bg-[#1a1a1a] hover:text-[#FFD8B1]"
+                    ? "border-l-2 border-orange-brand bg-orange-brand/10 font-bold text-white"
+                    : "border-l-2 border-transparent text-orange-soft/70 hover:bg-card hover:text-orange-soft"
                 }`}
               >
                 {season.name}
@@ -285,22 +285,22 @@ export default function KampePage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#111111]">
+    <main className="min-h-screen bg-background">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-[#FF6B00] opacity-[0.04] blur-3xl" />
-        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-[#FF6B00] opacity-[0.03] blur-3xl" />
+        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-orange-brand opacity-[0.04] blur-3xl" />
+        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-10">
         <header className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
           <div>
-            <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-[#FF6B00] sm:text-xs">
+            <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
               Power Ligaen • {SEASON_NAME}
             </p>
             <h1 className="text-4xl font-black uppercase leading-none tracking-tighter text-white sm:text-5xl md:text-6xl">
               Kampprogram
             </h1>
-            <div className="mt-2 h-0.5 w-16 rounded-full bg-[#FF6B00] sm:w-20" />
+            <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand sm:w-20" />
           </div>
 
           {state.status === "ok" && (
@@ -315,8 +315,8 @@ export default function KampePage() {
         {state.status === "loading" && (
           <div className="flex items-center justify-center py-32">
             <div className="flex flex-col items-center gap-3">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#FF6B00]/20 border-t-[#FF6B00]" />
-              <p className="text-sm text-[#FFD8B1]/60">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-brand/20 border-t-orange-brand" />
+              <p className="text-sm text-orange-soft/60">
                 Henter kampe for {SEASON_NAME}…
               </p>
             </div>
@@ -329,7 +329,7 @@ export default function KampePage() {
               <p className="text-sm text-red-400">{state.message}</p>
               <button
                 onClick={() => window.location.reload()}
-                className="mt-3 rounded-full bg-[#FF6B00] px-4 py-1.5 text-xs font-bold text-[#111111]"
+                className="mt-3 rounded-full bg-orange-brand px-4 py-1.5 text-xs font-bold text-background"
               >
                 Prøv igen
               </button>
@@ -339,9 +339,9 @@ export default function KampePage() {
 
         {state.status === "ok" && state.selectedSeason && (
           <section>
-            <h2 className="mb-6 text-xs font-black uppercase tracking-widest text-[#FF6B00] sm:text-sm">
+            <h2 className="mb-6 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
               {state.selectedSeason.name}{" "}
-              <span className="font-medium normal-case text-[#FFD8B1]/40">
+              <span className="font-medium normal-case text-orange-soft/40">
                 ({state.selectedSeason.matches?.length || 0} kampe)
               </span>
             </h2>
@@ -355,8 +355,8 @@ export default function KampePage() {
                   />
                 ))
               ) : (
-                <div className="col-span-full rounded-lg border border-[#FF6B00]/10 bg-[#1a1a1a] p-8 text-center">
-                  <p className="text-sm text-[#FFD8B1]/40">
+                <div className="col-span-full rounded-lg border border-orange-brand/10 bg-card p-8 text-center">
+                  <p className="text-sm text-orange-soft/40">
                     Ingen kampe fundet for denne ligaen
                   </p>
                 </div>

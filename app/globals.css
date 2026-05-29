@@ -12,6 +12,21 @@
   /* Brand-farver */
   --brand-orange: #FF6B00;
   --brand-orange-light: #FFD8B1;
+  --brand-orange-rgb: 255, 107, 0;
+
+  /* Mørke baggrundsfarver */
+  --bg-card: #1a1a1a;
+  --bg-card-deep: #0c0c0c;
+  --bg-surface: #0d0d0d;
+  --bg-input: #161616;
+  --bg-hover: #222222;
+  --bg-medium: #121212;
+  --bg-deeper: #0e0e0e;
+  --bg-darkest: #0b0b0b;
+  --bg-card-bottom: #151515;
+  --bg-player: #141414;
+  --bg-player-rgb: 20, 20, 20;
+  --bg-winner: #1a2d1d;
 
   /*
     Fixed nav i TheNav: py-8 + logo h-20 (ca. 9rem samlet).
@@ -25,8 +40,22 @@
    ========================================= */
 @theme {
   --color-background: var(--background);
+  --color-foreground: var(--foreground);
   --color-orange-brand: var(--brand-orange);
   --color-orange-soft: var(--brand-orange-light);
+
+  /* Mørke baggrundsfarver */
+  --color-card: var(--bg-card);
+  --color-card-deep: var(--bg-card-deep);
+  --color-surface: var(--bg-surface);
+  --color-input: var(--bg-input);
+  --color-card-hover: var(--bg-hover);
+  --color-medium: var(--bg-medium);
+  --color-deeper: var(--bg-deeper);
+  --color-darkest: var(--bg-darkest);
+  --color-card-bottom: var(--bg-card-bottom);
+  --color-player: var(--bg-player);
+  --color-winner: var(--bg-winner);
 
   /* Overskriver Tailwind sans, så hele sitet bruger samme font */
   --font-sans: "Host Grotesk", sans-serif;

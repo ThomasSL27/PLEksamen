@@ -32,7 +32,7 @@ export default function RootLayout({
         {/* Nav er fixed — den fjerner sig ikke fra dokumentflow, derfor padding på wrapper. */}
         <TheNav />
         {/* Fast baggrund så intet gennemsigtigt lag “slår igennem” med forkert farve */}
-        <div className="min-h-screen bg-[#111111] pt-[var(--nav-height)]">
+        <div className="min-h-screen bg-background pt-[var(--nav-height)]">
           <SponsorBanner />
           {children}
         </div>

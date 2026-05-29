@@ -2,9 +2,9 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap'; // GSAP bibliotek til smooth animationer
 import Link from 'next/link'; // Next.js Link-komponent til navigation
+import { usePathname } from 'next/navigation'; // Importeres for at finde den aktive rute
 
 // Array med fast definerede navigationsvalgmuligheder
-// Hver objekt indeholder label (navn) og link (rute)
 const NAV_ITEMS = [
   { label: 'FORSIDE', link: '/' },
   { label: 'KAMPE', link: '/kampe' },
@@ -21,12 +21,13 @@ type TheNavProps = {
   colors?: string[];
 };
 
-// TheNav er hovedkomponenten - en responsiv navigationsbalk med desktop-nav og mobile burger-menu
 export default function TheNav({
   logoUrl = './logo.webp',
-  accentColor = '#FF6B00',
-  colors = ['#FFD8B1', '#FF6B00']
+  accentColor = 'var(--brand-orange)',
+  colors = ['var(--brand-orange-light)', 'var(--brand-orange)']
 }: TheNavProps) {
+  const pathname = usePathname(); // Henter den nuværende URL-sti
+  
   // State for at tracke om mobile menu er åben/lukket
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
@@ -116,43 +117,49 @@ export default function TheNav({
         </div>
 
         {/* ========== DESKTOP NAVBAR ========== */}
-        <header className="hidden md:flex relative w-full justify-between items-center px-12 py-6 z-[100]">
-          {/* Desktop Logo */}
+        {/* Tilføjet pb-4 og pt-4 for at balancere det større logo */}
+        <header className="hidden md:flex relative w-full justify-between items-center px-12 py-4 z-[100]">
+          {/* Desktop Logo - Ændret fra h-24 til h-32 */}
           <Link href="/" className="pointer-events-auto flex-shrink-0">
-            <img src={logoUrl} alt="Logo" className="h-24 w-auto" />
+            <img src={logoUrl} alt="Logo" className="h-32 w-auto object-contain" />
           </Link>
           
           {/* Desktop Navigation Links */}
           <nav className="flex items-center gap-12">
             <ul className="list-none flex gap-12 m-0 p-0">
-              {NAV_ITEMS.map((item, idx) => (
-                <li key={idx}>
-                  <Link
-                    href={item.link}
-                    className="text-white text-sm font-bold no-underline transition-colors duration-200"
-                    style={{
-                      letterSpacing: '0.05em'
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.color = accentColor;
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.color = '#ffffff';
-                    }}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+              {NAV_ITEMS.map((item, idx) => {
+                const isActive = pathname === item.link;
+
+                return (
+                  <li key={idx}>
+                    <Link
+                      href={item.link}
+                      className="text-sm font-bold no-underline transition-colors duration-200"
+                      style={{
+                        letterSpacing: '0.05em',
+                        color: isActive ? accentColor : '#ffffff'
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.color = accentColor;
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.color = isActive ? accentColor : '#ffffff';
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
         </header>
 
         {/* ========== MOBILE HEADER ========== */}
-        <header className="md:hidden relative w-full flex justify-between items-center px-8 py-8 z-[100]">
-          {/* Mobile Logo */}
+        <header className="md:hidden relative w-full flex justify-between items-center px-8 py-6 z-[100]">
+          {/* Mobile Logo - Ændret fra h-20 til h-26 */}
           <Link href="/" className="pointer-events-auto">
-            <img src={logoUrl} alt="Logo" className="h-20 w-auto" />
+            <img src={logoUrl} alt="Logo" className="h-26 w-auto object-contain" />
           </Link>
           
           {/* Mobile Menu Toggle Button */}
@@ -184,25 +191,32 @@ export default function TheNav({
         >
           <div className="w-full h-full flex flex-col">
             <ul className="list-none p-0 space-y-4">
-              {NAV_ITEMS.map((it, idx) => (
-                <li key={idx} className="overflow-hidden">
-                  <Link
-                    href={it.link}
-                    className="block text-3xl font-black no-underline text-black leading-tight"
-                    onClick={toggleMobileMenu} // Rette-punkt: Lukker menupanelet korrekt via GSAP nu
-                    onMouseEnter={(e) => { 
-                      (e.currentTarget as HTMLElement).style.color = accentColor; 
-                    }}
-                    onMouseLeave={(e) => { 
-                      (e.currentTarget as HTMLElement).style.color = 'black'; 
-                    }}
-                  >
-                    <span className="sm-panel-itemLabel inline-block">
-                      {it.label}
-                    </span>
-                  </Link>
-                </li>
-              ))}
+              {NAV_ITEMS.map((it, idx) => {
+                const isActive = pathname === it.link;
+
+                return (
+                  <li key={idx} className="overflow-hidden">
+                    <Link
+                      href={it.link}
+                      className="block text-3xl font-black no-underline leading-tight"
+                      style={{
+                        color: isActive ? accentColor : 'black'
+                      }}
+                      onClick={toggleMobileMenu}
+                      onMouseEnter={(e) => { 
+                        (e.currentTarget as HTMLElement).style.color = accentColor; 
+                      }}
+                      onMouseLeave={(e) => { 
+                        (e.currentTarget as HTMLElement).style.color = isActive ? accentColor : 'black'; 
+                      }}
+                    >
+                      <span className="sm-panel-itemLabel inline-block">
+                        {it.label}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </aside>

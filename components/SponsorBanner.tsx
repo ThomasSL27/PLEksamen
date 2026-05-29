@@ -106,7 +106,7 @@ export default function SponsorBanner() {
 
       {/* Sektion – mb-8 sm:mb-12 tilføjet for at genskabe den oprindelige afstand til indholdet under */}
       <aside
-        className="relative flex w-full justify-between items-center border-b border-white/10 bg-[#111111] overflow-hidden h-24 sm:h-28 mb-8 sm:mb-12"
+        className="relative flex w-full justify-between items-center border-b border-white/10 bg-background overflow-hidden h-24 sm:h-28 mb-8 sm:mb-12"
         aria-label="Sponsorer"
       >
         
@@ -119,7 +119,7 @@ export default function SponsorBanner() {
                 className="flex flex-col items-start justify-center min-w-[190px] select-none py-1"
               >
                 {/* 1. Tidspunkt (øverst) */}
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-[#FF6B00]">
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-orange-brand">
                   {match.time}
                 </span>
                 
@@ -129,7 +129,7 @@ export default function SponsorBanner() {
                 </span>
                 
                 {/* 3. Stream link (nederst) */}
-                <span className="text-[10px] sm:text-xs font-bold tracking-wide text-[#FFD8B1]/45">
+                <span className="text-[10px] sm:text-xs font-bold tracking-wide text-orange-soft/45">
                   {match.stream}
                 </span>
               </div>
@@ -138,8 +138,8 @@ export default function SponsorBanner() {
         </div>
 
         {/* 2. MØRK MASKE (Z-index 15 - Ligger under sponsoren, men oven på kampene, og stopper midtvejs) */}
-        <div className="absolute inset-y-0 left-0 w-24 sm:w-36 bg-[#111111] z-15 pointer-events-none" />
-        <div className="absolute inset-y-0 left-24 sm:left-36 w-16 bg-gradient-to-r from-[#111111] to-transparent z-15 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-24 sm:w-36 bg-background z-15 pointer-events-none" />
+        <div className="absolute inset-y-0 left-24 sm:left-36 w-16 bg-gradient-to-r from-background to-transparent z-15 pointer-events-none" />
 
         {/* 3. SPONSOR BANNER (Z-index 20 - Placeret yderst til venstre på gennemsigtig baggrund) */}
         <div className="relative z-20 pl-4 sm:pl-6 flex items-center h-full pointer-events-none">
@@ -151,7 +151,7 @@ export default function SponsorBanner() {
         </div>
 
         {/* Fade-out i højre yderkant af skærmen for perfekt integration */}
-        <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#111111] to-transparent z-30 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-30 pointer-events-none" />
 
       </aside>
     </>

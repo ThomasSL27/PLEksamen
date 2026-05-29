@@ -124,7 +124,7 @@ function VetoSection({ veto, teams }: { veto: Veto[]; teams: Team[] }) {
         const mapText = action.map ? ` ${action.map}` : "";
         return (
           <div key={action._id || idx} className="flex items-start gap-3">
-            <span className="font-bold text-[#FF6B00] text-sm flex-shrink-0 w-6">
+            <span className="font-bold text-orange-brand text-sm flex-shrink-0 w-6">
               {idx + 1}.
             </span>
             <p className="text-sm text-white">
@@ -140,7 +140,7 @@ function VetoSection({ veto, teams }: { veto: Veto[]; teams: Team[] }) {
               >
                 {getVetoTypeLabel(action.type).toLowerCase()}
               </span>
-              <span className="text-[#FFD8B1]/70">{mapText}</span>
+              <span className="text-orange-soft/70">{mapText}</span>
             </p>
           </div>
         );
@@ -163,11 +163,11 @@ function LineupSection({
         {lineup.map((player) => (
           <div
             key={player._id}
-            className="rounded-lg border border-[#FF6B00]/10 bg-[#1a1a1a] p-3"
+            className="rounded-lg border border-orange-brand/10 bg-card p-3"
           >
             <p className="text-xs font-bold text-white">{player.nickname}</p>
             {player.name && (
-              <p className="text-[10px] text-[#FFD8B1]/50">{player.name}</p>
+              <p className="text-[10px] text-orange-soft/50">{player.name}</p>
             )}
           </div>
         ))}
@@ -246,34 +246,34 @@ export default function MatchDetailPage({
   const isComplete = state.status === "ok" ? (state.match.state === "complete" || state.match.status === "finished") : false;
 
   return (
-    <main className="min-h-screen bg-[#111111]">
+    <main className="min-h-screen bg-background">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-[#FF6B00] opacity-[0.04] blur-3xl" />
-        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-[#FF6B00] opacity-[0.03] blur-3xl" />
+        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-orange-brand opacity-[0.04] blur-3xl" />
+        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-10">
         <header className="mb-8">
           <Link
             href="/kampe"
-            className="inline-flex items-center gap-2 text-[#FF6B00] hover:text-[#FFD8B1] transition-colors mb-4 text-sm font-bold"
+            className="inline-flex items-center gap-2 text-orange-brand hover:text-orange-soft transition-colors mb-4 text-sm font-bold"
           >
             <span>←</span> Tilbage til kampprogram
           </Link>
-          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-[#FF6B00] sm:text-xs">
+          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Power Ligaen
           </p>
           <h1 className="text-3xl font-black uppercase tracking-tighter text-white sm:text-4xl">
             Kampdetaljer
           </h1>
-          <div className="mt-2 h-0.5 w-16 rounded-full bg-[#FF6B00] sm:w-20" />
+          <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand sm:w-20" />
         </header>
 
         {state.status === "loading" && (
           <div className="flex items-center justify-center py-32">
             <div className="flex flex-col items-center gap-3">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#FF6B00]/20 border-t-[#FF6B00]" />
-              <p className="text-sm text-[#FFD8B1]/60">Henter kampdetaljler...</p>
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-brand/20 border-t-orange-brand" />
+              <p className="text-sm text-orange-soft/60">Henter kampdetaljler...</p>
             </div>
           </div>
         )}
@@ -284,7 +284,7 @@ export default function MatchDetailPage({
               <p className="font-bold mb-2 text-red-400">FEJL: {state.message}</p>
               <button
                 onClick={() => router.back()}
-                className="mt-3 rounded-full bg-[#FF6B00] px-4 py-1.5 text-xs font-bold text-[#111111]"
+                className="mt-3 rounded-full bg-orange-brand px-4 py-1.5 text-xs font-bold text-background"
               >
                 Gå tilbage
               </button>
@@ -297,11 +297,11 @@ export default function MatchDetailPage({
             
             {/* Unificeret Match Hero - Nu helt svævende uden mørke baggrundskasser */}
             <div className="relative overflow-visible p-2 sm:p-4">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-[#FF6B00] opacity-[0.04] blur-[120px] pointer-events-none" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-orange-brand opacity-[0.04] blur-[120px] pointer-events-none" />
 
               {/* Top Meta info */}
-              <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-[#FF6B00]/10 pb-5 mb-6 sm:mb-8">
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#FF6B00]">
+              <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-orange-brand/10 pb-5 mb-6 sm:mb-8">
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-orange-brand">
                   {state.leagueName}
                 </span>
                 
@@ -309,7 +309,7 @@ export default function MatchDetailPage({
                   <span
                     className={`text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${
                       isComplete
-                        ? "bg-[#FF6B00]/10 text-[#FF6B00] border border-[#FF6B00]/20"
+                        ? "bg-orange-brand/10 text-orange-brand border border-orange-brand/20"
                         : "bg-green-500/10 text-green-400 border border-green-500/20 animate-pulse"
                     }`}
                   >
@@ -317,7 +317,7 @@ export default function MatchDetailPage({
                   </span>
                   
                   {state.match.startDate && (
-                    <span className="text-[11px] font-bold text-[#FFD8B1]/60">
+                    <span className="text-[11px] font-bold text-orange-soft/60">
                       {formatDate(state.match.startDate)}
                     </span>
                   )}
@@ -332,7 +332,7 @@ export default function MatchDetailPage({
                   <div
                     className={`relative h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 flex items-center justify-center mb-4 transition-all duration-300 ${
                       isT1Winner 
-                        ? "drop-shadow-[0_0_24px_rgba(255,107,0,0.6)] scale-105" 
+                        ? "drop-shadow-[0_0_24px_rgba(var(--brand-orange-rgb),0.6)] scale-105" 
                         : isComplete ? "opacity-35" : "opacity-95"
                     }`}
                   >
@@ -344,7 +344,7 @@ export default function MatchDetailPage({
                   </div>
                   <span 
                     className={`text-xl sm:text-2xl font-black uppercase tracking-wide text-center transition-colors duration-300 ${
-                      isT1Winner ? "text-[#FF6B00]" : "text-white"
+                      isT1Winner ? "text-orange-brand" : "text-white"
                     }`}
                   >
                     {t1.name}
@@ -353,21 +353,21 @@ export default function MatchDetailPage({
 
                 {/* VS / Score Centreret */}
                 <div className="flex flex-col items-center py-4 px-6 md:py-0">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF6B00]/40 mb-1">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-orange-brand/40 mb-1">
                     RESULTAT
                   </span>
                   <div className="flex items-center gap-4">
                     <span
                       className={`text-4xl sm:text-5xl md:text-6xl font-black tabular-nums transition-colors duration-300 ${
-                        isT1Winner ? "text-[#FF6B00]" : "text-white"
+                        isT1Winner ? "text-orange-brand" : "text-white"
                       }`}
                     >
                       {state.match.team1Score ?? 0}
                     </span>
-                    <span className="text-3xl sm:text-4xl font-black text-[#FF6B00]/30 select-none">-</span>
+                    <span className="text-3xl sm:text-4xl font-black text-orange-brand/30 select-none">-</span>
                     <span
                       className={`text-4xl sm:text-5xl md:text-6xl font-black tabular-nums transition-colors duration-300 ${
-                        isT2Winner ? "text-[#FF6B00]" : "text-white"
+                        isT2Winner ? "text-orange-brand" : "text-white"
                       }`}
                     >
                       {state.match.team2Score ?? 0}
@@ -380,7 +380,7 @@ export default function MatchDetailPage({
                   <div
                     className={`relative h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 flex items-center justify-center mb-4 transition-all duration-300 ${
                       isT2Winner 
-                        ? "drop-shadow-[0_0_24px_rgba(255,107,0,0.6)] scale-105" 
+                        ? "drop-shadow-[0_0_24px_rgba(var(--brand-orange-rgb),0.6)] scale-105" 
                         : isComplete ? "opacity-35" : "opacity-95"
                     }`}
                   >
@@ -392,7 +392,7 @@ export default function MatchDetailPage({
                   </div>
                   <span 
                     className={`text-xl sm:text-2xl font-black uppercase tracking-wide text-center transition-colors duration-300 ${
-                      isT2Winner ? "text-[#FF6B00]" : "text-white"
+                      isT2Winner ? "text-orange-brand" : "text-white"
                     }`}
                   >
                     {t2.name}
@@ -403,8 +403,8 @@ export default function MatchDetailPage({
 
               {/* Vinder Display i bunden */}
               {state.match.winnerId && (
-                <div className="relative z-10 mt-8 flex justify-center border-t border-[#FF6B00]/5 pt-5">
-                  <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#FFD8B1] bg-[#FF6B00]/10 px-4 py-1.5 rounded-full border border-[#FF6B00]/20">
+                <div className="relative z-10 mt-8 flex justify-center border-t border-orange-brand/5 pt-5">
+                  <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-orange-soft bg-orange-brand/10 px-4 py-1.5 rounded-full border border-orange-brand/20">
                     <span>
                       {state.teams.find((t) => t._id === state.match.winnerId)?.name} vinder kampen
                     </span>
@@ -414,13 +414,13 @@ export default function MatchDetailPage({
             </div>
 
             {/* LIVE KAMP OVERVIEW PLACEHOLDER (Matcher designet 1:1 i bredden) */}
-            <div className="relative overflow-hidden rounded-2xl border border-[#FF6B00]/15 shadow-2xl bg-gradient-to-b from-[#1a1a1a] to-[#111111]">
+            <div className="relative overflow-hidden rounded-2xl border border-orange-brand/15 shadow-2xl bg-gradient-to-b from-card to-background">
               <img
                 src="/placeholderTilKampOverview.png"
                 alt="Live Kamp Overview"
                 className="w-full h-auto object-cover opacity-90 block"
               />
-              <div className="absolute top-4 left-4 rounded-full bg-[#FF6B00]/10 border border-[#FF6B00]/25 px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-[#FF6B00] select-none z-10">
+              <div className="absolute top-4 left-4 rounded-full bg-orange-brand/10 border border-orange-brand/25 px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-orange-brand select-none z-10">
                 LIVE MATCH OVERVIEW
               </div>
             </div>
@@ -430,10 +430,10 @@ export default function MatchDetailPage({
               {/* Veto - Venstre */}
               {state.match.veto && state.match.veto.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-[#FF6B00] mb-2">
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-orange-brand mb-2">
                     Veto
                   </h3>
-                  <div className="rounded-xl border border-[#FF6B00]/10 bg-[#1a1a1a]/40 p-5">
+                  <div className="rounded-xl border border-orange-brand/10 bg-card/40 p-5">
                     <VetoSection veto={state.match.veto} teams={state.teams} />
                   </div>
                 </div>
@@ -442,7 +442,7 @@ export default function MatchDetailPage({
               {/* Maps - Højre med WebP-billeder og demo-logik check */}
               {state.match.maps && state.match.maps.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-[#FF6B00] mb-2">
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-orange-brand mb-2">
                     Maps
                   </h3>
                   <div className="grid grid-cols-1 gap-4">
@@ -453,9 +453,9 @@ export default function MatchDetailPage({
                       return (
                         <div
                           key={idx}
-                          className="relative overflow-hidden rounded-xl border border-[#FF6B00]/15 min-h-[140px] flex flex-col justify-between p-5 transition-all duration-300 hover:border-[#FF6B00]/40"
+                          className="relative overflow-hidden rounded-xl border border-orange-brand/15 min-h-[140px] flex flex-col justify-between p-5 transition-all duration-300 hover:border-orange-brand/40"
                           style={{
-                            backgroundImage: `linear-gradient(to right, rgba(20, 20, 20, 0.95) 45%, rgba(20, 20, 20, 0.3) 100%), url(${mapBg})`,
+                            backgroundImage: `linear-gradient(to right, rgba(var(--bg-player-rgb), 0.95) 45%, rgba(var(--bg-player-rgb), 0.3) 100%), url(${mapBg})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                           }}
@@ -471,17 +471,17 @@ export default function MatchDetailPage({
                             <div className="mt-4 flex items-end justify-between">
                               {/* Scores */}
                               {isPlayed ? (
-                                <div className="inline-flex items-center gap-2.5 bg-[#111111]/90 rounded-lg border border-[#FF6B00]/20 px-3.5 py-1.5 shadow-lg">
+                                <div className="inline-flex items-center gap-2.5 bg-background/90 rounded-lg border border-orange-brand/20 px-3.5 py-1.5 shadow-lg">
                                   <span className="text-sm font-black text-white tabular-nums">
                                     {mapData.team1Score ?? 0}
                                   </span>
-                                  <span className="text-[#FF6B00]/40 text-xs font-black">-</span>
+                                  <span className="text-orange-brand/40 text-xs font-black">-</span>
                                   <span className="text-sm font-black text-white tabular-nums">
                                     {mapData.team2Score ?? 0}
                                   </span>
                                 </div>
                               ) : (
-                                <div className="text-[10px] font-black uppercase tracking-widest bg-black/60 text-[#FFD8B1]/55 px-2.5 py-1.5 rounded">
+                                <div className="text-[10px] font-black uppercase tracking-widest bg-black/60 text-orange-soft/55 px-2.5 py-1.5 rounded">
                                   Ikke spillet
                                 </div>
                               )}
@@ -495,7 +495,7 @@ export default function MatchDetailPage({
                                       href={demo}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="inline-flex items-center text-xs font-bold uppercase tracking-wider text-[#FF6B00] hover:text-[#FFD8B1] transition-colors"
+                                      className="inline-flex items-center text-xs font-bold uppercase tracking-wider text-orange-brand hover:text-orange-soft transition-colors"
                                     >
                                       Download demo
                                     </a>
@@ -515,7 +515,7 @@ export default function MatchDetailPage({
             {/* Lineups */}
             {state.match.lineups && (
               <div className="space-y-4">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-[#FF6B00]">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-orange-brand">
                   Lineups
                 </h3>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

@@ -123,19 +123,19 @@ function PlaylistItem({
         ) : (
           <div className="flex h-full w-full items-center justify-center pb-3">
             <DefaultPlayerIcon className={`h-10 w-10 transition-colors duration-300 ${
-              isActive ? "text-[#FF6B00]" : "text-[#FF6B00]/15 group-hover:text-[#FF6B00]/45"
+              isActive ? "text-orange-brand" : "text-orange-brand/15 group-hover:text-orange-brand/45"
             }`} />
           </div>
         )}
         {/* Blød bund-fade til at smelte bunden af spilleren sammen med baggrunden */}
-        <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-[#111111] to-transparent z-15" />
+        <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-background to-transparent z-15" />
       </div>
 
       {/* Højre side: Teksterne tæt stakket, hvilket danner sin egen form */}
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-center w-full gap-2 mb-1">
           <span className={`text-[9px] font-black uppercase tracking-widest transition-colors duration-300 ${
-            isActive ? "text-[#FF6B00]" : "text-[#FFD8B1]/35 group-hover:text-[#FF6B00]"
+            isActive ? "text-orange-brand" : "text-orange-soft/35 group-hover:text-orange-brand"
           }`}>
             {video.teamName}
           </span>
@@ -144,12 +144,12 @@ function PlaylistItem({
         <span
           ref={nicknameRef}
           className={`text-base font-black uppercase tracking-tight block select-none leading-none transition-colors duration-300 ${
-            isActive ? "text-[#FF6B00]" : "text-white group-hover:text-[#FF6B00]"
+            isActive ? "text-orange-brand" : "text-white group-hover:text-orange-brand"
           }`}
         >
           {video.playerNickname}
         </span>
-        <p className="text-[11px] font-semibold text-[#FFD8B1]/50 truncate mt-1.5 leading-tight">
+        <p className="text-[11px] font-semibold text-orange-soft/50 truncate mt-1.5 leading-tight">
           {video.title}
         </p>
       </div>
@@ -223,18 +223,18 @@ export default function AllstarsHighlights() {
   };
 
   return (
-    <section className="relative w-full font-sans text-[#ededed] py-8 sm:py-12" aria-label="Allstars-highlights">
+    <section className="relative w-full font-sans text-foreground py-8 sm:py-12" aria-label="Allstars-highlights">
       <div className="relative z-10 mx-auto flex w-full flex-col">
         
         {/* Sektionsoverskrift */}
         <div className="mb-8">
-          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#FF6B00] mb-1">
+          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-brand mb-1">
             ALLSTARS HIGHLIGHTS
           </p>
           <h2 className="text-3xl font-black uppercase tracking-tight text-white sm:text-4xl">
             Highlights & Plays
           </h2>
-          <div className="mt-2 h-0.5 w-16 rounded-full bg-[#FF6B00]" />
+          <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand" />
         </div>
 
         {/* Content Layout Grid */}
@@ -242,7 +242,7 @@ export default function AllstarsHighlights() {
           
           {/* Venstre kolonne: Stor Video Player – UDEN AUTOPLAY */}
           <div className="relative lg:col-span-8 flex flex-col justify-center">
-            <div className="relative overflow-hidden rounded-2xl border border-[#FF6B00]/15 bg-[#141414] shadow-2xl transition-all duration-300 hover:border-[#FF6B00]/35 w-full aspect-video">
+            <div className="relative overflow-hidden rounded-2xl border border-orange-brand/15 bg-player shadow-2xl transition-all duration-300 hover:border-orange-brand/35 w-full aspect-video">
               <iframe
                 key={activeVideo.id}
                 src={`https://www.youtube.com/embed/${activeVideo.youtubeId}`}

@@ -94,7 +94,7 @@ export default function PlayerCard({
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group relative h-64 sm:h-72 w-full overflow-hidden rounded-xl border border-[#FF6B00]/15 bg-[#161616] transition-all duration-300 hover:border-[#FF6B00]/50 hover:shadow-[0_0_20px_rgba(255,107,0,0.15)]"
+      className="group relative h-64 sm:h-72 w-full overflow-hidden rounded-xl border border-orange-brand/15 bg-input transition-all duration-300 hover:border-orange-brand/50 hover:shadow-[0_0_20px_rgba(var(--brand-orange-rgb),0.15)]"
     >
       {/* 1. Fast dæmpet holdlogo i baggrunden */}
       {teamLogo && (
@@ -108,7 +108,7 @@ export default function PlayerCard({
         <img 
           src={teamLogo} 
           alt={teamName}
-          className="absolute top-3 right-3 h-10 w-10 object-contain z-5 transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_2px_4px_rgba(255,107,0,0.2)]" 
+          className="absolute top-3 right-3 h-10 w-10 object-contain z-5 transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_2px_4px_rgba(var(--brand-orange-rgb),0.2)]" 
         />
       )}
 
@@ -122,45 +122,45 @@ export default function PlayerCard({
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center pb-6">
-            <DefaultPlayerIcon className="h-14 w-14 text-[#FF6B00]/15" />
+            <DefaultPlayerIcon className="h-14 w-14 text-orange-brand/15" />
           </div>
         )}
-        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#111111] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-background to-transparent" />
       </div>
 
       {/* 4. Standard-bjælke nederst */}
-      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#0e0e0e] to-[#151515] border-t border-[#FF6B00]/10 p-3.5 h-14 flex items-center justify-between z-10 transition-opacity duration-300 group-hover:opacity-0 group-hover:pointer-events-none">
+      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-deeper to-card-bottom border-t border-orange-brand/10 p-3.5 h-14 flex items-center justify-between z-10 transition-opacity duration-300 group-hover:opacity-0 group-hover:pointer-events-none">
         <p className="text-sm font-black uppercase text-white truncate max-w-full">
           {nickname}
         </p>
       </div>
 
       {/* 5. Hover Overlay Panel */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#161616]/40 via-[#111111]/95 to-[#0b0b0b] p-4 flex flex-col justify-end opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-20">
+      <div className="absolute inset-0 bg-gradient-to-b from-input/40 via-background/95 to-darkest p-4 flex flex-col justify-end opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-20">
         <p
           ref={hoverNicknameRef}
-          className="text-base font-black uppercase text-[#FF6B00] mb-0.5 h-6 overflow-hidden select-none"
+          className="text-base font-black uppercase text-orange-brand mb-0.5 h-6 overflow-hidden select-none"
         >
           {nickname}
         </p>
         
         {name && (
-          <p className="text-[10px] text-[#FFD8B1]/45 truncate mb-3">
+          <p className="text-[10px] text-orange-soft/45 truncate mb-3">
             {name}
           </p>
         )}
 
         {/* Holdoplysninger */}
-        <div className="border-t border-[#FF6B00]/15 pt-2.5 flex items-center gap-2 mb-3">
+        <div className="border-t border-orange-brand/15 pt-2.5 flex items-center gap-2 mb-3">
           <div className="min-w-0">
             <p className="text-[10px] font-black uppercase text-white truncate leading-tight">
               {teamName}
             </p>
-            <p className="text-[8px] font-bold text-[#FFD8B1]/35 uppercase tracking-wider truncate leading-tight">
+            <p className="text-[8px] font-bold text-orange-soft/35 uppercase tracking-wider truncate leading-tight">
               {division}
             </p>
             {role && (
-              <p className="text-[8px] font-bold text-[#FF6B00] uppercase tracking-wider truncate leading-tight">
+              <p className="text-[8px] font-bold text-orange-brand uppercase tracking-wider truncate leading-tight">
                 {role}
               </p>
             )}
@@ -169,7 +169,7 @@ export default function PlayerCard({
 
         {/* Alder og Twitter */}
         <div className="flex items-center justify-between border-t border-white/5 pt-2">
-          <span className="text-[10px] font-semibold text-[#FFD8B1]/60">
+          <span className="text-[10px] font-semibold text-orange-soft/60">
             {age ? `${age} år` : "–"}
           </span>
           {twitter ? (
@@ -177,12 +177,12 @@ export default function PlayerCard({
               href={getTwitterUrl(twitter)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-5 w-5 items-center justify-center rounded bg-[#FF6B00]/10 text-[#FFD8B1]/50 hover:bg-[#FF6B00]/20 hover:text-white transition-colors"
+              className="flex h-5 w-5 items-center justify-center rounded bg-orange-brand/10 text-orange-soft/50 hover:bg-orange-brand/20 hover:text-white transition-colors"
             >
               <XTwitterIcon className="h-2.5 w-2.5" />
             </a>
           ) : (
-            <div className="flex h-5 w-5 items-center justify-center rounded bg-[#FF6B00]/5 text-[#FFD8B1]/20">
+            <div className="flex h-5 w-5 items-center justify-center rounded bg-orange-brand/5 text-orange-soft/20">
               <XTwitterIcon className="h-2.5 w-2.5" />
             </div>
           )}

@@ -113,11 +113,11 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
   };
 
   return (
-    <section className="relative w-full bg-[#111111] font-sans text-[#ededed]" aria-labelledby="season31-mvp-heading">
+    <section className="relative w-full bg-background font-sans text-foreground" aria-labelledby="season31-mvp-heading">
       <div className="relative z-10 mx-auto max-w-7xl flex flex-col">
         {/* Sektionsoverskrift */}
         <header className="mb-6">
-          <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-[#FF6B00] sm:text-xs">
+          <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             {SEASON_NAME_PART}
           </p>
           <h2
@@ -126,7 +126,7 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
           >
             Sæsonens MVP
           </h2>
-          <div className="mt-2 h-0.5 w-16 rounded-full bg-[#FF6B00]" />
+          <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand" />
         </header>
 
         {/* Content grid */}
@@ -138,9 +138,9 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
             onMouseLeave={handleMvpMouseLeave}
             className="group relative min-h-0"
           >
-            <div className="relative flex h-full min-h-[220px] flex-col overflow-visible rounded-xl border border-[#FF6B00]/25 bg-gradient-to-br from-[#1a1a1a] to-[#0c0c0c] shadow-xl transition-all duration-300 hover:border-[#FF6B00]/50 hover:shadow-[0_0_24px_rgba(255,107,0,0.08)]">
+            <div className="relative flex h-full min-h-[220px] flex-col overflow-visible rounded-xl border border-orange-brand/25 bg-gradient-to-br from-card to-card-deep shadow-xl transition-all duration-300 hover:border-orange-brand/50 hover:shadow-[0_0_24px_rgba(var(--brand-orange-rgb),0.08)]">
               
-              <div className="relative -mx-px -mt-px h-44 shrink-0 overflow-visible rounded-t-xl bg-gradient-to-br from-[#FF6B00]/25 to-[#FFD8B1]/5 sm:h-52 lg:h-[min(32dvh,260px)]">
+              <div className="relative -mx-px -mt-px h-44 shrink-0 overflow-visible rounded-t-xl bg-gradient-to-br from-orange-brand/25 to-orange-soft/5 sm:h-52 lg:h-[min(32dvh,260px)]">
                 {mvpPlayer.imageUrl ? (
                   <img
                     src={mvpPlayer.imageUrl}
@@ -149,12 +149,12 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <DefaultPlayerIcon className="h-16 w-16 text-[#FF6B00]/20" />
+                    <DefaultPlayerIcon className="h-16 w-16 text-orange-brand/20" />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
 
-                <div className="absolute right-4 top-4 rounded-full bg-[#FF6B00] px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[#111111] shadow-lg">
+                <div className="absolute right-4 top-4 rounded-full bg-orange-brand px-3 py-1 text-[10px] font-black uppercase tracking-widest text-background shadow-lg">
                   MVP
                 </div>
 
@@ -170,7 +170,7 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
               </div>
 
               <div className="flex flex-1 flex-col justify-center p-5">
-                <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-[#FF6B00] sm:text-xs">
+                <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
                   {mvpPlayer.teamName}
                 </p>
                 <h3 
@@ -179,7 +179,7 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
                 >
                   {mvpPlayer.name}
                 </h3>
-                <p className="mt-1.5 text-xs text-[#FFD8B1]/60 leading-relaxed">
+                <p className="mt-1.5 text-xs text-orange-soft/60 leading-relaxed">
                   {[mvpPlayer.fullName, "Sæsonens mest værdifulde spiller"].filter(Boolean).join(" • ")}
                 </p>
               </div>
@@ -189,10 +189,10 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
           {/* Højre side: Beskrivelse og Stats */}
           <div className="flex min-h-0 flex-col justify-center gap-6">
             <div>
-              <h3 className="mb-2 text-xs font-black uppercase tracking-widest text-[#FF6B00] sm:text-sm">
+              <h3 className="mb-2 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
                 Udsagn
               </h3>
-              <p className="text-sm sm:text-base leading-relaxed text-[#ededed]">
+              <p className="text-sm sm:text-base leading-relaxed text-foreground">
                 Vi havde regnet med at vinde. Alt andet ville være en skuffelse.
               </p>
             </div>
@@ -206,12 +206,12 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-lg border border-[#FF6B00]/15 bg-[#1a1a1a] px-3 py-3 text-center transition-all duration-300 hover:border-[#FF6B00]/45"
+                  className="rounded-lg border border-orange-brand/15 bg-card px-3 py-3 text-center transition-all duration-300 hover:border-orange-brand/45"
                 >
-                  <p className="text-xl sm:text-2xl font-black text-[#FF6B00]">
+                  <p className="text-xl sm:text-2xl font-black text-orange-brand">
                     {stat.value}
                   </p>
-                  <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#FFD8B1]/45 mt-0.5">
+                  <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-orange-soft/45 mt-0.5">
                     {stat.label}
                   </p>
                 </div>
@@ -221,8 +221,8 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
         </div>
 
         {/* Holdkammerater sektion */}
-        <div className="mt-2 border-t border-[#FF6B00]/10 pt-6">
-          <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-[#FF6B00] sm:text-xs">
+        <div className="mt-2 border-t border-orange-brand/10 pt-6">
+          <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Holdet
           </p>
           <h3 className="mb-4 text-xl font-black uppercase tracking-tighter text-white">
@@ -324,10 +324,10 @@ export default function Season31Champs() {
 
   if (state.status === "loading") {
     return (
-      <section className="flex py-16 items-center justify-center bg-[#111111] px-4 text-center">
+      <section className="flex py-16 items-center justify-center bg-background px-4 text-center">
         <div className="flex flex-col items-center gap-2">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#FF6B00]/20 border-t-[#FF6B00]" />
-          <p className="text-sm text-[#FFD8B1]/65">Henter Sæson 31 Champions...</p>
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-orange-brand/20 border-t-orange-brand" />
+          <p className="text-sm text-orange-soft/65">Henter Sæson 31 Champions...</p>
         </div>
       </section>
     );
@@ -335,7 +335,7 @@ export default function Season31Champs() {
 
   if (state.status === "error") {
     return (
-      <section className="flex py-16 items-center justify-center bg-[#111111] px-4 text-center">
+      <section className="flex py-16 items-center justify-center bg-background px-4 text-center">
         <p className="text-sm text-red-400">FEJL: {state.message}</p>
       </section>
     );

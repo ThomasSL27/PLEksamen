@@ -124,30 +124,30 @@ export default function SpillerePage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#111111]">
+    <main className="min-h-screen bg-background">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-[#FF6B00] opacity-[0.03] blur-3xl" />
-        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-[#FF6B00] opacity-[0.03] blur-3xl" />
+        <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
+        <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-10">
         
         {/* Header */}
         <header className="mb-8">
-          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-[#FF6B00] sm:text-xs">
+          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Power Ligaen • {SEASON_NAME}
           </p>
           <h1 className="text-4xl font-black uppercase leading-none tracking-tighter text-white sm:text-5xl md:text-6xl">
             Spillerdatabase
           </h1>
-          <div className="mt-2 h-0.5 w-16 rounded-full bg-[#FF6B00] sm:w-20" />
+          <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand sm:w-20" />
         </header>
 
         {state.status === "loading" && (
           <div className="flex items-center justify-center py-32">
             <div className="flex flex-col items-center gap-3">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#FF6B00]/20 border-t-[#FF6B00]" />
-              <p className="text-sm text-[#FFD8B1]/65">Henter alle ligaspillere...</p>
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-brand/20 border-t-orange-brand" />
+              <p className="text-sm text-orange-soft/65">Henter alle ligaspillere...</p>
             </div>
           </div>
         )}
@@ -158,7 +158,7 @@ export default function SpillerePage() {
               <p className="text-sm text-red-400">FEJL: {state.message}</p>
               <button
                 onClick={() => window.location.reload()}
-                className="mt-3 rounded-full bg-[#FF6B00] px-4 py-1.5 text-xs font-bold text-[#111111] uppercase tracking-wider"
+                className="mt-3 rounded-full bg-orange-brand px-4 py-1.5 text-xs font-bold text-background uppercase tracking-wider"
               >
                 Prøv igen
               </button>
@@ -176,12 +176,12 @@ export default function SpillerePage() {
                   placeholder="Søg efter kaldenavn, navn eller hold..."
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
-                  className="w-full rounded-xl border border-[#FF6B00]/20 bg-[#161616] px-5 py-3.5 text-sm font-semibold text-white placeholder-[#FFD8B1]/30 focus:border-[#FF6B00]/65 focus:outline-none focus:ring-1 focus:ring-[#FF6B00]/65 transition-all duration-300"
+                  className="w-full rounded-xl border border-orange-brand/20 bg-input px-5 py-3.5 text-sm font-semibold text-white placeholder-orange-soft/30 focus:border-orange-brand/65 focus:outline-none focus:ring-1 focus:ring-orange-brand/65 transition-all duration-300"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => handleSearchChange("")}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#FF6B00] hover:text-[#FFD8B1]/60 transition-colors uppercase tracking-wider"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-orange-brand hover:text-orange-soft/60 transition-colors uppercase tracking-wider"
                   >
                     Nulstil
                   </button>
@@ -203,11 +203,11 @@ export default function SpillerePage() {
 
               return (
                 <section>
-                  <div className="mb-6 flex justify-between items-end border-b border-[#FF6B00]/10 pb-2">
-                    <h3 className="text-xs font-black uppercase tracking-widest text-[#FF6B00]">
+                  <div className="mb-6 flex justify-between items-end border-b border-orange-brand/10 pb-2">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-orange-brand">
                       Resultater
                     </h3>
-                    <span className="text-xs font-bold text-[#FFD8B1]/45 uppercase tracking-wide">
+                    <span className="text-xs font-bold text-orange-soft/45 uppercase tracking-wide">
                       {filteredPlayers.length} spillere fundet
                     </span>
                   </div>
@@ -237,7 +237,7 @@ export default function SpillerePage() {
                         <div className="mt-10 flex justify-center">
                           <button
                             onClick={() => setDisplayCount((prev) => prev + 20)}
-                            className="rounded-full border border-[#FF6B00]/30 bg-[#FF6B00]/5 hover:bg-[#FF6B00] hover:text-[#111111] px-8 py-3 text-xs font-black uppercase tracking-widest text-[#FF6B00] transition-all duration-300"
+                            className="rounded-full border border-orange-brand/30 bg-orange-brand/5 hover:bg-orange-brand hover:text-background px-8 py-3 text-xs font-black uppercase tracking-widest text-orange-brand transition-all duration-300"
                           >
                             Indlæs flere
                           </button>
@@ -245,8 +245,8 @@ export default function SpillerePage() {
                       )}
                     </>
                   ) : (
-                    <div className="rounded-xl border border-[#FF6B00]/10 bg-[#161616]/40 p-12 text-center">
-                      <p className="text-sm font-bold text-[#FFD8B1]/45 uppercase tracking-widest">
+                    <div className="rounded-xl border border-orange-brand/10 bg-input/40 p-12 text-center">
+                      <p className="text-sm font-bold text-orange-soft/45 uppercase tracking-widest">
                         Ingen spillere matcher din søgning
                       </p>
                     </div>
