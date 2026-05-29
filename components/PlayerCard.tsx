@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
@@ -61,6 +61,7 @@ export default function PlayerCard({
   teamLogo,
   division,
 }: PlayerCardProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const hoverNicknameRef = useRef<HTMLParagraphElement>(null);
 
   const handleMouseEnter = () => {
@@ -94,7 +95,8 @@ export default function PlayerCard({
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group relative h-64 sm:h-72 w-full overflow-hidden rounded-xl border border-orange-brand/15 bg-input transition-all duration-300 hover:border-orange-brand/50 hover:shadow-[0_0_20px_rgba(var(--brand-orange-rgb),0.15)]"
+      onClick={() => setIsOpen(o => !o)}
+      className={`group relative h-64 sm:h-72 w-full overflow-hidden rounded-xl border bg-input transition-all duration-300 cursor-pointer hover:border-orange-brand/50 hover:shadow-[0_0_20px_rgba(var(--brand-orange-rgb),0.15)] ${isOpen ? "border-orange-brand/50 shadow-[0_0_20px_rgba(var(--brand-orange-rgb),0.15)]" : "border-orange-brand/15"}`}
     >
       {/* 1. Fast dæmpet holdlogo i baggrunden */}
       {teamLogo && (
@@ -129,14 +131,14 @@ export default function PlayerCard({
       </div>
 
       {/* 4. Standard-bjælke nederst */}
-      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-deeper to-card-bottom border-t border-orange-brand/10 p-3.5 h-14 flex items-center justify-between z-10 transition-opacity duration-300 group-hover:opacity-0 group-hover:pointer-events-none">
+      <div className={`absolute bottom-0 inset-x-0 bg-gradient-to-t from-deeper to-card-bottom border-t border-orange-brand/10 p-3.5 h-14 flex items-center justify-between z-10 transition-opacity duration-300 group-hover:opacity-0 group-hover:pointer-events-none ${isOpen ? "opacity-0 pointer-events-none" : ""}`}>
         <p className="text-sm font-black uppercase text-white truncate max-w-full">
           {nickname}
         </p>
       </div>
 
       {/* 5. Hover Overlay Panel */}
-      <div className="absolute inset-0 bg-gradient-to-b from-input/40 via-background/95 to-darkest p-4 flex flex-col justify-end opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-20">
+      <div className={`absolute inset-0 bg-gradient-to-b from-input/40 via-background/95 to-darkest p-4 flex flex-col justify-end transition-all duration-300 z-20 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto ${isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-4 pointer-events-none"}`}>
         <p
           ref={hoverNicknameRef}
           className="text-base font-black uppercase text-orange-brand mb-0.5 h-6 overflow-hidden select-none"
