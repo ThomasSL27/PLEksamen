@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 
-// Importér din genanvendelige PlayerCard komponent
 import PlayerCard from "@/components/PlayerCard";
 
 // ==================================================

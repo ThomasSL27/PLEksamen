@@ -223,8 +223,8 @@ export default function NextMatch() {
   return (
     <div className="w-full max-w-[560px] text-white">
       
-      {/* Sektion Info – Nu placeret HELT uden for linket for at undgå at dingle/skubbe sig under hover */}
-      <div className="mb-4 flex items-end justify-between gap-4 border-b border-orange-brand/10 pb-3 select-none">
+      {/* Sektion Info – mb-4 ændret til mb-2 for mindre afstand i bunden */}
+      <div className="mb-2 flex items-end justify-between gap-4 border-b border-orange-brand/10 pb-3 select-none">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-brand">POWER Ligaen</p>
           <h2 className="text-xl font-black uppercase tracking-tight text-white m-0">Næste kamp</h2>
@@ -240,7 +240,8 @@ export default function NextMatch() {
         onMouseLeave={handleWrapperMouseLeave}
         className="group block w-full bg-transparent cursor-pointer no-underline"
       >
-        <div className="relative py-6">
+        {/* py-6 ændret til pt-1 pb-6 for at trække spillerne tættere på overskriften */}
+        <div className="relative pt-1 pb-6">
           <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-8">
 
             {/* Spiller 1 */}

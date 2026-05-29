@@ -10,7 +10,7 @@ export default function Page() {
 
       {/* Hero Sektion */}
       <section className="relative z-10 flex min-h-[80vh] items-center px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-7xl w-full items-center gap-12 pb-12 pt-10 md:pt-16 lg:grid-cols-12 lg:gap-8">
+        <div className="mx-auto grid max-w-7xl w-full items-start gap-12 pb-12 pt-10 md:pt-8 lg:grid-cols-12 lg:gap-8">
           
           {/* Venstre side: Tekst og titler - Nu markant større og uden sidestreg */}
           <div className="flex flex-col justify-center lg:col-span-7">

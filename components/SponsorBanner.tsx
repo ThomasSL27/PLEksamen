@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 // -------------------------------------------
 interface TickerMatch {
   id: string;
+  date: string;
   time: string;
   teams: string;
   stream: string;
@@ -14,11 +15,11 @@ interface TickerMatch {
 
 // Realistiske testdata til brug ved din eksamensfremvisning
 const FALLBACK_MATCHES: TickerMatch[] = [
-  { id: "f1", time: "Kl 19:00", teams: "Sashi vs Ecstatic", stream: "twitch.tv/dust2tv" },
-  { id: "f2", time: "Kl 20:00", teams: "Tricked vs Astralis Talent", stream: "twitch.tv/dust2tv" },
-  { id: "f3", time: "Kl 21:00", teams: "WOPA vs XI Esport", stream: "twitch.tv/dust2tv2" },
-  { id: "f4", time: "Kl 22:00", teams: "Sashi vs Tricked", stream: "twitch.tv/dust2tv" },
-  { id: "f5", time: "Kl 23:00", teams: "Ecstatic vs Astralis Talent", stream: "twitch.tv/dust2tv" },
+  { id: "f1", date: "16. jun", time: "Kl 19:00", teams: "Sashi vs Ecstatic", stream: "twitch.tv/dust2tv" },
+  { id: "f2", date: "16. jun", time: "Kl 20:00", teams: "Tricked vs Astralis Talent", stream: "twitch.tv/dust2tv" },
+  { id: "f3", date: "17. jun", time: "Kl 21:00", teams: "WOPA vs XI Esport", stream: "twitch.tv/dust2tv2" },
+  { id: "f4", date: "17. jun", time: "Kl 22:00", teams: "Sashi vs Tricked", stream: "twitch.tv/dust2tv" },
+  { id: "f5", date: "18. jun", time: "Kl 23:00", teams: "Ecstatic vs Astralis Talent", stream: "twitch.tv/dust2tv" },
 ];
 
 export default function SponsorBanner() {
@@ -48,6 +49,10 @@ export default function SponsorBanner() {
             const t2 = season.teams.find((t: any) => t._id === m.team2);
             
             const dateObj = new Date(m.startDate);
+            const formattedDate = dateObj.toLocaleDateString("da-DK", {
+              day: "numeric",
+              month: "short",
+            });
             const formattedTime = dateObj.toLocaleTimeString("da-DK", {
               hour: "2-digit",
               minute: "2-digit",
@@ -62,6 +67,7 @@ export default function SponsorBanner() {
 
             return {
               id: m._id,
+              date: formattedDate,
               time: `Kl ${formattedTime}`,
               teams: `${t1?.shortName || "Ukendt"} vs ${t2?.shortName || "Ukendt"}`,
               stream: streamUrlClean,
@@ -118,7 +124,11 @@ export default function SponsorBanner() {
                 key={`${match.id}-${idx}`}
                 className="flex flex-col items-start justify-center min-w-[190px] select-none py-1"
               >
-                {/* 1. Tidspunkt (øverst) */}
+                {/* 1. Dato (øverst) */}
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-orange-soft/50">
+                  {match.date}
+                </span>
+                {/* 2. Tidspunkt */}
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-orange-brand">
                   {match.time}
                 </span>
@@ -142,7 +152,7 @@ export default function SponsorBanner() {
         <div className="absolute inset-y-0 left-24 sm:left-36 w-16 bg-gradient-to-r from-background to-transparent z-15 pointer-events-none" />
 
         {/* 3. SPONSOR BANNER (Z-index 20 - Placeret yderst til venstre på gennemsigtig baggrund) */}
-        <div className="relative z-20 pl-4 sm:pl-6 flex items-center h-full pointer-events-none">
+        <div className="relative z-20 flex items-center h-full pointer-events-none">
           <img 
             src="/powerSponsorBanner.avif" 
             alt="POWER Ligaen sponsor" 

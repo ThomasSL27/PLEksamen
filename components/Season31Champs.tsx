@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
-// Importér din genanvendelige PlayerCard komponent
 import PlayerCard from "@/components/PlayerCard";
 
 // Registrer GSAP plugin på klientsiden

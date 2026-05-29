@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { gsap } from "gsap";
 
 // -------------------------------------------
@@ -39,47 +39,45 @@ export default function NewsSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardRef = useRef<HTMLAnchorElement>(null);
   const isAnimating = useRef(false);
+  const pendingDirection = useRef<"left" | "right" | null>(null);
 
-  // Din originale tidslinje-animation med 'xPercent' - optimeret mod React-re-render glitches
-  const animateSlide = (newIndex: number, direction: "left" | "right") => {
-    if (isAnimating.current || !cardRef.current) return;
-    isAnimating.current = true;
+  // Del 2: Køres efter React har committed det nye indhold til DOM
+  useEffect(() => {
+    if (pendingDirection.current === null) return;
+    const direction = pendingDirection.current;
+    pendingDirection.current = null;
+    if (!cardRef.current) return;
 
-    const tl = gsap.timeline({
+    gsap.set(cardRef.current, {
+      xPercent: direction === "left" ? 110 : -110,
+      opacity: 0,
+    });
+    gsap.to(cardRef.current, {
+      xPercent: 0,
+      opacity: 1,
+      duration: 0.5,
+      ease: "power3.out",
       onComplete: () => {
         isAnimating.current = false;
       },
     });
+  }, [currentIndex]);
 
-    // 1. Slide og fade ud
-    tl.to(cardRef.current, {
+  // Del 1: Slide ud, gem retning, opdater state
+  const animateSlide = (newIndex: number, direction: "left" | "right") => {
+    if (isAnimating.current || !cardRef.current) return;
+    isAnimating.current = true;
+
+    gsap.to(cardRef.current, {
       xPercent: direction === "left" ? -110 : 110,
       opacity: 0,
       duration: 0.4,
       ease: "power3.in",
       onComplete: () => {
-        // Opdater indholdet i React midt i tidslinjen
+        pendingDirection.current = direction;
         setCurrentIndex(newIndex);
-        
-        // Flyt det tomme element til den modsatte startside
-        gsap.set(cardRef.current, {
-          xPercent: direction === "left" ? 110 : -110,
-          opacity: 0,
-        });
       },
     });
-
-    // 2. Slide og fade ind til 0 (Med en lille forsinkelse, så React når at tegne det nye billede i kulissen)
-    tl.to(
-      cardRef.current,
-      {
-        xPercent: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power3.out",
-      },
-      "+=0.02" // Forhindrer visuelle hop/glitches ved state-ændring
-    );
   };
 
   const goToSlide = (newIndex: number) => {

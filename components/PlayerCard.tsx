@@ -9,21 +9,6 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrambleTextPlugin);
 }
 
-// -------------------------------------------
-// Typer & Hjælpefunktioner
-// -------------------------------------------
-export interface PlayerCardProps {
-  nickname: string;
-  name?: string;
-  image?: string;
-  role?: string;
-  age?: number | string;
-  twitter?: string;
-  teamName: string;
-  teamLogo: string;
-  division: string;
-}
-
 function XTwitterIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 640 640" fill="currentColor" className={className}>
@@ -38,6 +23,21 @@ function DefaultPlayerIcon({ className = "" }: { className?: string }) {
       <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
     </svg>
   );
+}
+
+// -------------------------------------------
+// Typer & Hjælpefunktioner
+// -------------------------------------------
+export interface PlayerCardProps {
+  nickname: string;
+  name?: string;
+  image?: string;
+  role?: string;
+  age?: number | string;
+  twitter?: string;
+  teamName: string;
+  teamLogo: string;
+  division: string;
 }
 
 function getTwitterUrl(twitter?: string) {
