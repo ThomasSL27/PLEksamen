@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXTwitter, faInstagram, faTwitch, faFacebook } from "@fortawesome/free-brands-svg-icons";
 
 export default function TheFooter() {
   const currentYear = new Date().getFullYear();
@@ -21,18 +23,39 @@ export default function TheFooter() {
             />
           </div>
 
-          {/* En del af Dust2.dk - Justeret py-4 for at matche det større hovedlogo */}
-          <div className="flex items-center gap-3 bg-white/[0.02] border border-white/[0.05] rounded-xl px-5 py-4">
-            <span className="text-xs font-black uppercase tracking-wider text-orange-soft/65">
-              En del af
-            </span>
-            <div className="h-6 w-auto flex items-center shrink-0">
-              <img
-                src="/Dust2DKLogo.png"
-                alt="Dust2.dk Logo"
-                className="h-full w-auto object-contain"
-              />
+          {/* Højre side: Sociale medier + Dust2.dk */}
+          <div className="flex flex-col items-center md:items-end gap-4">
+
+            {/* Sociale medie ikoner */}
+            <div className="flex items-center gap-3">
+              <a href="https://x.com/dust2dk" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-orange-soft/50 transition-all duration-300 hover:border-orange-brand/40 hover:bg-orange-brand/10 hover:text-orange-brand">
+                <FontAwesomeIcon icon={faXTwitter} className="h-4 w-4" />
+              </a>
+              <a href="https://www.instagram.com/dust2dk" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-orange-soft/50 transition-all duration-300 hover:border-orange-brand/40 hover:bg-orange-brand/10 hover:text-orange-brand">
+                <FontAwesomeIcon icon={faInstagram} className="h-4 w-4" />
+              </a>
+              <a href="https://www.twitch.tv/dust2tv" target="_blank" rel="noopener noreferrer" aria-label="Twitch" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-orange-soft/50 transition-all duration-300 hover:border-orange-brand/40 hover:bg-orange-brand/10 hover:text-orange-brand">
+                <FontAwesomeIcon icon={faTwitch} className="h-4 w-4" />
+              </a>
+              <a href="https://www.facebook.com/dust2dk" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-orange-soft/50 transition-all duration-300 hover:border-orange-brand/40 hover:bg-orange-brand/10 hover:text-orange-brand">
+                <FontAwesomeIcon icon={faFacebook} className="h-4 w-4" />
+              </a>
             </div>
+
+            {/* En del af Dust2.dk */}
+            <div className="flex items-center gap-3 bg-white/[0.02] border border-white/[0.05] rounded-xl px-5 py-4">
+              <span className="text-xs font-black uppercase tracking-wider text-orange-soft/65">
+                En del af
+              </span>
+              <div className="h-6 w-auto flex items-center shrink-0">
+                <img
+                  src="/Dust2DKLogo.png"
+                  alt="Dust2.dk Logo"
+                  className="h-full w-auto object-contain"
+                />
+              </div>
+            </div>
+
           </div>
           
         </div>
