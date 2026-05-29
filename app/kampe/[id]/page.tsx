@@ -177,7 +177,7 @@ function LineupSection({
 }
 
 // ==================================================
-// Main Page
+// Main Page (Kampdetaljer)
 // ==================================================
 export default function MatchDetailPage({
   params,
@@ -295,8 +295,8 @@ export default function MatchDetailPage({
         {state.status === "ok" && state.match && t1 && t2 && (
           <section className="space-y-8">
             
-            {/* Unificeret Match Hero Card */}
-            <div className="relative overflow-hidden rounded-2xl border border-[#FF6B00]/15 bg-gradient-to-b from-[#1a1a1a] to-[#141414] p-6 sm:p-10 shadow-2xl">
+            {/* Unificeret Match Hero - Nu helt svævende uden mørke baggrundskasser */}
+            <div className="relative overflow-visible p-2 sm:p-4">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-[#FF6B00] opacity-[0.04] blur-[120px] pointer-events-none" />
 
               {/* Top Meta info */}
@@ -324,16 +324,16 @@ export default function MatchDetailPage({
                 </div>
               </div>
 
-              {/* Kamp Layout */}
+              {/* Kamp Layout - Med markant større logoer */}
               <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">
                 
                 {/* Hold 1 */}
                 <div className="flex flex-col items-center flex-1 w-full md:w-auto">
                   <div
-                    className={`relative h-20 w-20 sm:h-28 sm:w-28 flex items-center justify-center mb-3 transition-all duration-300 ${
+                    className={`relative h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 flex items-center justify-center mb-4 transition-all duration-300 ${
                       isT1Winner 
-                        ? "drop-shadow-[0_0_20px_rgba(255,107,0,0.55)] scale-105" 
-                        : isComplete ? "opacity-40" : "opacity-90"
+                        ? "drop-shadow-[0_0_24px_rgba(255,107,0,0.6)] scale-105" 
+                        : isComplete ? "opacity-35" : "opacity-95"
                     }`}
                   >
                     <img
@@ -343,7 +343,7 @@ export default function MatchDetailPage({
                     />
                   </div>
                   <span 
-                    className={`text-lg sm:text-xl font-black uppercase tracking-wide text-center transition-colors duration-300 ${
+                    className={`text-xl sm:text-2xl font-black uppercase tracking-wide text-center transition-colors duration-300 ${
                       isT1Winner ? "text-[#FF6B00]" : "text-white"
                     }`}
                   >
@@ -358,15 +358,15 @@ export default function MatchDetailPage({
                   </span>
                   <div className="flex items-center gap-4">
                     <span
-                      className={`text-4xl sm:text-5xl font-black tabular-nums transition-colors duration-300 ${
+                      className={`text-4xl sm:text-5xl md:text-6xl font-black tabular-nums transition-colors duration-300 ${
                         isT1Winner ? "text-[#FF6B00]" : "text-white"
                       }`}
                     >
                       {state.match.team1Score ?? 0}
                     </span>
-                    <span className="text-3xl font-black text-[#FF6B00]/30 select-none">-</span>
+                    <span className="text-3xl sm:text-4xl font-black text-[#FF6B00]/30 select-none">-</span>
                     <span
-                      className={`text-4xl sm:text-5xl font-black tabular-nums transition-colors duration-300 ${
+                      className={`text-4xl sm:text-5xl md:text-6xl font-black tabular-nums transition-colors duration-300 ${
                         isT2Winner ? "text-[#FF6B00]" : "text-white"
                       }`}
                     >
@@ -378,10 +378,10 @@ export default function MatchDetailPage({
                 {/* Hold 2 */}
                 <div className="flex flex-col items-center flex-1 w-full md:w-auto">
                   <div
-                    className={`relative h-20 w-20 sm:h-28 sm:w-28 flex items-center justify-center mb-3 transition-all duration-300 ${
+                    className={`relative h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 flex items-center justify-center mb-4 transition-all duration-300 ${
                       isT2Winner 
-                        ? "drop-shadow-[0_0_20px_rgba(255,107,0,0.55)] scale-105" 
-                        : isComplete ? "opacity-40" : "opacity-90"
+                        ? "drop-shadow-[0_0_24px_rgba(255,107,0,0.6)] scale-105" 
+                        : isComplete ? "opacity-35" : "opacity-95"
                     }`}
                   >
                     <img
@@ -391,7 +391,7 @@ export default function MatchDetailPage({
                     />
                   </div>
                   <span 
-                    className={`text-lg sm:text-xl font-black uppercase tracking-wide text-center transition-colors duration-300 ${
+                    className={`text-xl sm:text-2xl font-black uppercase tracking-wide text-center transition-colors duration-300 ${
                       isT2Winner ? "text-[#FF6B00]" : "text-white"
                     }`}
                   >
@@ -411,6 +411,18 @@ export default function MatchDetailPage({
                   </span>
                 </div>
               )}
+            </div>
+
+            {/* LIVE KAMP OVERVIEW PLACEHOLDER (Matcher designet 1:1 i bredden) */}
+            <div className="relative overflow-hidden rounded-2xl border border-[#FF6B00]/15 shadow-2xl bg-gradient-to-b from-[#1a1a1a] to-[#111111]">
+              <img
+                src="/placeholderTilKampOverview.png"
+                alt="Live Kamp Overview"
+                className="w-full h-auto object-cover opacity-90 block"
+              />
+              <div className="absolute top-4 left-4 rounded-full bg-[#FF6B00]/10 border border-[#FF6B00]/25 px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-[#FF6B00] select-none z-10">
+                LIVE MATCH OVERVIEW
+              </div>
             </div>
 
             {/* Veto og Maps */}
@@ -436,7 +448,6 @@ export default function MatchDetailPage({
                   <div className="grid grid-cols-1 gap-4">
                     {state.match.maps.map((mapData, idx) => {
                       const mapBg = getMapImageUrl(mapData.map);
-                      // Et map betragtes som spillet, hvis der er mindst én demo tilknyttet
                       const isPlayed = mapData.demos && mapData.demos.length > 0;
                       
                       return (
@@ -458,7 +469,7 @@ export default function MatchDetailPage({
                             </div>
 
                             <div className="mt-4 flex items-end justify-between">
-                              {/* Scores (Kun hvis spillet ud fra demo check) */}
+                              {/* Scores */}
                               {isPlayed ? (
                                 <div className="inline-flex items-center gap-2.5 bg-[#111111]/90 rounded-lg border border-[#FF6B00]/20 px-3.5 py-1.5 shadow-lg">
                                   <span className="text-sm font-black text-white tabular-nums">
