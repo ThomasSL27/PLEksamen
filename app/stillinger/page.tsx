@@ -14,11 +14,6 @@ interface Team {
   logoUrl: string;
 }
 
-interface SwissMatch {
-  team1: Team | null;
-  team2: Team | null;
-}
-
 interface Standing {
   team: Team;
   matches: number;
@@ -28,13 +23,18 @@ interface Standing {
   points: number;
 }
 
+interface DivisionData {
+  name: string;
+  standings: Standing[];
+}
+
 type FetchState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | {
       status: "ok";
-      teams: Team[];
-      standings: Standing[];
+      grundspilTeams: Team[];
+      divisions: DivisionData[];
     };
 
 // ==================================================
@@ -53,7 +53,7 @@ function SwissPool({
   return (
     <div className="flex flex-col gap-2 w-full">
       <div className="border border-orange-brand/15 rounded-xl p-3 bg-gradient-to-b from-card to-card-deep shadow-2xl">
-        <h3 className="text-center text-[10px] font-black text-orange-brand mb-3 uppercase tracking-widest border-b border-orange-brand/10 pb-1.5">
+        <h3 className="text-center text-label font-black text-orange-brand mb-3 uppercase tracking-widest border-b border-orange-brand/10 pb-1.5">
           {title}
         </h3>
         
@@ -82,7 +82,7 @@ function SwissPool({
                 )}
               </div>
 
-              <span className="text-[9px] font-black text-orange-brand/40 select-none">VS</span>
+              <span className="text-2xs font-black text-orange-brand/40 select-none">VS</span>
 
               <div className="h-7 w-7 flex items-center justify-center shrink-0">
                 {m.team2?.logoUrl ? (
@@ -105,11 +105,9 @@ function SwissPool({
 }
 
 function FinalSelection({
-  title,
   teams,
   isWinner,
 }: {
-  title: string;
   teams: Team[];
   isWinner: boolean;
 }) {
@@ -120,12 +118,9 @@ function FinalSelection({
   return (
     <div className={`border ${borderColor} ${glowShadow} rounded-2xl p-4 w-full shadow-2xl`}>
       <div className="text-center mb-4">
-        <span className={`inline-block text-[9px] font-black uppercase tracking-widest border px-2.5 py-1 rounded-full ${badgeColor}`}>
+        <span className={`inline-block text-2xs font-black uppercase tracking-widest border px-2.5 py-1 rounded-full ${badgeColor}`}>
           {isWinner ? "Kvalificeret • LAN" : "Elimineret"}
         </span>
-        <h3 className="text-center text-[11px] font-black text-white/50 uppercase tracking-wider mt-2">
-          {title}
-        </h3>
       </div>
 
       <div className="grid grid-cols-4 gap-3 justify-center items-center">
@@ -164,7 +159,7 @@ function StandingTable({
         <h3 className="text-sm font-black text-white uppercase tracking-tight">
           {title}
         </h3>
-        <span className="text-[10px] font-bold text-orange-soft/45 uppercase tracking-wide">
+        <span className="text-label font-bold text-orange-soft/45 uppercase tracking-wide">
           Sæson Status
         </span>
       </div>
@@ -228,22 +223,59 @@ export default function SwissStillinger() {
         const res = await fetch(`/api/powerstats?type=${SEASON_ENDPOINT}`);
         const json = await res.json();
 
-        const grundspil = json.data.find((s: any) =>
-          s.name.toLowerCase().includes("grundspil")
+        const allSeasons: any[] = json.data || [];
+
+        const grundspil = allSeasons.find((s: any) =>
+          s.name.toLowerCase().includes("grundspil") &&
+          !s.name.toLowerCase().includes("cepter")
         );
 
-        const teams = grundspil.teams || [];
+        const toTeam = (t: any): Team => ({
+          _id: t._id || "",
+          name: t.name || "Ukendt",
+          shortName: t.shortName || t.name || "???",
+          logoUrl: t.logoUrl || "",
+        });
 
-        const simulatedStandings = teams.map((t: Team) => ({
-          team: t,
-          matches: 0,
-          wins: 0,
-          losses: 0,
-          rd: 0,
-          points: 0,
-        }));
+        const toStanding = (t: any): Standing => ({
+          team: toTeam(t),
+          matches: 0, wins: 0, losses: 0, rd: 0, points: 0,
+        });
 
-        setState({ status: "ok", teams, standings: simulatedStandings });
+        const grundspilTeams: Team[] = (grundspil?.teams || []).map(toTeam);
+
+        // CEPTER division-sæsoner til leaderboards
+        const divisionSeasons = allSeasons.filter((s: any) =>
+          s.name.toLowerCase().includes("cepter") && (s.teams?.length ?? 0) > 0
+        );
+
+        let divisions: DivisionData[];
+
+        if (divisionSeasons.length > 0) {
+          divisions = divisionSeasons.map((s: any) => {
+            // Udtræk kortere navn: "CEPTER Divisionerne Sæson 31 - 1 Division - Grundspil • Sæson 31" → "1 Division"
+            const shortName = s.name
+              .replace(/cepter divisionerne sæson \d+\s*[-–]\s*/i, "")
+              .replace(/\s*[-–]\s*grundspil.*$/i, "")
+              .trim();
+            return {
+              name: shortName || s.name,
+              standings: (s.teams as any[]).map(toStanding),
+            };
+          });
+        } else {
+          // Fallback: opdel grundspil-hold i grupper
+          const chunk = <T,>(arr: T[], size: number): T[][] =>
+            Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
+              arr.slice(i * size, i * size + size)
+            );
+          divisions = chunk(grundspilTeams, 8).map((group, i) => ({
+            name: `Gruppe ${i + 1}`,
+            standings: group.map(team => ({ team, matches: 0, wins: 0, losses: 0, rd: 0, points: 0 })),
+          }));
+        }
+
+        setState({ status: "ok", grundspilTeams, divisions });
       } catch (e) {
         setState({ status: "error", message: "Fejl ved indlæsning af stillinger" });
       }
@@ -271,7 +303,7 @@ export default function SwissStillinger() {
     );
   }
 
-  const t = state.teams;
+  const t = state.grundspilTeams;
 
   const dummyMatch = (idx1: number, idx2: number) => ({
     team1: t[idx1] || null,
@@ -289,7 +321,7 @@ export default function SwissStillinger() {
         
         {/* HEADER */}
         <header className="mb-12">
-          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+          <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Power Ligaen • {SEASON_NAME}
           </p>
           <h1 className="text-4xl font-black uppercase leading-none tracking-tighter text-white sm:text-5xl md:text-6xl">
@@ -349,9 +381,9 @@ export default function SwissStillinger() {
             )}
             {mobileRound === 4 && (
               <div className="flex flex-col gap-6 w-full">
-                <FinalSelection title="Kvalificeret til LAN" teams={t.slice(0, 8)} isWinner={true} />
+                <FinalSelection teams={t.slice(0, 8)} isWinner={true} />
                 <SwissPool title="2:2 • Decider" matches={Array(3).fill(null).map((_, i) => dummyMatch(i, i + 1))} />
-                <FinalSelection title="Ikke kvalificeret" teams={t.slice(8, 16)} isWinner={false} />
+                <FinalSelection teams={t.slice(8, 16)} isWinner={false} />
               </div>
             )}
           </div>
@@ -425,7 +457,6 @@ export default function SwissStillinger() {
             {/* FINALER / STATUS BRACKET */}
             <div className="flex flex-col gap-6 flex-shrink-0">
               <FinalSelection
-                title="Kvalificeret til LAN"
                 teams={t.slice(0, 8)}
                 isWinner={true}
               />
@@ -440,7 +471,6 @@ export default function SwissStillinger() {
               </div>
 
               <FinalSelection
-                title="Ikke kvalificeret"
                 teams={t.slice(8, 16)}
                 isWinner={false}
               />
@@ -450,22 +480,9 @@ export default function SwissStillinger() {
 
         {/* DIVISIONER - STANDINGSTABELLER */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-16">
-          <StandingTable
-            title="Division 1"
-            standings={state.standings.slice(0, 10)}
-          />
-          <StandingTable
-            title="Division 2"
-            standings={state.standings.slice(10, 20)}
-          />
-          <StandingTable
-            title="Division 3"
-            standings={state.standings.slice(20, 30)}
-          />
-          <StandingTable
-            title="Division 4"
-            standings={state.standings.slice(30, 40)}
-          />
+          {state.divisions.map((div, idx) => (
+            <StandingTable key={idx} title={div.name} standings={div.standings} />
+          ))}
         </section>
         
       </div>

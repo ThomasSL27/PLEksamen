@@ -226,7 +226,7 @@ export default function NextMatch() {
       {/* Sektion Info – mb-4 ændret til mb-2 for mindre afstand i bunden */}
       <div className="mb-2 flex items-end justify-between gap-4 border-b border-orange-brand/10 pb-3 select-none">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-brand">POWER Ligaen</p>
+          <p className="text-label font-black uppercase tracking-[0.25em] text-orange-brand">POWER Ligaen</p>
           <h2 className="text-xl font-black uppercase tracking-tight text-white m-0">Næste kamp</h2>
         </div>
       </div>

@@ -8,11 +8,6 @@ import Link from "next/link";
 // ==================================================
 const SEASON_ENDPOINT = "a/31";
 
-// ==================================================
-// Hjælpefunktioner
-// ==================================================
-const toLower = (value?: string) => String(value || "").toLowerCase();
-
 const formatDate = (dateString?: string) => {
   if (!dateString) return "";
   return new Date(dateString).toLocaleDateString("da-DK", {
@@ -24,14 +19,6 @@ const formatDate = (dateString?: string) => {
   });
 };
 
-const formatTime = (timeString?: string) => {
-  if (!timeString) return "";
-  return new Date(timeString).toLocaleTimeString("da-DK", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
-};
 
 const getVetoTypeLabel = (type: string) => {
   const labels: Record<string, string> = {
@@ -167,7 +154,7 @@ function LineupSection({
           >
             <p className="text-xs font-bold text-white">{player.nickname}</p>
             {player.name && (
-              <p className="text-[10px] text-orange-soft/50">{player.name}</p>
+              <p className="text-label text-orange-soft/50">{player.name}</p>
             )}
           </div>
         ))}
@@ -260,7 +247,7 @@ export default function MatchDetailPage({
           >
             <span>←</span> Tilbage til kampprogram
           </Link>
-          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+          <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Power Ligaen
           </p>
           <h1 className="text-3xl font-black uppercase tracking-tighter text-white sm:text-4xl">
@@ -301,13 +288,13 @@ export default function MatchDetailPage({
 
               {/* Top Meta info */}
               <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-orange-brand/10 pb-5 mb-6 sm:mb-8">
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-orange-brand">
+                <span className="text-label sm:text-xs font-black uppercase tracking-widest text-orange-brand">
                   {state.leagueName}
                 </span>
                 
                 <div className="flex items-center gap-3">
                   <span
-                    className={`text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${
+                    className={`text-2xs sm:text-label font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${
                       isComplete
                         ? "bg-orange-brand/10 text-orange-brand border border-orange-brand/20"
                         : "bg-green-500/10 text-green-400 border border-green-500/20 animate-pulse"
@@ -317,7 +304,7 @@ export default function MatchDetailPage({
                   </span>
                   
                   {state.match.startDate && (
-                    <span className="text-[11px] font-bold text-orange-soft/60">
+                    <span className="text-caption font-bold text-orange-soft/60">
                       {formatDate(state.match.startDate)}
                     </span>
                   )}
@@ -353,7 +340,7 @@ export default function MatchDetailPage({
 
                 {/* VS / Score Centreret */}
                 <div className="flex flex-col items-center py-4 px-6 md:py-0">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-orange-brand/40 mb-1">
+                  <span className="text-label font-bold uppercase tracking-widest text-orange-brand/40 mb-1">
                     RESULTAT
                   </span>
                   <div className="flex items-center gap-4">
@@ -420,7 +407,7 @@ export default function MatchDetailPage({
                 alt="Live Kamp Overview"
                 className="w-full h-auto object-cover opacity-90 block"
               />
-              <div className="absolute top-4 left-4 rounded-full bg-orange-brand/10 border border-orange-brand/25 px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-orange-brand select-none z-10">
+              <div className="absolute top-4 left-4 rounded-full bg-orange-brand/10 border border-orange-brand/25 px-3 py-1.5 text-2xs font-black uppercase tracking-widest text-orange-brand select-none z-10">
                 LIVE MATCH OVERVIEW
               </div>
             </div>
@@ -481,7 +468,7 @@ export default function MatchDetailPage({
                                   </span>
                                 </div>
                               ) : (
-                                <div className="text-[10px] font-black uppercase tracking-widest bg-black/60 text-orange-soft/55 px-2.5 py-1.5 rounded">
+                                <div className="text-label font-black uppercase tracking-widest bg-black/60 text-orange-soft/55 px-2.5 py-1.5 rounded">
                                   Ikke spillet
                                 </div>
                               )}

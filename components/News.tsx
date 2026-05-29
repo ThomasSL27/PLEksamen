@@ -130,7 +130,7 @@ export default function NewsSlider() {
               />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card" />
               <div className="absolute left-4 top-4">
-                <span className="inline-block rounded-full bg-orange-brand/10 border border-orange-brand/25 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-orange-brand sm:text-[10px]">
+                <span className="inline-block rounded-full bg-orange-brand/10 border border-orange-brand/25 px-3 py-1 text-2xs font-black uppercase tracking-widest text-orange-brand sm:text-label">
                   {currentItem.category}
                 </span>
               </div>
@@ -144,7 +144,7 @@ export default function NewsSlider() {
 
             {/* Højre side/indhold */}
             <div className="relative z-10 flex flex-1 flex-col justify-center p-6 sm:p-8 lg:p-10">
-              <span className="mb-3 inline-block w-fit rounded-full bg-orange-brand/10 border border-orange-brand/25 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-orange-brand sm:hidden">
+              <span className="mb-3 inline-block w-fit rounded-full bg-orange-brand/10 border border-orange-brand/25 px-3 py-1 text-2xs font-black uppercase tracking-widest text-orange-brand sm:hidden">
                 {currentItem.category}
               </span>
               <h3 className="mb-3 text-xl font-black uppercase leading-tight tracking-tighter text-white transition-colors duration-300 group-hover:text-orange-brand sm:text-2xl lg:text-3xl max-w-lg">
@@ -154,10 +154,10 @@ export default function NewsSlider() {
                 {currentItem.excerpt}
               </p>
               <div className="mt-4 flex items-center justify-between border-t border-orange-brand/5 pt-4">
-                <span className="text-[11px] font-bold text-orange-brand/70 sm:text-xs tracking-wider">
+                <span className="text-caption font-bold text-orange-brand/70 sm:text-xs tracking-wider">
                   {currentItem.date}
                 </span>
-                <span className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-orange-soft/75 transition-colors duration-300 group-hover:text-orange-brand sm:text-xs">
+                <span className="flex items-center gap-1.5 text-caption font-black uppercase tracking-wider text-orange-soft/75 transition-colors duration-300 group-hover:text-orange-brand sm:text-xs">
                   Læs mere
                   <svg
                     className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"

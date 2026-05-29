@@ -59,6 +59,16 @@
 
   /* Overskriver Tailwind sans, så hele sitet bruger samme font */
   --font-sans: "Host Grotesk", sans-serif;
+
+  /* -----------------------------------------------
+     Typografi-skala (manglende Tailwind størrelser)
+     text-2xs  = 9px  → badges, VS-labels, micro
+     text-label = 10px → sektionspræfikser, labels
+     text-caption = 11px → undertekster, meta-info
+  ----------------------------------------------- */
+  --font-size-2xs: 0.5625rem;
+  --font-size-label: 0.625rem;
+  --font-size-caption: 0.6875rem;
 }
 
 /* =========================================

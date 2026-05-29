@@ -51,7 +51,7 @@ export default function OmPage() {
         
         {/* Sektionsoverskrift */}
         <header className="mb-12">
-          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+          <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Power Ligaen • Information
           </p>
           <h1 className="text-4xl font-black uppercase leading-none tracking-tighter text-white sm:text-5xl md:text-6xl">
@@ -79,7 +79,7 @@ export default function OmPage() {
 
           {/* 2. Præmiepulje Highlight (Fremhævet råt og markant) */}
           <section className="border-t border-orange-brand/10 pt-10">
-            <p className="text-[10px] font-black uppercase tracking-widest text-orange-brand mb-2">
+            <p className="text-label font-black uppercase tracking-widest text-orange-brand mb-2">
               Sæsonens samlede præmiepulje
             </p>
             <h2 className="text-5xl sm:text-7xl font-black uppercase tracking-tighter text-white leading-none">
@@ -97,32 +97,32 @@ export default function OmPage() {
             <div className="space-y-4">
               <div className="border-b border-orange-brand/10 pb-2">
                 <h3 className="text-lg font-black uppercase tracking-tight text-white">Power Ligaen</h3>
-                <p className="text-[9px] font-bold text-orange-soft/40 uppercase tracking-widest">Hovedturnering • 100.000 KR.</p>
+                <p className="text-2xs font-bold text-orange-soft/40 uppercase tracking-widest">Hovedturnering • 100.000 KR.</p>
               </div>
               <ul className="space-y-2.5 text-xs sm:text-sm">
                 <li className="flex justify-between items-center text-white font-black uppercase pb-1.5 border-b border-white/[0.03]">
                   <span>1. plads</span>
-                  <span className="text-orange-brand">40.000 KR. <span className="text-[10px] text-orange-soft/55">+ 5.000 kr. i club share</span></span>
+                  <span className="text-orange-brand">40.000 KR. <span className="text-label text-orange-soft/55">+ 5.000 kr. i club share</span></span>
                 </li>
                 <li className="flex justify-between items-center text-white/90 pb-1.5 border-b border-white/[0.03]">
                   <span>2. plads</span>
-                  <span>15.000 KR. <span className="text-[10px] text-orange-soft/45">+ 5.000 kr. i club share</span></span>
+                  <span>15.000 KR. <span className="text-label text-orange-soft/45">+ 5.000 kr. i club share</span></span>
                 </li>
                 <li className="flex justify-between items-center text-white/80 pb-1.5 border-b border-white/[0.03]">
                   <span>3. plads</span>
-                  <span>5.000 KR. <span className="text-[10px] text-orange-soft/45">+ 5.000 kr. i club share</span></span>
+                  <span>5.000 KR. <span className="text-label text-orange-soft/45">+ 5.000 kr. i club share</span></span>
                 </li>
                 <li className="flex justify-between items-center text-white/70 pb-1.5 border-b border-white/[0.03]">
                   <span>4. plads</span>
-                  <span>5.000 KR. <span className="text-[10px] text-orange-soft/45">i club share</span></span>
+                  <span>5.000 KR. <span className="text-label text-orange-soft/45">i club share</span></span>
                 </li>
                 <li className="flex justify-between items-center text-white/60 pb-1.5 border-b border-white/[0.03]">
                   <span>5.-6. plads</span>
-                  <span>5.000 KR. <span className="text-[10px] text-orange-soft/45">i club share</span></span>
+                  <span>5.000 KR. <span className="text-label text-orange-soft/45">i club share</span></span>
                 </li>
                 <li className="flex justify-between items-center text-white/50 pb-1.5">
                   <span>7.-8. plads</span>
-                  <span>5.000 KR. <span className="text-[10px] text-orange-soft/45">i club share</span></span>
+                  <span>5.000 KR. <span className="text-label text-orange-soft/45">i club share</span></span>
                 </li>
               </ul>
             </div>
@@ -131,7 +131,7 @@ export default function OmPage() {
             <div className="space-y-4">
               <div className="border-b border-orange-brand/10 pb-2">
                 <h3 className="text-lg font-black uppercase tracking-tight text-white">Divisionerne</h3>
-                <p className="text-[9px] font-bold text-orange-soft/40 uppercase tracking-widest">CEPTER divisioner • 60.000 KR.</p>
+                <p className="text-2xs font-bold text-orange-soft/40 uppercase tracking-widest">CEPTER divisioner • 60.000 KR.</p>
               </div>
               <ul className="space-y-3.5 text-xs sm:text-sm">
                 <li className="flex flex-col gap-0.5 pb-1.5 border-b border-white/[0.03]">
@@ -144,19 +144,19 @@ export default function OmPage() {
                 <li className="flex flex-col gap-0.5 pb-1.5 border-b border-white/[0.03]">
                   <span className="font-black text-white uppercase text-xs">2. Division A/B</span>
                   <div className="flex justify-between text-orange-soft/80">
-                    <span>1. plads: 5.000 KR. <span className="text-[10px] text-orange-soft/45">(per div)</span></span>
+                    <span>1. plads: 5.000 KR. <span className="text-label text-orange-soft/45">(per div)</span></span>
                   </div>
                 </li>
                 <li className="flex flex-col gap-0.5 pb-1.5 border-b border-white/[0.03]">
                   <span className="font-black text-white uppercase text-xs">3. Division A/B/C/D</span>
                   <div className="flex justify-between text-orange-soft/80">
-                    <span>1. plads: 4.500 KR. <span className="text-[10px] text-orange-soft/45">(per div)</span></span>
+                    <span>1. plads: 4.500 KR. <span className="text-label text-orange-soft/45">(per div)</span></span>
                   </div>
                 </li>
                 <li className="flex flex-col gap-0.5">
                   <span className="font-black text-white uppercase text-xs">4. Division A/B/C/D</span>
                   <div className="flex justify-between text-orange-soft/80">
-                    <span>1. plads: 3.500 KR. <span className="text-[10px] text-orange-soft/45">(per div)</span></span>
+                    <span>1. plads: 3.500 KR. <span className="text-label text-orange-soft/45">(per div)</span></span>
                   </div>
                 </li>
               </ul>

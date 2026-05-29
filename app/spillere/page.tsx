@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// Importér din genanvendelige PlayerCard komponent
 import PlayerCard from "@/components/PlayerCard";
+import { toLower } from "@/lib/utils";
 
 // ==================================================
 // Typer
@@ -35,11 +35,6 @@ type FetchState =
 // ==================================================
 const SEASON_ENDPOINT = "a/31";
 const SEASON_NAME = "Sæson 31";
-
-// ==================================================
-// Hjælpefunktioner
-// ==================================================
-const toLower = (value?: string) => String(value || "").toLowerCase();
 
 function mapAllPlayersFromSeasons(seasons: Season[]): PlayerData[] {
   const playersList: PlayerData[] = [];
@@ -134,7 +129,7 @@ export default function SpillerePage() {
         
         {/* Header */}
         <header className="mb-8">
-          <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+          <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Power Ligaen • {SEASON_NAME}
           </p>
           <h1 className="text-4xl font-black uppercase leading-none tracking-tighter text-white sm:text-5xl md:text-6xl">

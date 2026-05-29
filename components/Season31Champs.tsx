@@ -116,7 +116,7 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
       <div className="relative z-10 mx-auto max-w-7xl flex flex-col">
         {/* Sektionsoverskrift */}
         <header className="mb-6">
-          <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+          <p className="mb-0.5 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             {SEASON_NAME_PART}
           </p>
           <h2
@@ -153,7 +153,7 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
 
-                <div className="absolute right-4 top-4 rounded-full bg-orange-brand px-3 py-1 text-[10px] font-black uppercase tracking-widest text-background shadow-lg">
+                <div className="absolute right-4 top-4 rounded-full bg-orange-brand px-3 py-1 text-label font-black uppercase tracking-widest text-background shadow-lg">
                   MVP
                 </div>
 
@@ -169,7 +169,7 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
               </div>
 
               <div className="flex flex-1 flex-col justify-center p-5">
-                <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+                <p className="mb-0.5 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
                   {mvpPlayer.teamName}
                 </p>
                 <h3 
@@ -210,7 +210,7 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
                   <p className="text-xl sm:text-2xl font-black text-orange-brand">
                     {stat.value}
                   </p>
-                  <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-orange-soft/45 mt-0.5">
+                  <p className="text-2xs sm:text-label font-bold uppercase tracking-wider text-orange-soft/45 mt-0.5">
                     {stat.label}
                   </p>
                 </div>
@@ -221,7 +221,7 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
 
         {/* Holdkammerater sektion */}
         <div className="mt-2 border-t border-orange-brand/10 pt-6">
-          <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+          <p className="mb-0.5 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Holdet
           </p>
           <h3 className="mb-4 text-xl font-black uppercase tracking-tighter text-white">

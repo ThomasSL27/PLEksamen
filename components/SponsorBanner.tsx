@@ -125,11 +125,11 @@ export default function SponsorBanner() {
                 className="flex flex-col items-start justify-center min-w-[190px] select-none py-1"
               >
                 {/* 1. Dato (øverst) */}
-                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-orange-soft/50">
+                <span className="text-2xs sm:text-label font-bold uppercase tracking-wider text-orange-soft/50">
                   {match.date}
                 </span>
                 {/* 2. Tidspunkt */}
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-orange-brand">
+                <span className="text-label sm:text-xs font-black uppercase tracking-wider text-orange-brand">
                   {match.time}
                 </span>
                 
@@ -139,7 +139,7 @@ export default function SponsorBanner() {
                 </span>
                 
                 {/* 3. Stream link (nederst) */}
-                <span className="text-[10px] sm:text-xs font-bold tracking-wide text-orange-soft/45">
+                <span className="text-label sm:text-xs font-bold tracking-wide text-orange-soft/45">
                   {match.stream}
                 </span>
               </div>

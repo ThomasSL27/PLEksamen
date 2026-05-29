@@ -134,7 +134,7 @@ function PlaylistItem({
       {/* Højre side: Teksterne tæt stakket, hvilket danner sin egen form */}
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-center w-full gap-2 mb-1">
-          <span className={`text-[9px] font-black uppercase tracking-widest transition-colors duration-300 ${
+          <span className={`text-2xs font-black uppercase tracking-widest transition-colors duration-300 ${
             isActive ? "text-orange-brand" : "text-orange-soft/35 group-hover:text-orange-brand"
           }`}>
             {video.teamName}
@@ -149,7 +149,7 @@ function PlaylistItem({
         >
           {video.playerNickname}
         </span>
-        <p className="text-[11px] font-semibold text-orange-soft/50 truncate mt-1.5 leading-tight">
+        <p className="text-caption font-semibold text-orange-soft/50 truncate mt-1.5 leading-tight">
           {video.title}
         </p>
       </div>
@@ -228,7 +228,7 @@ export default function AllstarsHighlights() {
         
         {/* Sektionsoverskrift */}
         <div className="mb-8">
-          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-brand mb-1">
+          <p className="text-label font-black uppercase tracking-[0.25em] text-orange-brand mb-1">
             ALLSTARS HIGHLIGHTS
           </p>
           <h2 className="text-3xl font-black uppercase tracking-tight text-white sm:text-4xl">

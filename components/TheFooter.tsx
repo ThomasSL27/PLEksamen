@@ -93,22 +93,22 @@ export default function TheFooter() {
           {/* Links i højre side */}
           <div className="lg:col-span-4 flex justify-start lg:justify-end">
             <div className="flex flex-wrap gap-4 text-orange-soft/40">
-              <Link href="/" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-[10px]">
+              <Link href="/" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
                 Forside
               </Link>
-              <Link href="/kampe" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-[10px]">
+              <Link href="/kampe" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
                 Kampe
               </Link>
-              <Link href="/stillinger" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-[10px]">
+              <Link href="/stillinger" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
                 Stillinger
               </Link>
-              <Link href="/hold" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-[10px]">
+              <Link href="/hold" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
                 Hold
               </Link>
-              <Link href="/spillere" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-[10px]">
+              <Link href="/spillere" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
                 Spillere
               </Link>
-              <Link href="/om" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-[10px]">
+              <Link href="/om" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
                 Om
               </Link>
             </div>
@@ -148,14 +148,14 @@ export default function TheFooter() {
                 <img src="/stopSpillet.png" alt="StopSpillet" className="h-full w-auto object-contain" />
               </a>
               
-              <span className="text-[10px] font-black tracking-widest bg-white/5 text-orange-soft/40 border border-white/10 px-3 py-1.5 rounded-full uppercase">
+              <span className="text-label font-black tracking-widest bg-white/5 text-orange-soft/40 border border-white/10 px-3 py-1.5 rounded-full uppercase">
                 18+ • Regler og vilkår gælder
               </span>
             </div>
           </div>
 
           <div className="lg:col-span-4 flex items-center justify-start lg:justify-end lg:pt-2">
-            <p className="text-[10px] font-bold tracking-widest text-orange-soft/20 uppercase text-left lg:text-right">
+            <p className="text-label font-bold tracking-widest text-orange-soft/20 uppercase text-left lg:text-right">
               &copy; {currentYear} POWER Ligaen. Alle rettigheder forbeholdes.
             </p>
           </div>

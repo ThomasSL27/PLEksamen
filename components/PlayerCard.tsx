@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import { getTwitterUrl } from "@/lib/utils";
 
 // Registrer GSAP plugin (kun på klientsiden)
 if (typeof window !== "undefined") {
@@ -38,13 +39,6 @@ export interface PlayerCardProps {
   teamName: string;
   teamLogo: string;
   division: string;
-}
-
-function getTwitterUrl(twitter?: string) {
-  if (!twitter) return "";
-  return twitter.startsWith("http")
-    ? twitter
-    : `https://x.com/${twitter.replace("@", "")}`;
 }
 
 // -------------------------------------------
@@ -147,7 +141,7 @@ export default function PlayerCard({
         </p>
         
         {name && (
-          <p className="text-[10px] text-orange-soft/45 truncate mb-3">
+          <p className="text-xs text-orange-soft/45 leading-tight line-clamp-2 mb-3">
             {name}
           </p>
         )}
@@ -155,14 +149,14 @@ export default function PlayerCard({
         {/* Holdoplysninger */}
         <div className="border-t border-orange-brand/15 pt-2.5 flex items-center gap-2 mb-3">
           <div className="min-w-0">
-            <p className="text-[10px] font-black uppercase text-white truncate leading-tight">
+            <p className="text-label font-black uppercase text-white truncate leading-tight">
               {teamName}
             </p>
-            <p className="text-[8px] font-bold text-orange-soft/35 uppercase tracking-wider truncate leading-tight">
+            <p className="text-2xs font-bold text-orange-soft/35 uppercase tracking-wider truncate leading-tight">
               {division}
             </p>
             {role && (
-              <p className="text-[8px] font-bold text-orange-brand uppercase tracking-wider truncate leading-tight">
+              <p className="text-2xs font-bold text-orange-brand uppercase tracking-wider truncate leading-tight">
                 {role}
               </p>
             )}
@@ -171,7 +165,7 @@ export default function PlayerCard({
 
         {/* Alder og Twitter */}
         <div className="flex items-center justify-between border-t border-white/5 pt-2">
-          <span className="text-[10px] font-semibold text-orange-soft/60">
+          <span className="text-label font-semibold text-orange-soft/60">
             {age ? `${age} år` : "–"}
           </span>
           {twitter ? (

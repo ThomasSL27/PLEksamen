@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 
 import PlayerCard from "@/components/PlayerCard";
+import { toLower, getTwitterUrl } from "@/lib/utils";
 
 // ==================================================
 // Ikoner
@@ -73,18 +74,6 @@ const SEASON_ENDPOINT = "a/31";
 const SEASON_NAME = "Sæson 31";
 const GRUNDSPIL_MATCH = "grundspil";
 
-// ==================================================
-// Hjælpefunktioner
-// ==================================================
-const toLower = (value?: string) => String(value || "").toLowerCase();
-
-function getTwitterUrl(twitter?: string) {
-  if (!twitter) return "";
-  return twitter.startsWith("http")
-    ? twitter
-    : `https://x.com/${twitter.replace("@", "")}`;
-}
-
 function mapTeam(team: any, divisionName: string): TeamData {
   return {
     name: team.name || "Ukendt hold",
@@ -155,7 +144,7 @@ function FeaturedTeam({
             )}
           </div>
           <div>
-            <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+            <p className="mb-0.5 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
               {team.division} • {SEASON_NAME}
             </p>
             <h2 className="text-3xl font-black uppercase leading-none tracking-tighter text-white sm:text-4xl">
@@ -211,14 +200,14 @@ function FeaturedTeam({
               <div>
                 <p className="text-sm font-bold text-white">{coach.nickname}</p>
                 {coach.name && (
-                  <p className="text-[10px] text-orange-soft/50">{coach.name}</p>
+                  <p className="text-label text-orange-soft/50">{coach.name}</p>
                 )}
                 <div className="mt-1 flex items-center gap-2">
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-orange-brand">
+                  <p className="text-2xs font-bold uppercase tracking-wider text-orange-brand">
                     Coach
                   </p>
                   {coach.age && (
-                    <span className="text-[9px] text-orange-soft/40">{coach.age} år</span>
+                    <span className="text-2xs text-orange-soft/40">{coach.age} år</span>
                   )}
                   {coach.twitter && (
                     <a
@@ -265,7 +254,7 @@ function FeaturedTeam({
                     </span>
                     <div className="flex items-center gap-2">
                       {player.age && (
-                        <span className="text-[9px] text-orange-soft/40">
+                        <span className="text-2xs text-orange-soft/40">
                           {player.age} år
                         </span>
                       )}
@@ -374,7 +363,7 @@ function SeasonFilter({
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 rounded-lg border border-orange-brand/30 bg-gradient-to-r from-orange-brand/10 to-transparent px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-orange-soft transition-all hover:border-orange-brand/50 hover:bg-orange-brand/15 sm:px-5 sm:py-3"
       >
-        <span className="text-[10px] text-orange-brand sm:text-xs">FILTER</span>
+        <span className="text-label text-orange-brand sm:text-xs">FILTER</span>
         <ChevronIcon
           className={`h-4 w-4 transition-transform duration-300 ${
             isOpen ? "rotate-180" : ""
@@ -512,7 +501,7 @@ export default function HoldPage() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-10">
         <header className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
           <div>
-            <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+            <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
               Power Ligaen • {SEASON_NAME}
             </p>
             <h1 className="text-4xl font-black uppercase leading-none tracking-tighter text-white sm:text-5xl md:text-6xl">

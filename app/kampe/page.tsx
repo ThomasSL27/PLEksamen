@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { toLower } from "@/lib/utils";
 
 // ==================================================
 // Ikoner
@@ -20,10 +21,6 @@ const SEASON_ENDPOINT = "a/31";
 const SEASON_NAME = "Sæson 31";
 const GRUNDSPIL_MATCH = "grundspil";
 
-// ==================================================
-// Hjælpefunktioner
-// ==================================================
-const toLower = (value?: string) => String(value || "").toLowerCase();
 
 // ==================================================
 // Typer
@@ -121,7 +118,7 @@ function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
                 {match.team2Score ?? 0}
               </span>
             </div>
-            <span className="mt-1 rounded-full bg-orange-brand/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-orange-brand">
+            <span className="mt-1 rounded-full bg-orange-brand/10 px-2 py-0.5 text-2xs font-black uppercase tracking-widest text-orange-brand">
               {match.state === "complete" || match.status === "finished"
                 ? "Slut"
                 : "LIVE"}
@@ -191,7 +188,7 @@ function SeasonFilter({
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 rounded-lg border border-orange-brand/30 bg-gradient-to-r from-orange-brand/10 to-transparent px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-orange-soft transition-all hover:border-orange-brand/50 hover:bg-orange-brand/15 sm:px-5 sm:py-3"
       >
-        <span className="text-[10px] text-orange-brand sm:text-xs">FILTER</span>
+        <span className="text-label text-orange-brand sm:text-xs">FILTER</span>
         <ChevronIcon
           className={`h-4 w-4 transition-transform duration-300 ${
             isOpen ? "rotate-180" : ""
@@ -294,7 +291,7 @@ export default function KampePage() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-10">
         <header className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
           <div>
-            <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-orange-brand sm:text-xs">
+            <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
               Power Ligaen • {SEASON_NAME}
             </p>
             <h1 className="text-4xl font-black uppercase leading-none tracking-tighter text-white sm:text-5xl md:text-6xl">
