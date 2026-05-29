@@ -534,26 +534,6 @@ export default function MatchDetailPage({
                 </div>
               </div>
             )}
-
-            {/* Stream Link */}
-            {state.match.streamUrl && (
-              <div className="rounded-2xl border border-[#FF6B00]/10 bg-[#1a1a1a]/60 p-6 flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#FF6B00] mb-1">
-                    LIVE-DÆKNING
-                  </p>
-                  <p className="text-sm text-[#FFD8B1]/70 font-bold">Kampen bliver streamet direkte!</p>
-                </div>
-                <a
-                  href={state.match.streamUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#FF6B00] hover:bg-[#FF8C32] transition-colors px-6 py-3 text-sm font-black text-[#111111] uppercase tracking-wider"
-                >
-                  Se Live Stream
-                </a>
-              </div>
-            )}
           </section>
         )}
       </div>
