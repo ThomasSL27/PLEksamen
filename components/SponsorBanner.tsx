@@ -110,58 +110,55 @@ export default function SponsorBanner() {
         }
       `}</style>
 
-      {/* Sektion – mb-8 sm:mb-12 tilføjet for at genskabe den oprindelige afstand til indholdet under */}
+      {/* Mobil: stacked (banner øverst, kamp-ticker nedenunder). Desktop: side-by-side med absolut positionering */}
       <aside
-        className="relative flex w-full justify-between items-center border-b border-white/10 bg-background overflow-hidden h-24 sm:h-28 mb-8 sm:mb-12"
+        className="relative w-full border-b border-white/10 bg-background overflow-hidden mb-8 sm:mb-12 sm:h-28"
         aria-label="Sponsorer"
       >
-        
-        {/* 1. KAMP-TICKER (Z-index 10 - Går uforstyrret helt ind under banneret) */}
-        <div className="absolute inset-0 z-10 flex items-center pl-16 sm:pl-28">
-          <div className="animate-ticker-slide gap-12">
+
+        {/* SPONSOR BANNER – mobil: øverste række; desktop: absolut, venstre, z-20 */}
+        <div className="relative z-20 flex items-center h-20 sm:absolute sm:inset-y-0 sm:left-0 pointer-events-none">
+          <img
+            src="/powerSponsorBanner.avif"
+            alt="POWER Ligaen sponsor"
+            className="max-h-20 sm:max-h-28 w-auto max-w-full object-contain object-left pointer-events-auto"
+          />
+        </div>
+
+        {/* KAMP-TICKER – mobil: nederste række; desktop: absolut overlay, z-10, padding forbi banneret */}
+        <div className="relative sm:absolute sm:inset-0 sm:z-10 flex items-center sm:pl-28 overflow-hidden">
+          <div className="animate-ticker-slide gap-8 sm:gap-12 pl-2 sm:pl-0">
             {marqueeItems.map((match, idx) => (
               <div
                 key={`${match.id}-${idx}`}
-                className="flex flex-col items-start justify-center min-w-[190px] select-none py-1"
+                className="flex flex-col items-start justify-center min-w-[160px] sm:min-w-[190px] select-none py-1"
               >
-                {/* 1. Dato (øverst) */}
                 <span className="text-2xs sm:text-label font-bold uppercase tracking-wider text-orange-soft/50">
                   {match.date}
                 </span>
-                {/* 2. Tidspunkt */}
                 <span className="text-label sm:text-xs font-black uppercase tracking-wider text-orange-brand">
                   {match.time}
                 </span>
-                
-                {/* 2. Kamp og hold (midten) */}
-                <span className="text-sm sm:text-base font-black uppercase tracking-tight text-white mt-1 mb-0.5 whitespace-nowrap">
+                <span className="text-sm sm:text-base font-black uppercase tracking-tight text-white mt-0.5 sm:mt-1 mb-0 sm:mb-0.5 whitespace-nowrap">
                   {match.teams}
                 </span>
-                
-                {/* 3. Stream link (nederst) */}
                 <span className="text-label sm:text-xs font-bold tracking-wide text-orange-soft/45">
                   {match.stream}
                 </span>
               </div>
             ))}
           </div>
+          {/* Mobil: subtile side-fades på ticker-rækken */}
+          <div className="sm:hidden absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-background to-transparent pointer-events-none" />
+          <div className="sm:hidden absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none" />
         </div>
 
-        {/* 2. MØRK MASKE (Z-index 15 - Ligger under sponsoren, men oven på kampene, og stopper midtvejs) */}
-        <div className="absolute inset-y-0 left-0 w-24 sm:w-36 bg-background z-15 pointer-events-none" />
-        <div className="absolute inset-y-0 left-24 sm:left-36 w-16 bg-gradient-to-r from-background to-transparent z-15 pointer-events-none" />
+        {/* Desktop: mørk maske der skjuler ticker bag banneret */}
+        <div className="hidden sm:block absolute inset-y-0 left-0 w-24 sm:w-36 bg-background z-15 pointer-events-none" />
+        <div className="hidden sm:block absolute inset-y-0 left-24 sm:left-36 w-16 bg-gradient-to-r from-background to-transparent z-15 pointer-events-none" />
 
-        {/* 3. SPONSOR BANNER (Z-index 20 - Placeret yderst til venstre på gennemsigtig baggrund) */}
-        <div className="relative z-20 flex items-center h-full pointer-events-none">
-          <img 
-            src="/powerSponsorBanner.avif" 
-            alt="POWER Ligaen sponsor" 
-            className="max-h-24 sm:max-h-28 w-auto max-w-full object-contain object-left pointer-events-auto"
-          />
-        </div>
-
-        {/* Fade-out i højre yderkant af skærmen for perfekt integration */}
-        <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-30 pointer-events-none" />
+        {/* Desktop: fade-out i højre yderkant */}
+        <div className="hidden sm:block absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-30 pointer-events-none" />
 
       </aside>
     </>

@@ -30,6 +30,7 @@ export default function TheNav({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [medierOpen, setMedierOpen] = useState(false);
+  const [mobileMedierOpen, setMobileMedierOpen] = useState(false);
   const panelRef = useRef<HTMLElement | null>(null);
   const iconRef = useRef<HTMLSpanElement | null>(null);
   const medierTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -70,6 +71,7 @@ export default function TheNav({
     } else {
       gsap.to([panelRef.current, ".sm-prelayer"], { xPercent: 0, duration: 0.4, ease: 'power3.in' });
       animateIcon(0);
+      setMobileMedierOpen(false);
     }
   }, [mobileMenuOpen]);
 
@@ -250,44 +252,63 @@ export default function TheNav({
                 );
               })}
 
-              {/* Mobil: MEDIER med underlinks */}
-              <li className="overflow-hidden">
-                <span className="block text-3xl font-black leading-tight text-black">
-                  <span className="sm-panel-itemLabel inline-block">MEDIER</span>
-                </span>
-                <div className="mt-2 ml-1 flex flex-col gap-1.5">
-                  <a
-                    href="https://www.twitch.tv/dust2tv"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm font-bold no-underline"
-                    style={{ color: '#6441a5' }}
-                    onClick={toggleMobileMenu}
+              {/* Mobil: MEDIER accordion */}
+              <li>
+                <div className="overflow-hidden">
+                  <button
+                    className="sm-panel-itemLabel inline-flex items-center gap-2 text-3xl font-black leading-tight text-black bg-transparent border-none cursor-pointer p-0"
+                    onClick={() => setMobileMedierOpen(o => !o)}
                   >
-                    <FontAwesomeIcon icon={faTwitch} className="h-3.5 w-3.5" />
-                    dust2tv
-                  </a>
-                  <a
-                    href="https://open.spotify.com/show/2AJtotrfW0cTqw27RpJVQy"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm font-bold no-underline"
-                    style={{ color: '#1DB954' }}
-                    onClick={toggleMobileMenu}
-                  >
-                    <FontAwesomeIcon icon={faSpotify} className="h-3.5 w-3.5" />
-                    OGC Podcast – Spotify
-                  </a>
-                  <a
-                    href="https://www.youtube.com/@ograndecanhao"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm font-bold no-underline text-red-400"
-                    onClick={toggleMobileMenu}
-                  >
-                    <FontAwesomeIcon icon={faYoutube} className="h-3.5 w-3.5" />
-                    OGC Podcast – YouTube
-                  </a>
+                    MEDIER
+                    <svg
+                      className="w-5 h-5 transition-transform duration-300"
+                      style={{ transform: mobileMedierOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Accordion indhold */}
+                <div
+                  className="overflow-hidden transition-all duration-300 ease-in-out"
+                  style={{ maxHeight: mobileMedierOpen ? '200px' : '0px', opacity: mobileMedierOpen ? 1 : 0 }}
+                >
+                  <div className="pt-3 ml-1 flex flex-col gap-2.5">
+                    <a
+                      href="https://www.twitch.tv/dust2tv"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-sm font-bold no-underline"
+                      style={{ color: '#6441a5' }}
+                      onClick={toggleMobileMenu}
+                    >
+                      <FontAwesomeIcon icon={faTwitch} className="h-3.5 w-3.5" />
+                      dust2tv
+                    </a>
+                    <a
+                      href="https://open.spotify.com/show/2AJtotrfW0cTqw27RpJVQy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-sm font-bold no-underline"
+                      style={{ color: '#1DB954' }}
+                      onClick={toggleMobileMenu}
+                    >
+                      <FontAwesomeIcon icon={faSpotify} className="h-3.5 w-3.5" />
+                      OGC Podcast – Spotify
+                    </a>
+                    <a
+                      href="https://www.youtube.com/@ograndecanhao"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-sm font-bold no-underline text-red-400"
+                      onClick={toggleMobileMenu}
+                    >
+                      <FontAwesomeIcon icon={faYoutube} className="h-3.5 w-3.5" />
+                      OGC Podcast – YouTube
+                    </a>
+                  </div>
                 </div>
               </li>
             </ul>
