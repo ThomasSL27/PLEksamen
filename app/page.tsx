@@ -6,7 +6,7 @@ import AllstarsHighlights from '@/components/AllstarsHighlights';
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background overflow-hidden relative">
+    <main className="min-h-screen bg-background relative">
 
       {/* Hero Sektion */}
       <section className="relative z-10 flex min-h-[80vh] items-center px-4 sm:px-6 lg:px-8">
