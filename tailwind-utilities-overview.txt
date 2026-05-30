@@ -1,0 +1,455 @@
+TAILWIND CSS UTILITIES OVERVIEW — Power Ligaen
+===============================================
+Alle unikke Tailwind-klasser brugt i kodebasen, grupperet efter kategori.
+Klasser der bruges på en mere specifik måde er listet særskilt.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LAYOUT & POSITION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Position:
+  absolute, relative, fixed
+
+Top:
+  top-0, top-3, top-4, top-6, top-full, top-1/2, -top-20
+
+Bottom:
+  bottom-0, bottom-4, bottom-10
+
+Left:
+  left-0, left-4, left-10, left-24, left-full, left-1/2
+
+Right:
+  right-0, right-3, right-4, right-6, right-10
+
+Inset:
+  inset-0, inset-x-0, inset-y-0
+
+Display:
+  block, inline-block, inline-flex, flex, grid, hidden
+
+Overflow:
+  overflow-hidden, overflow-visible, overflow-x-auto, overflow-y-auto
+
+Z-index:
+  z-10, z-20, z-30, z-50
+  z-5, z-15, z-25, z-100          (custom/ikke-standard værdier)
+  z-[5], z-[9999]                  (arbitrære værdier)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SPACING — PADDING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+p (alle sider):
+  p-0, p-2, p-3, p-3.5, p-4, p-5, p-6, p-8, p-12
+
+px (venstre + højre):
+  px-0, px-1, px-2, px-2.5, px-3, px-3.5, px-4, px-5, px-6, px-8, px-12
+
+py (top + bund):
+  py-0.5, py-1, py-1.5, py-2, py-2.5, py-3, py-3.5, py-4, py-5,
+  py-6, py-8, py-10, py-12, py-16, py-32
+
+pt (top):
+  pt-1, pt-2, pt-2.5, pt-3, pt-4, pt-5, pt-6, pt-8, pt-10, pt-16, pt-20, pt-32
+  pt-[var(--nav-height)]           (CSS-variabel — sikrer korrekt afstand under nav)
+
+pb (bund):
+  pb-1.5, pb-2, pb-3, pb-4, pb-5, pb-6, pb-8, pb-12, pb-14, pb-16
+
+pl (venstre):
+  pl-0, pl-2, pl-28
+
+pr (højre):
+  pr-1, pr-4
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SPACING — MARGIN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+m:
+  m-0
+
+mb (bund):
+  mb-0, mb-0.5, mb-1, mb-2, mb-2.5, mb-3, mb-4, mb-6, mb-8, mb-10, mb-12, mb-20
+
+mt (top):
+  mt-0.5, mt-1, mt-1.5, mt-2, mt-3, mt-4, mt-6, mt-8, mt-10, mt-auto
+
+mx:
+  mx-auto, -mx-px
+
+ml:
+  ml-1
+
+Negativ margin:
+  -mt-px                           (fjerner én pixels overlap)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SPACING — GAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gap:
+  gap-0.5, gap-1, gap-1.5, gap-2, gap-2.5, gap-3, gap-4, gap-5, gap-6, gap-8, gap-10, gap-12
+
+gap-x (kun vandret):
+  gap-x-6, gap-x-16
+
+gap-y (kun lodret):
+  gap-y-4, gap-y-16
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SIZING — BREDDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+w:
+  w-auto, w-fit, w-full, w-screen
+  w-3, w-3.5, w-4, w-5, w-6, w-7, w-8, w-9, w-10, w-11, w-12,
+  w-14, w-16, w-20, w-24, w-36, w-40, w-56, w-64, w-72, w-96
+  w-[50%], w-[400px], w-[420px]   (arbitrære værdier)
+
+min-w:
+  min-w-0, min-w-[160px], min-w-[190px]
+
+max-w:
+  max-w-full, max-w-md, max-w-lg, max-w-3xl, max-w-4xl, max-w-5xl, max-w-7xl
+  max-w-[480px], max-w-[560px]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SIZING — HØJDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+h:
+  h-auto, h-full, h-screen
+  h-2.5, h-3, h-3.5, h-4, h-5, h-6, h-7, h-8, h-9, h-10, h-11, h-12,
+  h-14, h-16, h-20, h-24, h-26, h-28, h-32, h-36, h-44, h-48, h-52,
+  h-56, h-64, h-72, h-96
+  h-[340px]
+  h-[min(32dvh,260px)]             (clamp med dvh-enhed — adaptiv bannerhjøjde)
+
+min-h:
+  min-h-0, min-h-screen
+  min-h-[80vh], min-h-[140px], min-h-[220px]
+
+max-h:
+  max-h-20, max-h-96, max-h-[380px]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TYPOGRAFI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tekststørrelse:
+  text-xs, text-sm, text-base, text-lg, text-xl,
+  text-2xl, text-3xl, text-4xl, text-5xl, text-6xl, text-7xl, text-8xl
+  text-2xs, text-label, text-caption   (custom trin i theme)
+  text-[10px]                          (arbitrær størrelse)
+
+Skriftvægt:
+  font-medium, font-semibold, font-bold, font-black
+
+Font-familie:
+  font-sans
+
+Tekstjustering:
+  text-left, text-center, text-right
+
+Bogstavmellemrum (tracking):
+  tracking-tight, tracking-tighter, tracking-wide, tracking-wider, tracking-widest
+  tracking-[0.25em]                (arbitrær — bruges til kamp-marquee)
+
+Linjehøjde (leading):
+  leading-none, leading-tight, leading-relaxed
+  leading-[0.85]                   (ultra-tæt — bruges til store hero-overskrifter)
+
+Tekstoverflod:
+  truncate, whitespace-nowrap, whitespace-pre-line, line-clamp-2
+
+Casing & dekoration:
+  uppercase, normal-case, no-underline
+
+Tal-rendering:
+  tabular-nums                     (sikrer ensartet kolonnebredde i stillingstavler)
+
+Anti-aliasing:
+  antialiased
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FARVER — TEKST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Hvid (med opacity-varianter):
+  text-white
+  text-white/30, /40, /50, /60, /70, /80, /90, /95
+
+Semantiske tokens:
+  text-background, text-foreground, text-black, text-player
+
+Brand-orange:
+  text-orange-brand
+  text-orange-brand/15, /20, /30, /40, /60, /70
+
+Blød orange:
+  text-orange-soft
+  text-orange-soft/20, /30, /35, /40, /45, /50, /55, /60, /65, /70, /75, /80, /90
+
+Øvrige:
+  text-purple-400, text-red-400, text-red-500
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FARVER — BAGGRUND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Gennemsigtig / sort / hvid:
+  bg-transparent, bg-none
+  bg-black/60, bg-black/90
+  bg-white
+
+Semantiske tokens:
+  bg-background
+  bg-background/60, /85, /90
+  bg-surface, bg-card, bg-input, bg-player
+  bg-card/40, bg-card/50
+  bg-input/40, bg-input/95
+
+Brand-orange:
+  bg-orange-brand
+  bg-orange-brand/5, /10, /15, /20, /25, /30
+
+Øvrige:
+  bg-purple-600, bg-purple-500/10
+  bg-red-500/5, bg-red-600/20
+  bg-white/5, bg-white/[0.02], bg-white/[0.03]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FARVER — GRADIENTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Retning:
+  bg-gradient-to-r, bg-gradient-to-l, bg-gradient-to-t,
+  bg-gradient-to-b, bg-gradient-to-br
+
+from-*:
+  from-background, from-card, from-card/80, from-transparent
+  from-orange-brand/10, /15, /20, /25
+
+via-*:
+  via-transparent
+
+to-*:
+  to-background, to-card, to-card-deep, to-transparent
+  to-orange-brand/5, to-orange-soft/5
+  to-medium/80
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BORDERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Bredde:
+  border, border-0, border-2, border-none
+  border-t, border-b
+
+Farve (hvid opacity):
+  border-white/5, border-white/10
+  border-white/[0.02], border-white/[0.03], border-white/[0.05], border-white/[0.08]
+
+Farve (orange-brand):
+  border-orange-brand/5, /10, /15, /20, /25, /30
+  border-t-orange-brand             (top-kant i brandfarve — accent-linje på kort)
+
+Farve (øvrige):
+  border-red-500/20
+
+Border-radius:
+  rounded, rounded-md, rounded-lg, rounded-xl, rounded-2xl, rounded-full
+  rounded-t-xl                      (kun afrundet øverst)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FOKUS & OUTLINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  outline-none, focus:outline-none
+  focus-visible:outline, focus-visible:outline-2, focus-visible:outline-offset-2
+  focus-visible:outline-orange-brand
+  focus:border-orange-brand/65
+  focus:ring-1, focus:ring-orange-brand/65
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHADOWS & EFFEKTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Box-shadow:
+  shadow-lg, shadow-xl, shadow-2xl
+  shadow-[0_0_8px_rgba(255,107,0,0.8)]     (skarp orange glow på aktive elementer)
+
+Drop-shadow (filter):
+  drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]
+  drop-shadow-[0_2px_4px_rgba(var(--brand-orange-rgb),0.2)]
+  drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]
+  drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]
+  drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]
+  drop-shadow-[0_0_15px_rgba(var(--brand-orange-rgb),0.15)]
+  drop-shadow-[0_0_15px_rgba(var(--brand-orange-rgb),0.25)]
+  drop-shadow-[0_0_30px_rgba(var(--brand-orange-rgb),0.15)]
+  drop-shadow-[0_0_30px_rgba(var(--brand-orange-rgb),0.25)]
+
+Blur:
+  blur-3xl
+  blur-[120px]                      (baggrundsorb / ambient-effekt)
+
+Opacity:
+  opacity-10, opacity-60, opacity-90, opacity-95
+  opacity-[0.03], opacity-[0.04], opacity-[0.08]   (subtile overlay-lag)
+
+Backdrop:
+  backdrop-blur-xl, filter
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HOVER & INTERAKTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Baggrund ved hover:
+  hover:bg-transparent, hover:bg-card, hover:bg-card-hover
+  hover:bg-orange-brand, hover:bg-orange-brand/5, /10, /15, /20
+  hover:bg-purple-500/10, hover:bg-red-600/20
+  hover:bg-[#1DB954]/20            (Spotify-grøn — til Spotify-knap)
+
+Border ved hover:
+  hover:border-orange-brand/30, /35, /40, /45, /50
+  hover:border-purple-500/50, hover:border-red-600/50
+  hover:border-[#1DB954]/50
+
+Tekst ved hover:
+  hover:text-orange-brand, hover:text-orange-soft, hover:text-orange-soft/60
+  hover:text-white, hover:text-background
+  hover:text-purple-300, hover:text-red-400
+  hover:text-[#1DB954]
+
+Skala ved hover:
+  hover:scale-105, hover:scale-110
+  hover:scale-[1.015]              (subtil forstørrelse på kort)
+
+Flytning ved hover:
+  hover:translate-x-1
+
+Shadow ved hover:
+  hover:shadow-[0_0_24px_rgba(var(--brand-orange-rgb),0.06)]
+  hover:shadow-[0_0_24px_rgba(var(--brand-orange-rgb),0.08)]
+
+Group-hover (parent → child-effekt):
+  group
+  group-hover:scale-105, group-hover:scale-110
+  group-hover:text-orange-brand, group-hover:text-purple-300
+  group-hover:translate-x-1
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FLEX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Direction:
+  flex-col, flex-row, flex-wrap
+
+Størrelse:
+  flex-1, flex-shrink-0, shrink-0
+
+Align items:
+  items-start, items-center, items-end, items-stretch, items-baseline
+
+Justify content:
+  justify-start, justify-center, justify-between
+
+Self:
+  self-center
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GRID
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Kolonner:
+  grid-cols-1, grid-cols-2, grid-cols-3, grid-cols-4
+  grid-cols-[1fr_auto_1fr]         (asymmetrisk layout — bruges til kamp-header)
+
+Responsive kolonner:
+  sm:grid-cols-2, sm:grid-cols-3
+  md:grid-cols-2, md:grid-cols-4, md:grid-cols-5
+  lg:grid-cols-2, lg:grid-cols-3, lg:grid-cols-4, lg:grid-cols-5, lg:grid-cols-12
+
+Col-span:
+  col-span-full
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRANSFORMS & TRANSITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Translate:
+  -translate-x-1/2, -translate-y-1/2   (centrering via absolut position)
+
+Transition:
+  transition-all, transition-colors, transition-transform
+
+Duration:
+  duration-200, duration-300, duration-500, duration-700
+  duration-305, duration-350, duration-750   (custom værdier til fine timing-justeringer)
+
+Easing:
+  ease-in-out, ease-out
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANIMATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  animate-spin           (loading-spinner)
+  animate-ping           (live-indikator / pulserende prik)
+  animate-pulse          (skeleton-loading)
+  animate-ticker-slide   (custom — vandret scrollende tekst-ticker)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BILLEDER & ASPECT RATIO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  aspect-video
+  object-contain, object-cover
+  object-left, object-top, object-bottom
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POINTER & BRUGEROPLEVELSE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  cursor-pointer
+  pointer-events-none, pointer-events-auto
+  select-none
+  scrollbar-none         (skjuler scrollbar på overflow-containere)
+  list-none
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RESPONSIVE BREAKPOINTS (generelt)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  sm:*   — ≥640px
+  md:*   — ≥768px
+  lg:*   — ≥1024px
+  xl:*   — ≥1280px
+
+Alle ovennævnte utility-kategorier har responsive varianter.
+Typiske mønstre: hidden → sm:block, flex-col → md:flex-row,
+grid-cols-1 → lg:grid-cols-3, text-3xl → md:text-6xl osv.
