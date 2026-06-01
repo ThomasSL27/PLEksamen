@@ -19,14 +19,6 @@ type MatchPlayer = {
   image: string;
 };
 
-// Standard Spiller Ikon
-function DefaultPlayerIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
-    </svg>
-  );
-}
 
 // ==================================================
 // Spiller Showcase (Frit svævende)
@@ -60,11 +52,7 @@ function PlayerShowcase({
             alt={nickname}
             className="h-full w-full object-contain object-bottom transition-transform duration-500 ease-out group-hover:scale-110"
           />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center pb-12 transition-transform duration-500 group-hover:scale-110">
-            <DefaultPlayerIcon className="h-20 w-20 text-orange-brand/20 animate-pulse" />
-          </div>
-        )}
+        ) : null}
       </div>
 
       {/* Holdnavn under spilleren med Scramble-reference */}

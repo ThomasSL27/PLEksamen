@@ -15,13 +15,6 @@ function XTwitterIcon({ className = "" }: { className?: string }) {
   );
 }
 
-function DefaultPlayerIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
-    </svg>
-  );
-}
 
 function ChevronIcon({ className = "" }: { className?: string }) {
   return (
@@ -193,9 +186,7 @@ function FeaturedTeam({
                     alt={coach.nickname}
                     className="h-full w-full object-cover object-top"
                   />
-                ) : (
-                  <DefaultPlayerIcon className="h-6 w-6 text-orange-brand/40" />
-                )}
+                ) : null}
               </div>
               <div>
                 <p className="text-sm font-bold text-white">{coach.nickname}</p>
@@ -244,9 +235,7 @@ function FeaturedTeam({
                         alt={player.nickname}
                         className="h-full w-full object-cover object-top"
                       />
-                    ) : (
-                      <DefaultPlayerIcon className="h-4 w-4 text-orange-brand/30" />
-                    )}
+                    ) : null}
                   </div>
                   <div>
                     <span className="text-xs font-bold text-white">

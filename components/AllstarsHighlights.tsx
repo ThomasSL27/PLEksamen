@@ -51,14 +51,6 @@ const HIGHLIGHTS_PLAYLIST: HighlightVideo[] = [
   },
 ];
 
-// Standard Spiller Ikon
-function DefaultPlayerIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
-    </svg>
-  );
-}
 
 // ==================================================
 // PlaylistItem Komponent uden rammer, kasser eller varighed
@@ -120,13 +112,7 @@ function PlaylistItem({
               isActive ? "scale-105 drop-shadow-[0_0_10px_rgba(255,107,0,0.35)]" : "opacity-60 group-hover:opacity-100 group-hover:scale-105"
             }`}
           />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center pb-3">
-            <DefaultPlayerIcon className={`h-10 w-10 transition-colors duration-300 ${
-              isActive ? "text-orange-brand" : "text-orange-brand/15 group-hover:text-orange-brand/45"
-            }`} />
-          </div>
-        )}
+        ) : null}
         {/* Blød bund-fade til at smelte bunden af spilleren sammen med baggrunden */}
         <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-background to-transparent z-15" />
       </div>
