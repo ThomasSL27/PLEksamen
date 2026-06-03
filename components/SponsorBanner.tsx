@@ -1,10 +1,6 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
-// -------------------------------------------
-// Typer
-// -------------------------------------------
 interface TickerMatch {
   id: string;
   date: string;

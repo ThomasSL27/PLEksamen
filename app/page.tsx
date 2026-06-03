@@ -1,3 +1,7 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import type { ApiSeason } from "@/lib/types";
 import NewSeason from '../components/NewSeason';
 import Season31Champs from '../components/Season31Champs';
 import News from '../components/News';
@@ -5,6 +9,14 @@ import NextMatch from '@/components/NextMatch';
 import AllstarsHighlights from '@/components/AllstarsHighlights';
 
 export default function Page() {
+  const [seasons, setSeasons] = useState<ApiSeason[] | null>(null);
+
+  useEffect(() => {
+    fetch("/api/powerstats")
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((json) => setSeasons(Array.isArray(json?.data) ? json.data : []));
+  }, []);
+
   return (
     <main className="min-h-screen bg-background relative">
 
@@ -39,7 +51,7 @@ export default function Page() {
           {/* Højre side: NextMatch kortet */}
           <div className="w-full flex justify-center lg:justify-end lg:col-span-5">
             <div className="w-full max-w-md lg:max-w-full transition-all duration-500 hover:scale-[1.015]">
-              <NextMatch />
+              <NextMatch seasons={seasons} />
             </div>
           </div>
 
@@ -49,14 +61,14 @@ export default function Page() {
       {/* MVP/Season highlight - Helt rent, gennemsigtigt og uden baggrundsfarve eller rundede kanter */}
       <section className="relative z-10 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Season31Champs />
+          <Season31Champs seasons={seasons} />
         </div>
       </section>
 
       {/* Allstars Highlights */}
       <section className="relative z-10 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AllstarsHighlights />
+          <AllstarsHighlights seasons={seasons} />
         </div>
       </section>
 

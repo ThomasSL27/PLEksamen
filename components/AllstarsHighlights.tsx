@@ -3,27 +3,21 @@
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import type { ApiSeason } from "@/lib/types";
 
-// Registrer GSAP plugin (kun på klientsiden)
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrambleTextPlugin);
 }
 
-// -------------------------------------------
-// Typer
-// -------------------------------------------
 interface HighlightVideo {
   id: string;
   playerNickname: string;
   teamName: string;
   title: string;
   youtubeId: string;
-  playerImage?: string; // Hentes dynamisk fra API via useEffect
+  playerImage?: string;
 }
 
-// -------------------------------------------
-// Kamp-Data (Spillere uden Cabbi)
-// -------------------------------------------
 const HIGHLIGHTS_PLAYLIST: HighlightVideo[] = [
   {
     id: "v1",
@@ -52,9 +46,6 @@ const HIGHLIGHTS_PLAYLIST: HighlightVideo[] = [
 ];
 
 
-// ==================================================
-// PlaylistItem Komponent uden rammer, kasser eller varighed
-// ==================================================
 function PlaylistItem({
   video,
   isActive,
@@ -117,7 +108,6 @@ function PlaylistItem({
         <div className="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-background to-transparent z-15" />
       </div>
 
-      {/* Højre side: Teksterne tæt stakket, hvilket danner sin egen form */}
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-center w-full gap-2 mb-1">
           <span className={`text-2xs font-black uppercase tracking-widest transition-colors duration-300 ${
@@ -143,66 +133,44 @@ function PlaylistItem({
   );
 }
 
-// ================================================= =
-// Allstars Highlights Hovedkomponent
-// ================================================= =
-export default function AllstarsHighlights() {
+export default function AllstarsHighlights({ seasons }: { seasons: ApiSeason[] | null }) {
   const [playlist, setPlaylist] = useState<HighlightVideo[]>(HIGHLIGHTS_PLAYLIST);
   const [activeVideo, setActiveVideo] = useState<HighlightVideo>(playlist[0]);
 
-  // Hent spillernes billeder dynamisk fra Sæson 31 API'et ved load
   useEffect(() => {
+    if (!seasons) return;
     const toLower = (val: string) => val.toLowerCase();
+    try {
+      const season = seasons.find(
+        s =>
+          String(s?.name || "").includes("Sæson 31") &&
+          toLower(String(s?.name || "")).includes("grundspil")
+      );
+      if (!season?.teams) return;
 
-    async function fetchPlayerImages() {
-      try {
-        const res = await fetch("/api/powerstats?type=a/31");
-        if (!res.ok) return;
-        const json = await res.json();
-        const seasons = json?.data;
-        if (!Array.isArray(seasons)) return;
+      const tricked = season.teams.find(t => toLower(String(t.shortName || t.name)).includes("tricked"));
+      const ecstatic = season.teams.find(t => toLower(String(t.shortName || t.name)).includes("ecstatic"));
 
-        const season = seasons.find(
-          (s: any) =>
-            String(s?.name || "").includes("Sæson 31") &&
-            toLower(String(s?.name || "")).includes("grundspil")
+      const playersList = [
+        ...(tricked?.lineups?.players || []),
+        ...(ecstatic?.lineups?.players || []),
+      ];
+
+      const updatedPlaylist = HIGHLIGHTS_PLAYLIST.map((video) => {
+        const apiPlayer = playersList.find(
+          p => toLower(String(p?.nickname || "")) === toLower(video.playerNickname)
         );
-        if (!season?.teams) return;
+        return { ...video, playerImage: apiPlayer?.image || "" };
+      });
 
-        // Saml alle spillere fra Tricked og Ecstatic
-        const tricked = season.teams.find((t: any) => toLower(String(t.shortName || t.name)).includes("tricked"));
-        const ecstatic = season.teams.find((t: any) => toLower(String(t.shortName || t.name)).includes("ecstatic"));
+      setPlaylist(updatedPlaylist);
 
-        const playersList = [
-          ...(tricked?.lineups?.players || []),
-          ...(ecstatic?.lineups?.players || []),
-        ];
-
-        // Opdater playlisten med billederne fra API'et
-        const updatedPlaylist = playlist.map((video) => {
-          const apiPlayer = playersList.find(
-            (p: any) => toLower(String(p?.nickname || "")) === toLower(video.playerNickname)
-          );
-          return {
-            ...video,
-            playerImage: apiPlayer?.image || "",
-          };
-        });
-
-        setPlaylist(updatedPlaylist);
-        
-        // Synkroniser activeVideo med det nye opdaterede objekt
-        const updatedActive = updatedPlaylist.find((v) => v.id === activeVideo.id);
-        if (updatedActive) {
-          setActiveVideo(updatedActive);
-        }
-      } catch {
-        // Fallback bevares lydløst
-      }
+      const updatedActive = updatedPlaylist.find((v) => v.id === activeVideo.id);
+      if (updatedActive) setActiveVideo(updatedActive);
+    } catch {
+      // Fallback bevares lydløst
     }
-
-    fetchPlayerImages();
-  }, []);
+  }, [seasons]);
 
   const handleVideoSelect = (video: HighlightVideo) => {
     setActiveVideo(video);
@@ -212,7 +180,6 @@ export default function AllstarsHighlights() {
     <section className="relative w-full font-sans text-foreground py-8 sm:py-12" aria-label="Allstars-highlights">
       <div className="relative z-10 mx-auto flex w-full flex-col">
         
-        {/* Sektionsoverskrift */}
         <div className="mb-8">
           <p className="text-label font-black uppercase tracking-[0.25em] text-orange-brand mb-1">
             ALLSTARS HIGHLIGHTS
@@ -223,10 +190,7 @@ export default function AllstarsHighlights() {
           <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand" />
         </div>
 
-        {/* Content Layout Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch w-full">
-          
-          {/* Venstre kolonne: Stor Video Player – UDEN AUTOPLAY */}
           <div className="relative lg:col-span-8 flex flex-col justify-center">
             <div className="relative overflow-hidden rounded-2xl border border-orange-brand/15 bg-player shadow-2xl transition-all duration-300 hover:border-orange-brand/35 w-full aspect-video">
               <iframe
@@ -240,7 +204,6 @@ export default function AllstarsHighlights() {
             </div>
           </div>
 
-          {/* Højre kolonne: Playlist uden kasser eller unødvendig luft */}
           <div className="lg:col-span-4 flex flex-col h-full justify-start">
             <div className="flex flex-col gap-1 overflow-y-auto max-h-[380px] lg:max-h-full pr-1">
               {playlist.map((video) => (

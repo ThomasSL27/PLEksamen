@@ -7,11 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitch, faSpotify, faYoutube } from '@fortawesome/free-brands-svg-icons';
 
 const NAV_ITEMS = [
-  { label: 'FORSIDE', link: '/' },
-  { label: 'KAMPE', link: '/kampe' },
   { label: 'STILLINGER', link: '/stillinger' },
-  { label: 'HOLD', link: '/hold' },
+  { label: 'KAMPE', link: '/kampe' },
   { label: 'SPILLERE', link: '/spillere' },
+  { label: 'HOLD', link: '/hold' },
   { label: 'OM', link: '/om' },
 ];
 

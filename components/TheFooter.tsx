@@ -93,20 +93,17 @@ export default function TheFooter() {
           {/* Links i højre side */}
           <div className="lg:col-span-4 flex justify-start lg:justify-end">
             <div className="flex flex-wrap gap-4 text-orange-soft/40">
-              <Link href="/" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
-                Forside
+              <Link href="/stillinger" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
+                Stillinger
               </Link>
               <Link href="/kampe" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
                 Kampe
               </Link>
-              <Link href="/stillinger" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
-                Stillinger
+              <Link href="/spillere" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
+                Spillere
               </Link>
               <Link href="/hold" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
                 Hold
-              </Link>
-              <Link href="/spillere" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
-                Spillere
               </Link>
               <Link href="/om" className="hover:text-orange-brand transition-colors font-bold uppercase tracking-wider text-label">
                 Om

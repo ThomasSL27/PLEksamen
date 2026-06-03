@@ -3,15 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import type { ApiSeason } from "@/lib/types";
 
-// Registrer GSAP plugin (kun på klientsiden)
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrambleTextPlugin);
 }
 
-// -------------------------------------------
-// Typer
-// -------------------------------------------
 type MatchPlayer = {
   teamName: string;
   teamLogo: string;
@@ -20,9 +17,6 @@ type MatchPlayer = {
 };
 
 
-// ==================================================
-// Spiller Showcase (Frit svævende)
-// ==================================================
 function PlayerShowcase({
   teamName,
   teamLogo,
@@ -44,7 +38,6 @@ function PlayerShowcase({
         </div>
       )}
 
-      {/* Spiller container */}
       <div className="relative h-56 w-40 sm:h-72 sm:w-56 z-10 flex items-end justify-center">
         {image ? (
           <img
@@ -55,7 +48,6 @@ function PlayerShowcase({
         ) : null}
       </div>
 
-      {/* Holdnavn under spilleren med Scramble-reference */}
       <span
         ref={textRef}
         className="mt-4 text-xs sm:text-sm font-black uppercase tracking-widest text-orange-soft/90 transition-colors duration-300 group-hover:text-orange-brand z-20 h-5 overflow-hidden block select-none"
@@ -67,67 +59,49 @@ function PlayerShowcase({
   );
 }
 
-// ==================================================
-// Hovedkomponent
-// ==================================================
-export default function NextMatch() {
+export default function NextMatch({ seasons }: { seasons: ApiSeason[] | null }) {
   const [players, setPlayers] = useState<{ a: MatchPlayer; b: MatchPlayer } | null>(null);
   const vsTextRef = useRef<HTMLDivElement>(null);
   const teamARef = useRef<HTMLSpanElement>(null);
   const teamBRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    if (!seasons) return;
     const toLower = (value: string) => value.toLowerCase();
-    async function loadNextMatchPlayers() {
-      try {
-        const res = await fetch("/api/powerstats");
-        const json = await res.json();
-        const seasons = json?.data;
-        if (!Array.isArray(seasons)) return;
-        const season = seasons.find(
-          (s: any) =>
-            String(s?.name || "").includes("Sæson 31") &&
-            toLower(String(s?.name || "")).includes("grundspil")
-        );
-        if (!season?.teams) return;
-        
-        const findTeam = (key: string) =>
-          season.teams.find((t: any) =>
-            toLower(String(t?.shortName || t?.name || "")).includes(key)
-          );
-        const findPlayer = (team: any, nick: string) =>
-          team?.lineups?.players?.find(
-            (p: any) => toLower(String(p?.nickname || "")) === nick
-          );
-          
-        const ecstatic = findTeam("ecstatic");
-        const sashi = findTeam("sashi");
-        const nicoodoz = findPlayer(ecstatic, "nicoodoz");
-        const zyphon = findPlayer(sashi, "zyphon");
-        if (!ecstatic || !sashi || !nicoodoz || !zyphon) return;
-        
-        setPlayers({
-          a: {
-            teamName: ecstatic.shortName || ecstatic.name,
-            teamLogo: ecstatic.logoUrl || "",
-            nickname: nicoodoz.nickname,
-            image: nicoodoz.image || "",
-          },
-          b: {
-            teamName: sashi.shortName || sashi.name,
-            teamLogo: sashi.logoUrl || "",
-            nickname: zyphon.nickname,
-            image: zyphon.image || "",
-          },
-        });
-      } catch {
-        // Fallback
-      }
-    }
-    loadNextMatchPlayers();
-  }, []);
+    try {
+      const season = seasons.find(
+        s =>
+          String(s?.name || "").includes("Sæson 31") &&
+          toLower(String(s?.name || "")).includes("grundspil")
+      );
+      if (!season?.teams) return;
 
-  // GSAP Scramble Text – trigges synkront for alle tekster
+      const teams = season.teams!;
+      const ecstatic = teams.find(t => toLower(String(t.shortName || t.name || "")).includes("ecstatic"));
+      const sashi = teams.find(t => toLower(String(t.shortName || t.name || "")).includes("sashi"));
+      const nicoodoz = ecstatic?.lineups?.players?.find(p => toLower(String(p.nickname || "")) === "nicoodoz");
+      const zyphon = sashi?.lineups?.players?.find(p => toLower(String(p.nickname || "")) === "zyphon");
+      if (!ecstatic || !sashi || !nicoodoz || !zyphon) return;
+
+      setPlayers({
+        a: {
+          teamName: ecstatic.shortName || ecstatic.name || "",
+          teamLogo: ecstatic.logoUrl || "",
+          nickname: nicoodoz.nickname || "",
+          image: nicoodoz.image || "",
+        },
+        b: {
+          teamName: sashi.shortName || sashi.name || "",
+          teamLogo: sashi.logoUrl || "",
+          nickname: zyphon.nickname || "",
+          image: zyphon.image || "",
+        },
+      });
+    } catch {
+      // Fallback
+    }
+  }, [seasons]);
+
   const handleWrapperMouseEnter = () => {
     if (vsTextRef.current) {
       gsap.to(vsTextRef.current, {
@@ -211,7 +185,6 @@ export default function NextMatch() {
   return (
     <div className="w-full max-w-[560px] text-white">
       
-      {/* Sektion Info – mb-4 ændret til mb-2 for mindre afstand i bunden */}
       <div className="mb-2 flex items-end justify-between gap-4 border-b border-orange-brand/10 pb-3 select-none">
         <div>
           <p className="text-label font-black uppercase tracking-[0.25em] text-orange-brand">POWER Ligaen</p>
@@ -219,7 +192,6 @@ export default function NextMatch() {
         </div>
       </div>
 
-      {/* Interaktiv Kamp-Anchor */}
       <a
         href="https://www.twitch.tv/dust2tv"
         target="_blank"
@@ -228,21 +200,17 @@ export default function NextMatch() {
         onMouseLeave={handleWrapperMouseLeave}
         className="group block w-full bg-transparent cursor-pointer no-underline"
       >
-        {/* py-6 ændret til pt-1 pb-6 for at trække spillerne tættere på overskriften */}
         <div className="relative pt-1 pb-6">
           <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-8">
 
-            {/* Spiller 1 */}
             <PlayerShowcase {...players.a} textRef={teamARef} />
 
-            {/* Svævende VS-indikator */}
             <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-orange-brand/25 bg-background text-xs font-black text-orange-brand sm:h-12 sm:w-12 z-25">
               <span ref={vsTextRef} className="select-none inline-block">
                 (VS)
               </span>
             </div>
 
-            {/* Spiller 2 */}
             <PlayerShowcase {...players.b} textRef={teamBRef} />
 
           </div>

@@ -3,27 +3,21 @@
 import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import type { ApiSeason, ApiPlayer } from "@/lib/types";
 
 import PlayerCard from "@/components/PlayerCard";
 
-// Registrer GSAP plugin på klientsiden
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrambleTextPlugin);
 }
 
-// -------------------------------------------
-// Konfiguration & Afgrænsning
-// -------------------------------------------
 const MVP_NICKNAME = "leakz";
 const TEAM_MATCH = "tricked";
 const SEASON_NAME_PART = "Sæson 31";
 
-// Præcis afgrænsning af, hvilke holdkammerater der må vises
+// Kun disse spillere vises som holdkammerater
 const ALLOWED_TEAMMATES = ["boye", "nickyb", "salazar", "iceberg"];
 
-// -------------------------------------------
-// Typer
-// -------------------------------------------
 interface Player {
   id: string;
   name: string; // Nickname/kaldenavn i API'et
@@ -41,18 +35,8 @@ interface MvpShowcaseProps {
   teammates: Player[];
 }
 
-// Mapper rå API-player til den struktur vi bruger
 function mapRosterToPlayers(
-  players: { 
-    name?: string; 
-    nickname?: string; 
-    steamid?: string; 
-    image?: string;
-    role?: string;
-    age?: number | string;
-    twitter?: string;
-    social?: { twitter?: string };
-  }[],
+  players: ApiPlayer[],
   teamName: string,
   teamLogo: string
 ): Player[] {
@@ -70,9 +54,6 @@ function mapRosterToPlayers(
 }
 
 
-// ==================================================
-// MVP Showcase Sektion
-// ==================================================
 function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
   const mvpNameRef = useRef<HTMLHeadingElement>(null);
 
@@ -106,7 +87,6 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
   return (
     <section className="relative w-full bg-background font-sans text-foreground" aria-labelledby="season31-mvp-heading">
       <div className="relative z-10 mx-auto max-w-7xl flex flex-col">
-        {/* Sektionsoverskrift */}
         <header className="mb-6">
           <p className="mb-0.5 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             {SEASON_NAME_PART}
@@ -120,10 +100,8 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
           <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand" />
         </header>
 
-        {/* Content grid */}
         <div className="grid min-h-0 grid-cols-1 gap-6 lg:grid-cols-2 lg:items-stretch lg:gap-8 mb-8">
-          
-          {/* Main MVP Card */}
+
           <div 
             onMouseEnter={handleMvpMouseEnter}
             onMouseLeave={handleMvpMouseLeave}
@@ -173,7 +151,6 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
             </div>
           </div>
 
-          {/* Højre side: Beskrivelse og Stats */}
           <div className="flex min-h-0 flex-col justify-center gap-6">
             <div>
               <h3 className="mb-2 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
@@ -184,7 +161,6 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
               </p>
             </div>
 
-            {/* Stats */}
             <div className="grid grid-cols-3 gap-3">
               {[
                 { label: "Kampe", value: "30" },
@@ -207,7 +183,6 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
           </div>
         </div>
 
-        {/* Holdkammerater sektion */}
         <div className="mt-2 border-t border-orange-brand/10 pt-6">
           <p className="mb-0.5 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Holdet
@@ -237,77 +212,57 @@ function MvpShowcase({ mvpPlayer, teammates }: MvpShowcaseProps) {
   );
 }
 
-// ==================================================
-// Hovedkomponent til data-hentning
-// ==================================================
 type FetchState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | { status: "ok"; mvpPlayer: Player; teammates: Player[] };
 
-export default function Season31Champs() {
+export default function Season31Champs({ seasons }: { seasons: ApiSeason[] | null }) {
   const [state, setState] = useState<FetchState>({ status: "loading" });
 
   useEffect(() => {
-    async function loadSeasonChamps() {
-      try {
-        const res = await fetch("/api/powerstats?type=a/31");
-        if (!res.ok) {
-          const errorData = await res.json().catch(() => ({}));
-          throw new Error(errorData?.error || `API fejl: ${res.status} ${res.statusText}`);
-        }
-
-        const json = await res.json();
-        const seasons = json.data;
-        if (!Array.isArray(seasons)) {
-          throw new Error("Ugyldigt svar fra API - 'data' er ikke et array");
-        }
-
-        const season = seasons.find((s: any) => s.name?.includes(SEASON_NAME_PART));
-        if (!season?.teams?.length) {
-          throw new Error(`Fandt ikke ${SEASON_NAME_PART}`);
-        }
-
-        const team = season.teams.find((t: any) => {
-          const name = String(t.name || "").toLowerCase();
-          const shortName = String(t.shortName || "").toLowerCase();
-          return name === TEAM_MATCH || shortName === TEAM_MATCH;
-        });
-        if (!team?.lineups?.players?.length) {
-          throw new Error("Fandt ikke Tricked-roster");
-        }
-
-        const roster = mapRosterToPlayers(
-          team.lineups.players,
-          team.shortName || team.name || "Tricked",
-          team.logoUrl || ""
-        );
-
-        // Find MVP-spillerens indeks
-        const mvpIdx = roster.findIndex((p) => p.name.toLowerCase() === MVP_NICKNAME);
-        const selectedIdx = mvpIdx >= 0 ? mvpIdx : 0;
-
-        // Filtrer makkere ud, så vi KUN tager dem der er i vores whitelist
-        const filteredTeammates = roster.filter((p) => {
-          const checkName = p.name.toLowerCase();
-          return checkName !== MVP_NICKNAME && ALLOWED_TEAMMATES.includes(checkName);
-        });
-
-        setState({
-          status: "ok",
-          mvpPlayer: roster[selectedIdx],
-          teammates: filteredTeammates,
-        });
-      } catch (e: unknown) {
-        setState({
-          status: "error",
-          message: e instanceof Error ? e.message : "Ukendt fejl",
-        });
+    if (!seasons) return;
+    try {
+      const season = seasons.find(s => s.name?.includes(SEASON_NAME_PART));
+      if (!season?.teams?.length) {
+        throw new Error(`Fandt ikke ${SEASON_NAME_PART}`);
       }
-    }
 
-    loadSeasonChamps();
-  }, []);
+      const team = season.teams.find(t => {
+        const name = String(t.name || "").toLowerCase();
+        const shortName = String(t.shortName || "").toLowerCase();
+        return name === TEAM_MATCH || shortName === TEAM_MATCH;
+      });
+      if (!team?.lineups?.players?.length) {
+        throw new Error("Fandt ikke Tricked-roster");
+      }
+
+      const roster = mapRosterToPlayers(
+        team.lineups.players,
+        team.shortName || team.name || "Tricked",
+        team.logoUrl || ""
+      );
+
+      const mvpIdx = roster.findIndex((p) => p.name.toLowerCase() === MVP_NICKNAME);
+      const selectedIdx = mvpIdx >= 0 ? mvpIdx : 0;
+
+      const filteredTeammates = roster.filter((p) => {
+        const checkName = p.name.toLowerCase();
+        return checkName !== MVP_NICKNAME && ALLOWED_TEAMMATES.includes(checkName);
+      });
+
+      setState({
+        status: "ok",
+        mvpPlayer: roster[selectedIdx],
+        teammates: filteredTeammates,
+      });
+    } catch (e: unknown) {
+      setState({
+        status: "error",
+        message: e instanceof Error ? e.message : "Ukendt fejl",
+      });
+    }
+  }, [seasons]);
 
   if (state.status === "loading") {
     return (
