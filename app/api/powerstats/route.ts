@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
 
   // Hvis API-nøglen mangler, logges en fejl og der returneres en 500-fejl til klienten
   if (!apiKey) {
-    console.error("❌ DUST2_API_KEY ikke fundet i environment variables");
+    console.error("DUST2_API_KEY ikke fundet i environment variables");
     // Returnerer et JSON-fejlobjekt med HTTP status 500 (Internal Server Error)
     return NextResponse.json(
       { error: "API nøgle ikke konfigureret" },
