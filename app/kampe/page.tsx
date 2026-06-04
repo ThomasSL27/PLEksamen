@@ -1,11 +1,20 @@
+// ============================================================
+// Kampprogram: app/kampe/page.tsx (Next.js App Router)
+// Viser alle kampe for den valgte sæson i et responsivt grid.
+// Hvert kamp-kort linker til en detaljeside (/kampe/[id]).
+// Inkluderer en sæson-filter dropdown til at skifte mellem sæsoner.
+// "use client" er nødvendigt pga. useState, useEffect og events.
+// ============================================================
 "use client";
 import { useEffect, useState, useRef } from "react";
+// Link bruges til intern navigation (hurtigere end <a>)
 import Link from "next/link";
+// toLower er en hjælpefunktion til case-insensitiv sammenligning
 import { toLower } from "@/lib/utils";
 
-// ==================================================
-// Ikoner
-// ==================================================
+// ============================================================
+// ChevronIcon: Lille pil-ikon brugt i dropdown-knappen
+// ============================================================
 function ChevronIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className={className}>
@@ -14,17 +23,16 @@ function ChevronIcon({ className = "" }: { className?: string }) {
   );
 }
 
-// ==================================================
+// ============================================================
 // Konstanter
-// ==================================================
+// ============================================================
 const SEASON_ENDPOINT = "a/31";
 const SEASON_NAME = "Sæson 31";
-const GRUNDSPIL_MATCH = "grundspil";
+const GRUNDSPIL_MATCH = "grundspil"; // Bruges til at finde standard-sæsonen
 
-
-// ==================================================
-// Typer
-// ==================================================
+// ============================================================
+// Typer: Beskriver API-datastrukturen for hold, kampe og sæsoner
+// ============================================================
 interface Team {
   _id: string;
   name: string;
@@ -34,11 +42,11 @@ interface Team {
 
 interface Match {
   _id: string;
-  team1: string;
-  team2: string;
-  winnerId?: string;
-  status?: string;
-  state?: string;
+  team1: string;        // Hold-ID (ikke objekt — slås op separat)
+  team2: string;        // Hold-ID (ikke objekt — slås op separat)
+  winnerId?: string;    // ID på det vindende hold (undefined hvis uafgjort/ikke spillet)
+  status?: string;      // "finished" fra API
+  state?: string;       // "complete" fra API
   team1Score?: number;
   team2Score?: number;
   streamUrl?: string;
@@ -51,46 +59,49 @@ interface Season {
   matches: Match[];
 }
 
+// FetchState: loading → ok (med seasons og selectedSeason) eller error
 type FetchState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | {
       status: "ok";
       seasons: Season[];
-      selectedSeason: Season;
+      selectedSeason: Season; // Den aktuelle sæson der vises
     };
 
-// ==================================================
-// Komponent: MatchRow
-// ==================================================
+// ============================================================
+// MatchRow: Viser én kamp som et klikbart kort
+// teams-arrayet bruges til at slå holdnavne og logoer op fra ID
+// ============================================================
 function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
+  // Slår holdene op baseret på deres ID
   const t1 = teams.find((t) => t._id === match.team1);
   const t2 = teams.find((t) => t._id === match.team2);
 
+  // Springer over hvis et hold ikke kan findes (data-fejl)
   if (!t1 || !t2) return null;
 
+  // Bestemmer vinder ved at sammenligne winnerId med holdets ID
   const isT1Winner = match.winnerId === t1._id;
   const isT2Winner = match.winnerId === t2._id;
 
   return (
+    // Link til kampdetaljesiden med matchets unikke ID
     <Link href={`/kampe/${match._id}`} className="block">
       <div className="group overflow-hidden rounded-xl border border-orange-brand/10 bg-card p-5 transition-all duration-300 hover:border-orange-brand/40 hover:bg-card-hover cursor-pointer">
         <div className="flex items-center justify-between gap-4 text-center">
-          
-          {/* Hold 1 */}
+
+          {/* Hold 1 — vinderens logo har orange glow-skygge */}
           <div className="flex flex-1 flex-col items-center">
             <div
               className={`relative h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center mb-3 transition-all duration-300 group-hover:scale-110 ${
                 isT1Winner ? "drop-shadow-[0_0_12px_rgba(var(--brand-orange-rgb),0.6)]" : "opacity-80 group-hover:opacity-100"
               }`}
             >
-              <img
-                src={t1.logoUrl}
-                alt={t1.name}
-                className="h-full w-full object-contain"
-              />
+              <img src={t1.logoUrl} alt={t1.name} className="h-full w-full object-contain" />
             </div>
-            <span 
+            {/* Vinderens navn vises i orange */}
+            <span
               className={`text-xs sm:text-sm font-black uppercase truncate w-full transition-colors duration-300 ${
                 isT1Winner ? "text-orange-brand" : "text-white"
               }`}
@@ -99,29 +110,21 @@ function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
             </span>
           </div>
 
-          {/* Score Area */}
+          {/* Score og status i midten */}
           <div className="flex flex-col items-center px-2">
             <div className="flex items-center gap-2">
-              <span
-                className={`text-2xl font-black tracking-tight ${
-                  isT1Winner ? "text-orange-brand" : "text-white"
-                }`}
-              >
+              {/* Vinders score fremhæves i orange */}
+              <span className={`text-2xl font-black tracking-tight ${isT1Winner ? "text-orange-brand" : "text-white"}`}>
                 {match.team1Score ?? 0}
               </span>
               <span className="text-orange-brand/40 text-lg font-black">-</span>
-              <span
-                className={`text-2xl font-black tracking-tight ${
-                  isT2Winner ? "text-orange-brand" : "text-white"
-                }`}
-              >
+              <span className={`text-2xl font-black tracking-tight ${isT2Winner ? "text-orange-brand" : "text-white"}`}>
                 {match.team2Score ?? 0}
               </span>
             </div>
+            {/* Status-badge: "Slut" eller "LIVE" */}
             <span className="mt-1 rounded-full bg-orange-brand/10 px-2 py-0.5 text-2xs font-black uppercase tracking-widest text-orange-brand">
-              {match.state === "complete" || match.status === "finished"
-                ? "Slut"
-                : "LIVE"}
+              {match.state === "complete" || match.status === "finished" ? "Slut" : "LIVE"}
             </span>
           </div>
 
@@ -132,13 +135,9 @@ function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
                 isT2Winner ? "drop-shadow-[0_0_12px_rgba(var(--brand-orange-rgb),0.6)]" : "opacity-80 group-hover:opacity-100"
               }`}
             >
-              <img
-                src={t2.logoUrl}
-                alt={t2.name}
-                className="h-full w-full object-contain"
-              />
+              <img src={t2.logoUrl} alt={t2.name} className="h-full w-full object-contain" />
             </div>
-            <span 
+            <span
               className={`text-xs sm:text-sm font-black uppercase truncate w-full transition-colors duration-300 ${
                 isT2Winner ? "text-orange-brand" : "text-white"
               }`}
@@ -153,9 +152,10 @@ function MatchRow({ match, teams }: { match: Match; teams: Team[] }) {
   );
 }
 
-// ==================================================
-// Season Filter Dropdown
-// ==================================================
+// ============================================================
+// SeasonFilter: Dropdown til at skifte mellem sæsoner
+// Lukker automatisk ved klik udenfor dropdown-elementet
+// ============================================================
 function SeasonFilter({
   seasons,
   selectedSeason,
@@ -166,8 +166,13 @@ function SeasonFilter({
   onSelectSeason: (season: Season) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  // dropdownRef bruges til at detektere klik udenfor dropdown
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // ============================================================
+  // Klik-uden-for detektion: Lukker dropdown hvis brugeren klikker
+  // et andet sted på siden — forbedrer brugeroplevelsen
+  // ============================================================
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -179,23 +184,24 @@ function SeasonFilter({
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+    // Cleanup: Fjerner event listener når komponenten unmountes
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div ref={dropdownRef} className="relative inline-block">
+      {/* Filter-knap — viser pil der roteres ved åbning */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 rounded-lg border border-orange-brand/30 bg-gradient-to-r from-orange-brand/10 to-transparent px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-orange-soft transition-all hover:border-orange-brand/50 hover:bg-orange-brand/15 sm:px-5 sm:py-3"
       >
         <span className="text-label text-orange-brand sm:text-xs">FILTER</span>
         <ChevronIcon
-          className={`h-4 w-4 transition-transform duration-300 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
+      {/* Dropdown-liste — vises kun når isOpen er true */}
       {isOpen && (
         <div className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-lg border border-orange-brand/30 bg-surface shadow-2xl">
           <div className="max-h-96 overflow-y-auto">
@@ -204,11 +210,11 @@ function SeasonFilter({
                 key={idx}
                 onClick={() => {
                   onSelectSeason(season);
-                  setIsOpen(false);
+                  setIsOpen(false); // Lukker dropdown efter valg
                 }}
                 className={`block w-full px-4 py-3 text-left text-sm transition-all ${
                   selectedSeason.name === season.name
-                    ? "border-l-2 border-orange-brand bg-orange-brand/10 font-bold text-white"
+                    ? "border-l-2 border-orange-brand bg-orange-brand/10 font-bold text-white" // Aktiv sæson
                     : "border-l-2 border-transparent text-orange-soft/70 hover:bg-card hover:text-orange-soft"
                 }`}
               >
@@ -222,31 +228,30 @@ function SeasonFilter({
   );
 }
 
-// ==================================================
-// Main Page
-// ==================================================
+// ============================================================
+// KampePage: Hoved-sidkomponent
+// ============================================================
 export default function KampePage() {
   const [state, setState] = useState<FetchState>({ status: "loading" });
 
+  // ============================================================
+  // Datahentning: Henter alle sæsoner og kampe fra API'et
+  // ============================================================
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await fetch(`/api/powerstats?type=${SEASON_ENDPOINT}`);
         if (!res.ok) {
           const errorData = await res.json().catch(() => ({}));
-          throw new Error(
-            errorData?.error || `API fejl: ${res.status} ${res.statusText}`
-          );
+          throw new Error(errorData?.error || `API fejl: ${res.status} ${res.statusText}`);
         }
 
         const json = await res.json();
         const seasons: Season[] = json.data;
 
-        if (!Array.isArray(seasons)) {
-          throw new Error("Ugyldigt svar fra API");
-        }
+        if (!Array.isArray(seasons)) throw new Error("Ugyldigt svar fra API");
 
-        // Find Grundspillet som default
+        // Finder Grundspillet som standard-sæson
         const grundspil = seasons.find((s: any) =>
           toLower(s.name).includes(GRUNDSPIL_MATCH)
         );
@@ -255,11 +260,7 @@ export default function KampePage() {
           throw new Error("Fandt ikke kampe for Grundsspillet i Sæson 31");
         }
 
-        setState({
-          status: "ok",
-          seasons,
-          selectedSeason: grundspil,
-        });
+        setState({ status: "ok", seasons, selectedSeason: grundspil });
       } catch (e: unknown) {
         setState({
           status: "error",
@@ -271,6 +272,7 @@ export default function KampePage() {
     fetchData();
   }, []);
 
+  // Skifter den valgte sæson uden at genindlæse alle data
   const handleSeasonChange = (newSeason: Season) => {
     if (state.status === "ok") {
       setState({
@@ -283,12 +285,15 @@ export default function KampePage() {
 
   return (
     <main className="min-h-screen bg-background">
+      {/* Dekorative glow-cirkler */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-orange-brand opacity-[0.04] blur-3xl" />
         <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-10">
+
+        {/* Overskrift med filter-dropdown til højre */}
         <header className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
           <div>
             <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
@@ -300,6 +305,7 @@ export default function KampePage() {
             <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand sm:w-20" />
           </div>
 
+          {/* SeasonFilter vises kun når data er loaded */}
           {state.status === "ok" && (
             <SeasonFilter
               seasons={state.seasons}
@@ -309,39 +315,39 @@ export default function KampePage() {
           )}
         </header>
 
+        {/* Loading-tilstand */}
         {state.status === "loading" && (
           <div className="flex items-center justify-center py-32">
             <div className="flex flex-col items-center gap-3">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-brand/20 border-t-orange-brand" />
-              <p className="text-sm text-orange-soft/60">
-                Henter kampe for {SEASON_NAME}…
-              </p>
+              <p className="text-sm text-orange-soft/60">Henter kampe for {SEASON_NAME}…</p>
             </div>
           </div>
         )}
 
+        {/* Fejl-tilstand */}
         {state.status === "error" && (
           <div className="flex items-center justify-center py-32">
             <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-6 py-4 text-center">
               <p className="text-sm text-red-400">{state.message}</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-3 rounded-full bg-orange-brand px-4 py-1.5 text-xs font-bold text-background"
-              >
+              <button onClick={() => window.location.reload()} className="mt-3 rounded-full bg-orange-brand px-4 py-1.5 text-xs font-bold text-background">
                 Prøv igen
               </button>
             </div>
           </div>
         )}
 
+        {/* Succes-tilstand: Viser kamp-grid */}
         {state.status === "ok" && state.selectedSeason && (
           <section>
+            {/* Sæsonnavnet og antal kampe */}
             <h2 className="mb-6 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
               {state.selectedSeason.name}{" "}
               <span className="font-medium normal-case text-orange-soft/40">
                 ({state.selectedSeason.matches?.length || 0} kampe)
               </span>
             </h2>
+            {/* Responsivt 3-kolonne grid af kamp-kort */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {state.selectedSeason.matches && state.selectedSeason.matches.length > 0 ? (
                 state.selectedSeason.matches.map((match) => (
@@ -352,6 +358,7 @@ export default function KampePage() {
                   />
                 ))
               ) : (
+                // Tom-tilstand: Vises hvis ingen kampe er fundet
                 <div className="col-span-full rounded-lg border border-orange-brand/10 bg-card p-8 text-center">
                   <p className="text-sm text-orange-soft/40">
                     Ingen kampe fundet for denne ligaen

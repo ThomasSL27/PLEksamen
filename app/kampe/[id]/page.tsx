@@ -1,13 +1,27 @@
+// ============================================================
+// Kampdetaljer: app/kampe/[id]/page.tsx (Next.js App Router)
+// Dynamisk route — [id] i mappenavnet er et URL-parameter.
+// Viser detaljeret info om én specifik kamp: score, hold, veto,
+// maps (med billeder og demo-links) og player lineups.
+// "use client" er nødvendigt pga. useState, useEffect og useRouter.
+// ============================================================
 "use client";
 import { useEffect, useState, use } from "react";
+// useRouter bruges til at navigere tilbage
 import { useRouter } from "next/navigation";
+// Link bruges til intern navigation til kampprogram-siden
 import Link from "next/link";
 
-// ==================================================
+// ============================================================
 // Konstanter
-// ==================================================
+// ============================================================
 const SEASON_ENDPOINT = "a/31";
 
+// ============================================================
+// Hjælpefunktioner
+// ============================================================
+
+// formatDate: Konverterer ISO-dato til dansk format, fx "14. jun 2025, 19:00"
 const formatDate = (dateString?: string) => {
   if (!dateString) return "";
   return new Date(dateString).toLocaleDateString("da-DK", {
@@ -19,7 +33,7 @@ const formatDate = (dateString?: string) => {
   });
 };
 
-
+// getVetoTypeLabel: Oversætter API-veto-type til dansk label
 const getVetoTypeLabel = (type: string) => {
   const labels: Record<string, string> = {
     pickBanTeam: "Starthold",
@@ -29,16 +43,17 @@ const getVetoTypeLabel = (type: string) => {
   return labels[type] || type;
 };
 
-// Returnerer den korrekte sti til et banebillede i .webp-format
+// getMapImageUrl: Returnerer stien til et bane-billede i .webp-format
+// Billederne ligger i /public/maps/ og navngives med mapnavn i lowercase
 const getMapImageUrl = (mapName: string) => {
   if (!mapName) return "/maps/default.webp";
   const formattedName = mapName.trim().toLowerCase();
   return `/maps/${formattedName}.webp`;
 };
 
-// ==================================================
-// Typer
-// ==================================================
+// ============================================================
+// Typer: Beskriver API-datastrukturen for en kamp og dens dele
+// ============================================================
 interface Team {
   _id: string;
   name: string;
@@ -47,8 +62,8 @@ interface Team {
 }
 
 interface MapData {
-  map: string;
-  demos?: string[];
+  map: string;              // Banens navn, fx "Dust2"
+  demos?: string[];         // URL'er til demo-filer (tom hvis bane ikke er spillet)
   team1Score?: number;
   team2Score?: number;
 }
@@ -61,21 +76,21 @@ interface Player {
 }
 
 interface Veto {
-  type: string;
-  teamId: string;
+  type: string;             // "ban", "pick" eller "pickBanTeam"
+  teamId: string;           // ID på det hold der foretog handlingen
   side?: string;
   time: string;
   _id: string;
-  map?: string;
+  map?: string;             // Kortnavn for den valgte/bannede bane
 }
 
 interface Match {
   _id: string;
-  team1: string;
-  team2: string;
-  winnerId?: string;
-  state?: string;
-  status?: string;
+  team1: string;            // Hold-ID (ikke objekt)
+  team2: string;            // Hold-ID (ikke objekt)
+  winnerId?: string;        // ID på det vindende hold
+  state?: string;           // "complete"
+  status?: string;          // "finished"
   team1Score?: number;
   team2Score?: number;
   startDate?: string;
@@ -94,28 +109,33 @@ interface LeagueData {
   matches: Match[];
 }
 
+// FetchState: loading → ok eller error
 type FetchState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | { status: "ok"; match: Match; teams: Team[]; leagueName: string };
 
-// ==================================================
-// Komponenter
-// ==================================================
-
+// ============================================================
+// VetoSection: Viser veto-rækkefølgen med farvekodet type
+// Grøn = pick, rød = ban, blå = starthold
+// ============================================================
 function VetoSection({ veto, teams }: { veto: Veto[]; teams: Team[] }) {
   return (
     <div className="space-y-3">
       {veto.map((action, idx) => {
+        // Slår holdet op via teamId
         const team = teams.find((t) => t._id === action.teamId);
         const mapText = action.map ? ` ${action.map}` : "";
         return (
           <div key={action._id || idx} className="flex items-start gap-3">
+            {/* Nummer på handlingen */}
             <span className="font-bold text-orange-brand text-sm flex-shrink-0 w-6">
               {idx + 1}.
             </span>
             <p className="text-sm text-white">
+              {/* Holdnavn i bold */}
               <span className="font-bold">{team?.shortName || team?.name}</span>{" "}
+              {/* Type farvekodet: ban=rød, pick=grøn, pickBanTeam=blå */}
               <span
                 className={`font-semibold ${
                   action.type === "ban"
@@ -127,6 +147,7 @@ function VetoSection({ veto, teams }: { veto: Veto[]; teams: Team[] }) {
               >
                 {getVetoTypeLabel(action.type).toLowerCase()}
               </span>
+              {/* Kortnavn (hvis det er en pick/ban af en bane) */}
               <span className="text-orange-soft/70">{mapText}</span>
             </p>
           </div>
@@ -136,6 +157,9 @@ function VetoSection({ veto, teams }: { veto: Veto[]; teams: Team[] }) {
   );
 }
 
+// ============================================================
+// LineupSection: Viser spillerlisten for ét hold
+// ============================================================
 function LineupSection({
   lineup,
   teamName,
@@ -146,6 +170,7 @@ function LineupSection({
   return (
     <div className="space-y-3">
       <h4 className="text-sm font-bold text-white uppercase">{teamName}</h4>
+      {/* 2-kolonne grid af spillerkort */}
       <div className="grid grid-cols-2 gap-2">
         {lineup.map((player) => (
           <div
@@ -153,6 +178,7 @@ function LineupSection({
             className="rounded-lg border border-orange-brand/10 bg-card p-3"
           >
             <p className="text-xs font-bold text-white">{player.nickname}</p>
+            {/* Spillerens rigtige navn vises kun hvis tilgængeligt */}
             {player.name && (
               <p className="text-label text-orange-soft/50">{player.name}</p>
             )}
@@ -163,27 +189,30 @@ function LineupSection({
   );
 }
 
-// ==================================================
-// Main Page (Kampdetaljer)
-// ==================================================
+// ============================================================
+// MatchDetailPage: Hoved-sidkomponent
+// params er et Promise i Next.js App Router — udpakkes med use()
+// ============================================================
 export default function MatchDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const router = useRouter();
+  // use() er en React-hook der udpakker Promise-baserede params
   const { id } = use(params);
   const [state, setState] = useState<FetchState>({ status: "loading" });
 
+  // ============================================================
+  // Datahentning: Henter alle sæsoner og finder kampen med det givne id
+  // ============================================================
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await fetch(`/api/powerstats?type=${SEASON_ENDPOINT}`);
         if (!res.ok) {
           const errorData = await res.json().catch(() => ({}));
-          throw new Error(
-            errorData?.error || `API fejl: ${res.status} ${res.statusText}`
-          );
+          throw new Error(errorData?.error || `API fejl: ${res.status} ${res.statusText}`);
         }
 
         const json = await res.json();
@@ -193,6 +222,7 @@ export default function MatchDetailPage({
           throw new Error("Ugyldigt svar fra API");
         }
 
+        // Søger alle sæsoner igennem for at finde kampen med det givne ID
         let foundMatch: Match | undefined;
         let foundLeague: LeagueData | undefined;
 
@@ -201,7 +231,7 @@ export default function MatchDetailPage({
           if (match) {
             foundMatch = match;
             foundLeague = season;
-            break;
+            break; // Stopper søgningen når kampen er fundet
           }
         }
 
@@ -224,23 +254,32 @@ export default function MatchDetailPage({
     }
 
     fetchData();
-  }, [id]);
+  }, [id]); // Kører igen hvis URL-parametret id ændres
 
+  // ============================================================
+  // Afledte variabler: Beregner vinder-status fra state
+  // Kun relevant når state er "ok"
+  // ============================================================
   const t1 = state.status === "ok" ? state.teams.find((t) => t._id === state.match.team1) : null;
   const t2 = state.status === "ok" ? state.teams.find((t) => t._id === state.match.team2) : null;
   const isT1Winner = state.status === "ok" ? state.match.winnerId === t1?._id : false;
   const isT2Winner = state.status === "ok" ? state.match.winnerId === t2?._id : false;
+  // isComplete er true hvis state eller status indikerer at kampen er færdigspillet
   const isComplete = state.status === "ok" ? (state.match.state === "complete" || state.match.status === "finished") : false;
 
   return (
     <main className="min-h-screen bg-background">
+      {/* Dekorative glow-cirkler */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-orange-brand opacity-[0.04] blur-3xl" />
         <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-10">
+
+        {/* Side-header med "Tilbage"-link */}
         <header className="mb-8">
+          {/* Tilbagelink til kampprogram-oversigten */}
           <Link
             href="/kampe"
             className="inline-flex items-center gap-2 text-orange-brand hover:text-orange-soft transition-colors mb-4 text-sm font-bold"
@@ -256,6 +295,7 @@ export default function MatchDetailPage({
           <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand sm:w-20" />
         </header>
 
+        {/* Loading-tilstand */}
         {state.status === "loading" && (
           <div className="flex items-center justify-center py-32">
             <div className="flex flex-col items-center gap-3">
@@ -265,10 +305,12 @@ export default function MatchDetailPage({
           </div>
         )}
 
+        {/* Fejl-tilstand */}
         {state.status === "error" && (
           <div className="flex items-center justify-center py-32">
             <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-6 py-4 text-center">
               <p className="font-bold mb-2 text-red-400">FEJL: {state.message}</p>
+              {/* "Gå tilbage" bruger router.back() til at navigere til forrige side */}
               <button
                 onClick={() => router.back()}
                 className="mt-3 rounded-full bg-orange-brand px-4 py-1.5 text-xs font-bold text-background"
@@ -279,20 +321,25 @@ export default function MatchDetailPage({
           </div>
         )}
 
+        {/* Succes-tilstand: Viser kampdetaljerne */}
         {state.status === "ok" && state.match && t1 && t2 && (
           <section className="space-y-8">
-            
-            {/* Unificeret Match Hero - Nu helt svævende uden mørke baggrundskasser */}
+
+            {/* ============================================================ */}
+            {/* Match Hero: Score og holdlogoer centreret                     */}
+            {/* ============================================================ */}
             <div className="relative overflow-visible p-2 sm:p-4">
+              {/* Subtil glow-cirkel bag scoret */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-orange-brand opacity-[0.04] blur-[120px] pointer-events-none" />
 
-              {/* Top Meta info */}
+              {/* Meta-info: Ligaens navn + kamp-status og dato */}
               <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-orange-brand/10 pb-5 mb-6 sm:mb-8">
                 <span className="text-label sm:text-xs font-black uppercase tracking-widest text-orange-brand">
                   {state.leagueName}
                 </span>
-                
+
                 <div className="flex items-center gap-3">
+                  {/* Status-badge: "Afsluttet" eller pulserende "LIVE" */}
                   <span
                     className={`text-2xs sm:text-label font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${
                       isComplete
@@ -302,7 +349,8 @@ export default function MatchDetailPage({
                   >
                     {isComplete ? "Afsluttet" : "LIVE"}
                   </span>
-                  
+
+                  {/* Kampens dato og tidspunkt */}
                   {state.match.startDate && (
                     <span className="text-caption font-bold text-orange-soft/60">
                       {formatDate(state.match.startDate)}
@@ -311,25 +359,23 @@ export default function MatchDetailPage({
                 </div>
               </div>
 
-              {/* Kamp Layout - Med markant større logoer */}
+              {/* ============================================================ */}
+              {/* Hold + Score: Tre-kolonne layout (Hold 1 | Score | Hold 2)   */}
+              {/* ============================================================ */}
               <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">
-                
-                {/* Hold 1 */}
+
+                {/* Hold 1: Vinderens logo har full opacity, taberens er dæmpet */}
                 <div className="flex flex-col items-center flex-1 w-full md:w-auto">
                   <div
                     className={`relative h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 flex items-center justify-center mb-4 transition-all duration-300 ${
-                      isT1Winner 
-                        ? "drop-shadow-[0_0_24px_rgba(var(--brand-orange-rgb),0.6)] scale-105" 
+                      isT1Winner
+                        ? "drop-shadow-[0_0_24px_rgba(var(--brand-orange-rgb),0.6)] scale-105"
                         : isComplete ? "opacity-35" : "opacity-95"
                     }`}
                   >
-                    <img
-                      src={t1.logoUrl}
-                      alt={t1.name}
-                      className="h-full w-full object-contain"
-                    />
+                    <img src={t1.logoUrl} alt={t1.name} className="h-full w-full object-contain" />
                   </div>
-                  <span 
+                  <span
                     className={`text-xl sm:text-2xl font-black uppercase tracking-wide text-center transition-colors duration-300 ${
                       isT1Winner ? "text-orange-brand" : "text-white"
                     }`}
@@ -338,25 +384,17 @@ export default function MatchDetailPage({
                   </span>
                 </div>
 
-                {/* VS / Score Centreret */}
+                {/* Score i midten — store tal, vinderens tal i orange */}
                 <div className="flex flex-col items-center py-4 px-6 md:py-0">
                   <span className="text-label font-bold uppercase tracking-widest text-orange-brand/40 mb-1">
                     RESULTAT
                   </span>
                   <div className="flex items-center gap-4">
-                    <span
-                      className={`text-4xl sm:text-5xl md:text-6xl font-black tabular-nums transition-colors duration-300 ${
-                        isT1Winner ? "text-orange-brand" : "text-white"
-                      }`}
-                    >
+                    <span className={`text-4xl sm:text-5xl md:text-6xl font-black tabular-nums transition-colors duration-300 ${isT1Winner ? "text-orange-brand" : "text-white"}`}>
                       {state.match.team1Score ?? 0}
                     </span>
                     <span className="text-3xl sm:text-4xl font-black text-orange-brand/30 select-none">-</span>
-                    <span
-                      className={`text-4xl sm:text-5xl md:text-6xl font-black tabular-nums transition-colors duration-300 ${
-                        isT2Winner ? "text-orange-brand" : "text-white"
-                      }`}
-                    >
+                    <span className={`text-4xl sm:text-5xl md:text-6xl font-black tabular-nums transition-colors duration-300 ${isT2Winner ? "text-orange-brand" : "text-white"}`}>
                       {state.match.team2Score ?? 0}
                     </span>
                   </div>
@@ -366,18 +404,14 @@ export default function MatchDetailPage({
                 <div className="flex flex-col items-center flex-1 w-full md:w-auto">
                   <div
                     className={`relative h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 flex items-center justify-center mb-4 transition-all duration-300 ${
-                      isT2Winner 
-                        ? "drop-shadow-[0_0_24px_rgba(var(--brand-orange-rgb),0.6)] scale-105" 
+                      isT2Winner
+                        ? "drop-shadow-[0_0_24px_rgba(var(--brand-orange-rgb),0.6)] scale-105"
                         : isComplete ? "opacity-35" : "opacity-95"
                     }`}
                   >
-                    <img
-                      src={t2.logoUrl}
-                      alt={t2.name}
-                      className="h-full w-full object-contain"
-                    />
+                    <img src={t2.logoUrl} alt={t2.name} className="h-full w-full object-contain" />
                   </div>
-                  <span 
+                  <span
                     className={`text-xl sm:text-2xl font-black uppercase tracking-wide text-center transition-colors duration-300 ${
                       isT2Winner ? "text-orange-brand" : "text-white"
                     }`}
@@ -388,7 +422,7 @@ export default function MatchDetailPage({
 
               </div>
 
-              {/* Vinder Display i bunden */}
+              {/* Vinder-display i bunden — vises kun hvis en vinder er registreret */}
               {state.match.winnerId && (
                 <div className="relative z-10 mt-8 flex justify-center border-t border-orange-brand/5 pt-5">
                   <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-orange-soft bg-orange-brand/10 px-4 py-1.5 rounded-full border border-orange-brand/20">
@@ -400,7 +434,9 @@ export default function MatchDetailPage({
               )}
             </div>
 
-            {/* LIVE KAMP OVERVIEW PLACEHOLDER (Matcher designet 1:1 i bredden) */}
+            {/* ============================================================ */}
+            {/* Live Match Overview: Placeholder-billede                      */}
+            {/* ============================================================ */}
             <div className="relative overflow-hidden rounded-2xl border border-orange-brand/15 shadow-2xl bg-gradient-to-b from-card to-background">
               <img
                 src="/placeholderTilKampOverview.png"
@@ -412,9 +448,12 @@ export default function MatchDetailPage({
               </div>
             </div>
 
-            {/* Veto og Maps */}
+            {/* ============================================================ */}
+            {/* Veto og Maps: To-kolonne grid                                 */}
+            {/* ============================================================ */}
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {/* Veto - Venstre */}
+
+              {/* Veto-sektion — vises kun hvis veto-data er tilgængeligt */}
               {state.match.veto && state.match.veto.length > 0 && (
                 <div className="space-y-4">
                   <h3 className="text-xs font-bold uppercase tracking-widest text-orange-brand mb-2">
@@ -426,7 +465,7 @@ export default function MatchDetailPage({
                 </div>
               )}
 
-              {/* Maps - Højre med WebP-billeder og demo-logik check */}
+              {/* Maps-sektion — vises kun hvis map-data er tilgængeligt */}
               {state.match.maps && state.match.maps.length > 0 && (
                 <div className="space-y-4">
                   <h3 className="text-xs font-bold uppercase tracking-widest text-orange-brand mb-2">
@@ -434,38 +473,37 @@ export default function MatchDetailPage({
                   </h3>
                   <div className="grid grid-cols-1 gap-4">
                     {state.match.maps.map((mapData, idx) => {
+                      // Henter billede-stien til banen
                       const mapBg = getMapImageUrl(mapData.map);
+                      // En bane er spillet hvis der er demo-filer tilknyttet
                       const isPlayed = mapData.demos && mapData.demos.length > 0;
-                      
+
                       return (
                         <div
                           key={idx}
                           className="relative overflow-hidden rounded-xl border border-orange-brand/15 min-h-[140px] flex flex-col justify-between p-5 transition-all duration-300 hover:border-orange-brand/40"
+                          // Banebilledet bruges som CSS baggrundsbillede med gradient overlay
                           style={{
                             backgroundImage: `linear-gradient(to right, rgba(var(--bg-player-rgb), 0.95) 45%, rgba(var(--bg-player-rgb), 0.3) 100%), url(${mapBg})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                           }}
                         >
-                          {/* Map Info */}
                           <div className="relative z-10 flex flex-col justify-between h-full">
                             <div className="flex items-start justify-between">
+                              {/* Banens navn */}
                               <h4 className="font-black text-white uppercase text-base tracking-wide">
                                 {mapData.map}
                               </h4>
                             </div>
 
                             <div className="mt-4 flex items-end justify-between">
-                              {/* Scores */}
+                              {/* Score vises kun for afspillede baner */}
                               {isPlayed ? (
                                 <div className="inline-flex items-center gap-2.5 bg-background/90 rounded-lg border border-orange-brand/20 px-3.5 py-1.5 shadow-lg">
-                                  <span className="text-sm font-black text-white tabular-nums">
-                                    {mapData.team1Score ?? 0}
-                                  </span>
+                                  <span className="text-sm font-black text-white tabular-nums">{mapData.team1Score ?? 0}</span>
                                   <span className="text-orange-brand/40 text-xs font-black">-</span>
-                                  <span className="text-sm font-black text-white tabular-nums">
-                                    {mapData.team2Score ?? 0}
-                                  </span>
+                                  <span className="text-sm font-black text-white tabular-nums">{mapData.team2Score ?? 0}</span>
                                 </div>
                               ) : (
                                 <div className="text-label font-black uppercase tracking-widest bg-black/60 text-orange-soft/55 px-2.5 py-1.5 rounded">
@@ -473,7 +511,7 @@ export default function MatchDetailPage({
                                 </div>
                               )}
 
-                              {/* Demos */}
+                              {/* Demo-download links — vises kun for afspillede baner */}
                               {isPlayed && mapData.demos && mapData.demos.length > 0 && (
                                 <div className="space-y-1">
                                   {mapData.demos.map((demo, demoIdx) => (
@@ -499,7 +537,9 @@ export default function MatchDetailPage({
               )}
             </div>
 
-            {/* Lineups */}
+            {/* ============================================================ */}
+            {/* Lineups: Viser begge holds spillerlister side om side         */}
+            {/* ============================================================ */}
             {state.match.lineups && (
               <div className="space-y-4">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-orange-brand">
@@ -507,16 +547,10 @@ export default function MatchDetailPage({
                 </h3>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   {state.match.lineups.team1 && (
-                    <LineupSection
-                      lineup={state.match.lineups.team1}
-                      teamName={t1.name}
-                    />
+                    <LineupSection lineup={state.match.lineups.team1} teamName={t1.name} />
                   )}
                   {state.match.lineups.team2 && (
-                    <LineupSection
-                      lineup={state.match.lineups.team2}
-                      teamName={t2.name}
-                    />
+                    <LineupSection lineup={state.match.lineups.team2} teamName={t2.name} />
                   )}
                 </div>
               </div>

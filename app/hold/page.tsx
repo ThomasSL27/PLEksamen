@@ -1,12 +1,20 @@
+// ============================================================
+// Hold: app/hold/page.tsx (Next.js App Router)
+// Viser alle hold med klikbare logo-knapper og en detaljeret
+// holdvisning (FeaturedTeam) med spillerkort og trænerprofil.
+// Inkluderer sæson-filter dropdown til at skifte sæson.
+// "use client" er nødvendigt pga. useState, useEffect og events.
+// ============================================================
 "use client";
 import { useEffect, useState, useRef } from "react";
-
+// PlayerCard er det genbrugelige spillerkort
 import PlayerCard from "@/components/PlayerCard";
+// Hjælpefunktioner til sammenligning og Twitter-URL
 import { toLower, getTwitterUrl } from "@/lib/utils";
 
-// ==================================================
-// Ikoner
-// ==================================================
+// ============================================================
+// X (Twitter) ikon: Inline SVG-komponent
+// ============================================================
 function XTwitterIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 640 640" fill="currentColor" className={className}>
@@ -15,7 +23,9 @@ function XTwitterIcon({ className = "" }: { className?: string }) {
   );
 }
 
-
+// ============================================================
+// ChevronIcon: Lille pil-ikon brugt i dropdown-knappen
+// ============================================================
 function ChevronIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className={className}>
@@ -24,9 +34,9 @@ function ChevronIcon({ className = "" }: { className?: string }) {
   );
 }
 
-// ==================================================
-// Typer
-// ==================================================
+// ============================================================
+// Typer: Beskriver datastrukturen for hold og spillere
+// ============================================================
 interface PlayerData {
   nickname: string;
   name?: string;
@@ -40,7 +50,7 @@ interface TeamData {
   name: string;
   shortName: string;
   logoUrl: string;
-  division: string;
+  division: string;    // Divisionsnavnet, fx "Sæson 31 Grundspil"
   players: PlayerData[];
 }
 
@@ -49,6 +59,7 @@ interface Season {
   teams: any[];
 }
 
+// FetchState: loading → ok eller error
 type FetchState =
   | { status: "loading" }
   | {
@@ -60,19 +71,24 @@ type FetchState =
     }
   | { status: "error"; message: string };
 
-// ==================================================
+// ============================================================
 // Konstanter
-// ==================================================
+// ============================================================
 const SEASON_ENDPOINT = "a/31";
 const SEASON_NAME = "Sæson 31";
 const GRUNDSPIL_MATCH = "grundspil";
 
+// ============================================================
+// mapTeam: Konverterer et API-holdobjekt til TeamData-type
+// Håndterer tilfælde hvor feltnavne mangler med || fallbacks
+// ============================================================
 function mapTeam(team: any, divisionName: string): TeamData {
   return {
     name: team.name || "Ukendt hold",
     shortName: team.shortName || team.name || "???",
     logoUrl: team.logoUrl || "",
     division: divisionName,
+    // Mapper spillere til PlayerData — tomt array hvis ingen spillere
     players:
       team.lineups?.players?.map((p: any) => ({
         nickname: p.nickname ?? p.name ?? "Ukendt",
@@ -85,9 +101,10 @@ function mapTeam(team: any, divisionName: string): TeamData {
   };
 }
 
-// ==================================================
-// Featured Team Sektion (Bruger nu den eksterne PlayerCard)
-// ==================================================
+// ============================================================
+// FeaturedTeam: Viser detaljeret holdvisning med logo, spillere og træner
+// onClose lukker visningen og sender brugeren tilbage til holdlisten
+// ============================================================
 function FeaturedTeam({
   team,
   onClose,
@@ -95,31 +112,30 @@ function FeaturedTeam({
   team: TeamData;
   onClose: () => void;
 }) {
+  // Finder trænerens profil ved rolle-matching
   const coach = team.players.find((p) =>
     ["coach", "træner"].includes(p.role?.toLowerCase() || "")
   );
+  // Aktive spillere er alle udover træneren
   const activePlayers = team.players.filter((p) => p !== coach);
 
   return (
     <section className="mb-10 overflow-hidden rounded-2xl border border-orange-brand/25 bg-gradient-to-br from-card to-card-deep shadow-2xl">
-      {/* Header */}
+
+      {/* Hold-header med logo og navn */}
       <div className="relative border-b border-orange-brand/15 bg-gradient-to-r from-orange-brand/10 to-transparent p-6 sm:p-8">
+        {/* Luk-knap i øverste højre hjørne */}
         <button
           onClick={onClose}
           aria-label="Luk holdvisning"
           className="absolute right-6 top-6 flex h-9 w-9 items-center justify-center rounded-full border border-orange-brand/20 bg-background text-orange-soft/60 transition-all hover:border-orange-brand/50 hover:text-white"
         >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
+        {/* Logo + holdnavn side om side */}
         <div className="flex items-center gap-5">
           <div className="relative flex h-24 w-24 shrink-0 items-center justify-center sm:h-28 sm:w-28 transition-transform duration-350">
             {team.logoUrl ? (
@@ -129,6 +145,7 @@ function FeaturedTeam({
                 className="h-full w-full object-contain drop-shadow-[0_0_15px_rgba(var(--brand-orange-rgb),0.15)]"
               />
             ) : (
+              // Fallback: Initialbogstav hvis intet logo
               <div className="flex h-full w-full items-center justify-center rounded-xl bg-orange-brand/10 border border-orange-brand/20">
                 <span className="text-3xl font-black text-orange-brand">
                   {(team.shortName || team.name).charAt(0)}
@@ -143,6 +160,7 @@ function FeaturedTeam({
             <h2 className="text-3xl font-black uppercase leading-none tracking-tighter text-white sm:text-4xl">
               {team.name}
             </h2>
+            {/* Antal spillere og om der er en træner */}
             <p className="mt-1.5 text-xs text-orange-soft/60">
               {activePlayers.length} spillere{coach ? " • 1 træner" : ""}
             </p>
@@ -150,13 +168,15 @@ function FeaturedTeam({
         </div>
       </div>
 
-      {/* Spillere */}
+      {/* Spillergrid: Maks. 5 aktive spillere vist */}
       <div className="p-6">
         <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
           Spillere
         </h3>
+        {/* 2-5 kolonner afhængigt af skærmbredde */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 md:gap-4">
           {activePlayers.slice(0, 5).map((player, idx) => (
+            // Genbruger den globale PlayerCard-komponent
             <PlayerCard
               key={`${player.nickname}-${idx}`}
               nickname={player.nickname}
@@ -172,20 +192,17 @@ function FeaturedTeam({
           ))}
         </div>
 
-        {/* Træner */}
+        {/* Træner-sektion (vises kun hvis en træner er fundet) */}
         {coach && (
           <div className="mt-8 border-t border-orange-brand/10 pt-5">
             <h3 className="mb-3 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
               Træner
             </h3>
             <div className="inline-flex items-center gap-3 rounded-lg border border-orange-brand/20 bg-card/50 p-3.5 transition-all hover:border-orange-brand/40">
+              {/* Trænerbillede */}
               <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md bg-gradient-to-br from-orange-brand/20 to-orange-brand/5">
                 {coach.image ? (
-                  <img
-                    src={coach.image}
-                    alt={coach.nickname}
-                    className="h-full w-full object-cover object-top"
-                  />
+                  <img src={coach.image} alt={coach.nickname} className="h-full w-full object-cover object-top" />
                 ) : null}
               </div>
               <div>
@@ -194,19 +211,12 @@ function FeaturedTeam({
                   <p className="text-label text-orange-soft/50">{coach.name}</p>
                 )}
                 <div className="mt-1 flex items-center gap-2">
-                  <p className="text-2xs font-bold uppercase tracking-wider text-orange-brand">
-                    Coach
-                  </p>
+                  <p className="text-2xs font-bold uppercase tracking-wider text-orange-brand">Coach</p>
                   {coach.age && (
                     <span className="text-2xs text-orange-soft/40">{coach.age} år</span>
                   )}
                   {coach.twitter && (
-                    <a
-                      href={getTwitterUrl(coach.twitter)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-orange-soft/40 transition-colors hover:text-white"
-                    >
+                    <a href={getTwitterUrl(coach.twitter)} target="_blank" rel="noopener noreferrer" className="text-orange-soft/40 transition-colors hover:text-white">
                       <XTwitterIcon className="h-3 w-3" />
                     </a>
                   )}
@@ -216,13 +226,14 @@ function FeaturedTeam({
           </div>
         )}
 
-        {/* Reserves */}
+        {/* Udskiftere: Vises hvis holdet har mere end 5 aktive spillere */}
         {activePlayers.length > 5 && (
           <div className="mt-6 border-t border-orange-brand/10 pt-5">
             <h3 className="mb-3 text-xs font-black uppercase tracking-widest text-orange-brand/60 sm:text-sm">
               Udskiftere
             </h3>
             <div className="flex flex-wrap gap-2">
+              {/* Starter fra index 5 (de første 5 er vist ovenfor) */}
               {activePlayers.slice(5).map((player, idx) => (
                 <div
                   key={`sub-${player.nickname}-${idx}`}
@@ -230,30 +241,15 @@ function FeaturedTeam({
                 >
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded bg-gradient-to-br from-orange-brand/15 to-transparent">
                     {player.image ? (
-                      <img
-                        src={player.image}
-                        alt={player.nickname}
-                        className="h-full w-full object-cover object-top"
-                      />
+                      <img src={player.image} alt={player.nickname} className="h-full w-full object-cover object-top" />
                     ) : null}
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-white">
-                      {player.nickname}
-                    </span>
+                    <span className="text-xs font-bold text-white">{player.nickname}</span>
                     <div className="flex items-center gap-2">
-                      {player.age && (
-                        <span className="text-2xs text-orange-soft/40">
-                          {player.age} år
-                        </span>
-                      )}
+                      {player.age && <span className="text-2xs text-orange-soft/40">{player.age} år</span>}
                       {player.twitter && (
-                        <a
-                          href={getTwitterUrl(player.twitter)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-orange-soft/30 hover:text-white"
-                        >
+                        <a href={getTwitterUrl(player.twitter)} target="_blank" rel="noopener noreferrer" className="text-orange-soft/30 hover:text-white">
                           <XTwitterIcon className="h-2.5 w-2.5" />
                         </a>
                       )}
@@ -269,9 +265,10 @@ function FeaturedTeam({
   );
 }
 
-// ==================================================
-// Team Logo og Navne-knap (Navne altid synlige)
-// ==================================================
+// ============================================================
+// TeamButton: Klikbar hold-knap med logo og navn
+// isActive fremhæver det aktuelt valgte hold med orange kant
+// ============================================================
 function TeamButton({
   team,
   isActive,
@@ -290,6 +287,7 @@ function TeamButton({
           : "border-orange-brand/10 bg-card hover:border-orange-brand/40 hover:bg-card-hover"
       }`}
     >
+      {/* Hold-logo med scale-animation ved hover */}
       <div className="relative h-12 w-12 sm:h-16 sm:w-16 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-105">
         {team.logoUrl ? (
           <img
@@ -300,12 +298,14 @@ function TeamButton({
             }`}
           />
         ) : (
+          // Fallback: Første 3 bogstaver fra holdnavnet
           <span className={`text-xl font-black ${isActive ? 'text-orange-brand' : 'text-orange-soft/50'}`}>
             {team.shortName.substring(0, 3).toUpperCase()}
           </span>
         )}
       </div>
 
+      {/* Holdnavn under logoet — afkortes med truncate hvis for langt */}
       <span
         className={`text-2xs sm:text-xs font-black uppercase tracking-wider text-center truncate w-full transition-colors duration-300 ${
           isActive ? "text-orange-brand" : "text-white group-hover:text-orange-brand"
@@ -317,9 +317,10 @@ function TeamButton({
   );
 }
 
-// ==================================================
-// Season Filter Dropdown
-// ==================================================
+// ============================================================
+// SeasonFilter: Dropdown til at skifte sæson
+// (Identisk implementation som i kampe/page.tsx)
+// ============================================================
 function SeasonFilter({
   seasons,
   selectedSeason,
@@ -332,16 +333,13 @@ function SeasonFilter({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Lukker dropdown ved klik udenfor
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -353,23 +351,15 @@ function SeasonFilter({
         className="flex items-center gap-2 rounded-lg border border-orange-brand/30 bg-gradient-to-r from-orange-brand/10 to-transparent px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-orange-soft transition-all hover:border-orange-brand/50 hover:bg-orange-brand/15 sm:px-5 sm:py-3"
       >
         <span className="text-label text-orange-brand sm:text-xs">FILTER</span>
-        <ChevronIcon
-          className={`h-4 w-4 transition-transform duration-300 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
+        <ChevronIcon className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
       </button>
-
       {isOpen && (
         <div className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-lg border border-orange-brand/30 bg-surface shadow-2xl">
           <div className="max-h-96 overflow-y-auto">
             {seasons.map((season, idx) => (
               <button
                 key={idx}
-                onClick={() => {
-                  onSelectSeason(season);
-                  setIsOpen(false);
-                }}
+                onClick={() => { onSelectSeason(season); setIsOpen(false); }}
                 className={`block w-full px-4 py-3 text-left text-sm transition-all ${
                   selectedSeason.name === season.name
                     ? "border-l-2 border-orange-brand bg-orange-brand/10 font-bold text-white"
@@ -386,22 +376,24 @@ function SeasonFilter({
   );
 }
 
-// ==================================================
-// Main Page (HoldPage)
-// ==================================================
+// ============================================================
+// HoldPage: Hoved-sidkomponent
+// ============================================================
 export default function HoldPage() {
   const [state, setState] = useState<FetchState>({ status: "loading" });
+  // selectedTeam holder det aktuelt valgte hold (null = ingen valgt)
   const [selectedTeam, setSelectedTeam] = useState<TeamData | null>(null);
 
+  // ============================================================
+  // Datahentning: Henter hold fra API'et
+  // ============================================================
   useEffect(() => {
     async function fetchTeams() {
       try {
         const res = await fetch(`/api/powerstats?type=${SEASON_ENDPOINT}`);
         if (!res.ok) {
           const errorData = await res.json().catch(() => ({}));
-          throw new Error(
-            errorData?.error || `API fejl: ${res.status} ${res.statusText}`
-          );
+          throw new Error(errorData?.error || `API fejl: ${res.status} ${res.statusText}`);
         }
 
         const json = await res.json();
@@ -409,6 +401,7 @@ export default function HoldPage() {
 
         if (!Array.isArray(seasons)) throw new Error("Ugyldigt svar fra API");
 
+        // Finder Grundspil-sæsonen
         const grundspilSeason = seasons.find((s: any) =>
           toLower(s.name).includes(GRUNDSPIL_MATCH)
         );
@@ -418,28 +411,23 @@ export default function HoldPage() {
         }
 
         const divisionName: string = grundspilSeason.name;
+        // Konverterer alle API-hold til TeamData-type
         const teams: TeamData[] = grundspilSeason.teams.map((team: any) =>
           mapTeam(team, divisionName)
         );
 
+        // Sorterer holdene alfabetisk efter shortName (dansk locale)
         teams.sort((a, b) =>
           (a.shortName || a.name).localeCompare(b.shortName || b.name, "da")
         );
 
+        // Sætter Tricked som standard-hold, falder tilbage på første hold
         const defaultTeam =
           teams.find(
-            (t) =>
-              toLower(t.shortName) === "tricked" ||
-              toLower(t.name).includes("tricked")
+            (t) => toLower(t.shortName) === "tricked" || toLower(t.name).includes("tricked")
           ) || teams[0];
 
-        setState({
-          status: "ok",
-          seasons,
-          selectedSeason: grundspilSeason,
-          teams,
-          divisionName,
-        });
+        setState({ status: "ok", seasons, selectedSeason: grundspilSeason, teams, divisionName });
         setSelectedTeam(defaultTeam);
       } catch (e: unknown) {
         setState({
@@ -452,42 +440,34 @@ export default function HoldPage() {
     fetchTeams();
   }, []);
 
+  // Skifter sæson og opdaterer holdlisten og standard-valget
   const handleSeasonChange = (newSeason: Season) => {
     if (state.status === "ok") {
       const teams: TeamData[] = newSeason.teams.map((team: any) =>
         mapTeam(team, newSeason.name)
       );
-
       teams.sort((a, b) =>
         (a.shortName || a.name).localeCompare(b.shortName || b.name, "da")
       );
-
       const defaultTeam =
-        teams.find(
-          (t) =>
-            toLower(t.shortName) === "tricked" ||
-            toLower(t.name).includes("tricked")
-        ) || teams[0];
+        teams.find((t) => toLower(t.shortName) === "tricked" || toLower(t.name).includes("tricked")) || teams[0];
 
-      setState({
-        status: "ok",
-        seasons: state.seasons,
-        selectedSeason: newSeason,
-        teams,
-        divisionName: newSeason.name,
-      });
+      setState({ status: "ok", seasons: state.seasons, selectedSeason: newSeason, teams, divisionName: newSeason.name });
       setSelectedTeam(defaultTeam);
     }
   };
 
   return (
     <main className="min-h-screen bg-background">
+      {/* Dekorative glow-cirkler */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-orange-brand opacity-[0.04] blur-3xl" />
         <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-10">
+
+        {/* Overskrift med filter til højre */}
         <header className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
           <div>
             <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
@@ -500,47 +480,40 @@ export default function HoldPage() {
           </div>
 
           {state.status === "ok" && (
-            <SeasonFilter
-              seasons={state.seasons}
-              selectedSeason={state.selectedSeason}
-              onSelectSeason={handleSeasonChange}
-            />
+            <SeasonFilter seasons={state.seasons} selectedSeason={state.selectedSeason} onSelectSeason={handleSeasonChange} />
           )}
         </header>
 
+        {/* Loading-tilstand */}
         {state.status === "loading" && (
           <div className="flex items-center justify-center py-32">
             <div className="flex flex-col items-center gap-3">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-brand/20 border-t-orange-brand" />
-              <p className="text-sm text-orange-soft/60">
-                Henter hold for {SEASON_NAME}…
-              </p>
+              <p className="text-sm text-orange-soft/60">Henter hold for {SEASON_NAME}…</p>
             </div>
           </div>
         )}
 
+        {/* Fejl-tilstand */}
         {state.status === "error" && (
           <div className="flex items-center justify-center py-32">
             <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-6 py-4 text-center">
               <p className="text-sm text-red-400">FEJL: {state.message}</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-3 rounded-full bg-orange-brand px-4 py-1.5 text-xs font-bold text-background"
-              >
+              <button onClick={() => window.location.reload()} className="mt-3 rounded-full bg-orange-brand px-4 py-1.5 text-xs font-bold text-background">
                 Prøv igen
               </button>
             </div>
           </div>
         )}
 
+        {/* Succes-tilstand */}
         {state.status === "ok" && (
           <>
+            {/* FeaturedTeam — vises øverst når et hold er valgt */}
             {selectedTeam ? (
-              <FeaturedTeam
-                team={selectedTeam}
-                onClose={() => setSelectedTeam(null)}
-              />
+              <FeaturedTeam team={selectedTeam} onClose={() => setSelectedTeam(null)} />
             ) : (
+              // Placeholder-besked når intet hold er valgt
               <div className="mb-8 rounded-lg border border-orange-brand/10 bg-card p-8 text-center">
                 <p className="text-sm text-orange-soft/40">
                   Vælg et hold nedenfor for at se holdopstillingen
@@ -548,6 +521,7 @@ export default function HoldPage() {
               </div>
             )}
 
+            {/* Hold-grid med klikbare logo-knapper */}
             <section>
               <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
                 {state.divisionName}{" "}
@@ -555,11 +529,13 @@ export default function HoldPage() {
                   ({state.teams.length} hold)
                 </span>
               </h3>
+              {/* flex-wrap tillader knapperne at fylde flere rækker */}
               <div className="flex flex-wrap gap-2 sm:gap-4 justify-start">
                 {state.teams.map((team, idx) => (
                   <TeamButton
                     key={`${team.shortName}-${idx}`}
                     team={team}
+                    // Et hold er aktivt hvis det er selectedTeam
                     isActive={
                       selectedTeam?.shortName === team.shortName &&
                       selectedTeam?.division === team.division

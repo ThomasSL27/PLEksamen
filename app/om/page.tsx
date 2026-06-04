@@ -1,20 +1,31 @@
+// ============================================================
+// Om Ligaen: app/om/page.tsx (Next.js App Router)
+// Informationsside med: Liga-struktur, præmiepulje og FAQ.
+// FaqItem-komponenten bruger CSS Grid til at animere højde.
+// "use client" er nødvendigt pga. useState i FaqItem.
+// ============================================================
 "use client";
 
 import { useState } from "react";
 
-// ==================================================
-// FAQ Item Komponent med CSS-Grid Højde Transition
-// ==================================================
+// ============================================================
+// FaqItem: Accordion-komponent til ofte stillede spørgsmål
+// Bruger CSS Grid height transition — den mest ydeevnestærke måde
+// at animere et elements højde fra 0 til "auto" i CSS.
+// ============================================================
 function FaqItem({ question, answer }: { question: string; answer: string }) {
+  // isOpen styrer om svaret er synligt
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="border-b border-orange-brand/10 py-5 transition-colors">
+      {/* Spørgsmål-knap: Klik toggler isOpen */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex w-full items-center justify-between text-left font-black uppercase tracking-tight text-white hover:text-orange-brand transition-colors focus:outline-none"
       >
         <span className="text-sm sm:text-base">{question}</span>
+        {/* Pil-ikon der roteres 180° når accordion er åben */}
         <span
           className={`transform transition-transform duration-305 text-orange-brand shrink-0 ml-4 ${
             isOpen ? "rotate-180" : ""
@@ -25,13 +36,19 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
           </svg>
         </span>
       </button>
-      
+
+      {/* ============================================================ */}
+      {/* Svar-container: CSS Grid animerer højde fra 0 til 1fr         */}
+      {/* grid-rows-[1fr] = fuld højde, grid-rows-[0fr] = ingen højde  */}
+      {/* overflow-hidden på den indre div skjuler indholdet ved 0fr    */}
+      {/* ============================================================ */}
       <div
         className={`grid transition-all duration-300 ease-in-out ${
           isOpen ? "grid-rows-[1fr] opacity-100 mt-3.5" : "grid-rows-[0fr] opacity-0"
         }`}
       >
         <div className="overflow-hidden">
+          {/* whitespace-pre-line bevarer linjeskift i svaret */}
           <p className="text-sm text-orange-soft/70 leading-relaxed max-w-3xl whitespace-pre-line">
             {answer}
           </p>
@@ -41,14 +58,14 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
-// ==================================================
-// Hovedside (Om Os / Info)
-// ==================================================
+// ============================================================
+// OmPage: Selve Om-sidens indhold
+// ============================================================
 export default function OmPage() {
   return (
     <main className="min-h-screen bg-background text-foreground font-sans overflow-hidden relative">
       <div className="relative z-10 mx-auto max-w-5xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-10">
-        
+
         {/* Sektionsoverskrift */}
         <header className="mb-12">
           <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
@@ -60,10 +77,12 @@ export default function OmPage() {
           <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand sm:w-20" />
         </header>
 
-        {/* Indholdsoversigt */}
+        {/* Sektioner med lodret mellemrum */}
         <div className="space-y-16">
-          
-          {/* 1. Swiss og CEPTER Divisionerne Beskrivelse */}
+
+          {/* ============================================================ */}
+          {/* Sektion 1: Ligastruktur — forklarer Swiss og CEPTER           */}
+          {/* ============================================================ */}
           <section className="space-y-4">
             <h2 className="text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
               Liga struktur
@@ -72,16 +91,19 @@ export default function OmPage() {
               Danmarks førende CS2-liga. Turneringen er opdelt i to tydelige sektioner: POWER Ligaen (VRS) og CEPTER Divisionerne.
             </p>
             <p className="text-sm sm:text-base leading-relaxed text-orange-soft/70 max-w-3xl">
-              POWER Ligaen køres som et Swiss-format med 16 hold — de 8 bedst placerede kvalificerer sig til en LAN-finale. 
+              POWER Ligaen køres som et Swiss-format med 16 hold — de 8 bedst placerede kvalificerer sig til en LAN-finale.
               Holdene kommer ind via én af fire kvalifikationer, mens CEPTER Divisionerne fortsætter som separate divisioner med oprykning, nedrykning og egne præmiepuljer.
             </p>
           </section>
 
-          {/* 2. Præmiepulje Highlight (Fremhævet råt og markant) */}
+          {/* ============================================================ */}
+          {/* Sektion 2: Præmiepulje — fremhævet markant i stor skrift      */}
+          {/* ============================================================ */}
           <section className="border-t border-orange-brand/10 pt-10">
             <p className="text-label font-black uppercase tracking-widest text-orange-brand mb-2">
               Sæsonens samlede præmiepulje
             </p>
+            {/* Stor orange beløbstekst med glow-skygge */}
             <h2 className="text-5xl sm:text-7xl font-black uppercase tracking-tighter text-white leading-none">
               <span className="text-orange-brand drop-shadow-[0_0_30px_rgba(var(--brand-orange-rgb),0.25)]">160.000 KR.</span>
             </h2>
@@ -90,10 +112,12 @@ export default function OmPage() {
             </p>
           </section>
 
-          {/* 3. Pengefordeling (Udarbejdet som råt CSS-layout uden baggrundskasser) */}
+          {/* ============================================================ */}
+          {/* Sektion 3: Pengefordeling — to kolonner med lister            */}
+          {/* ============================================================ */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-orange-brand/10 pt-10">
-            
-            {/* POWER Ligaen Præmiefordeling */}
+
+            {/* POWER Ligaen præmiefordeling */}
             <div className="space-y-4">
               <div className="border-b border-orange-brand/10 pb-2">
                 <h3 className="text-lg font-black uppercase tracking-tight text-white">Power Ligaen</h3>
@@ -127,7 +151,7 @@ export default function OmPage() {
               </ul>
             </div>
 
-            {/* Divisionerne Præmiefordeling */}
+            {/* Divisionernes præmiefordeling */}
             <div className="space-y-4">
               <div className="border-b border-orange-brand/10 pb-2">
                 <h3 className="text-lg font-black uppercase tracking-tight text-white">Divisionerne</h3>
@@ -164,12 +188,15 @@ export default function OmPage() {
 
           </section>
 
-          {/* 4. FAQ Sektion */}
+          {/* ============================================================ */}
+          {/* Sektion 4: FAQ med accordion-items                            */}
+          {/* ============================================================ */}
           <section className="border-t border-orange-brand/10 pt-10">
             <h2 className="text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm mb-4">
               Ofte stillede spørgsmål (FAQ)
             </h2>
             <div className="flex flex-col">
+              {/* Hvert FaqItem er en selvstændig accordion */}
               <FaqItem
                 question="Hvordan tilmelder man sig POWER Ligaen?"
                 answer="POWER Ligaen er en lukket liga, hvor hold kvalificerer sig gennem fire kvalifikationsturneringer. Tilmeldingen til kvalifikationerne åbner mellem sæsonerne via Dust2.dk — hold øje med nyheder. Sørg for at holde jer opdateret på vores officielle kanaler for at få besked om åbning af tilmeldingen."

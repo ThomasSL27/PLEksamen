@@ -1,12 +1,22 @@
+// ============================================================
+// Stillinger: app/stillinger/page.tsx (Next.js App Router)
+// Viser Swiss Bracket-struktur og CEPTER divisions-standings.
+// Swiss Bracket: 16 hold spiller med W/L-record (0:0 → 3:0 eller 0:3).
+// Responsive: Mobil har tab-navigation, desktop viser hele bracketet.
+// "use client" er nødvendigt pga. useState, useEffect og tab-navigation.
+// ============================================================
 "use client";
 import { useEffect, useState } from "react";
 
-// ==================================================
-// TYPER & KONSTANTER
-// ==================================================
-const SEASON_ENDPOINT = "a/31";
+// ============================================================
+// Konstanter
+// ============================================================
+const SEASON_ENDPOINT = "a/31"; // API endpoint-parameter
 const SEASON_NAME = "Sæson 31";
 
+// ============================================================
+// Typer: Beskriver API-datastrukturen
+// ============================================================
 interface Team {
   _id: string;
   name: string;
@@ -19,7 +29,7 @@ interface Standing {
   matches: number;
   wins: number;
   losses: number;
-  rd: number;
+  rd: number;     // Round difference
   points: number;
 }
 
@@ -28,19 +38,20 @@ interface DivisionData {
   standings: Standing[];
 }
 
+// FetchState er en discriminated union: enten loading, error eller ok
 type FetchState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | {
       status: "ok";
-      grundspilTeams: Team[];
-      divisions: DivisionData[];
+      grundspilTeams: Team[];   // Alle 16 hold i Swiss Bracket
+      divisions: DivisionData[]; // CEPTER-divisioner med standings
     };
 
-// ==================================================
-// KOMPONENTER
-// ==================================================
-
+// ============================================================
+// SwissPool: Viser én runde i Swiss Bracket med kamp-par
+// columns-prop tillader grid-layout med flere kolonner
+// ============================================================
 function SwissPool({
   title,
   matches,
@@ -53,10 +64,12 @@ function SwissPool({
   return (
     <div className="flex flex-col gap-2 w-full">
       <div className="border border-orange-brand/15 rounded-xl p-3 bg-gradient-to-b from-card to-card-deep shadow-2xl">
+        {/* Runde-titel øverst, fx "0:0", "1:0", "2:1 • Decider" */}
         <h3 className="text-center text-label font-black text-orange-brand mb-3 uppercase tracking-widest border-b border-orange-brand/10 pb-1.5">
           {title}
         </h3>
-        
+
+        {/* Dynamisk grid med columns-prop til at styre antal kolonner */}
         <div
           style={{
             display: "grid",
@@ -65,10 +78,12 @@ function SwissPool({
           }}
         >
           {matches.map((m, i) => (
+            // Hvert kamp-par viser to holdlogoer med "VS" imellem
             <div
               key={i}
               className="flex items-center justify-between gap-3 bg-background/60 border border-orange-brand/5 hover:border-orange-brand/30 p-2 rounded-lg transition-all duration-300"
             >
+              {/* Hold 1 logo */}
               <div className="h-7 w-7 flex items-center justify-center shrink-0">
                 {m.team1?.logoUrl ? (
                   <img
@@ -84,6 +99,7 @@ function SwissPool({
 
               <span className="text-2xs font-black text-orange-brand/40 select-none">VS</span>
 
+              {/* Hold 2 logo */}
               <div className="h-7 w-7 flex items-center justify-center shrink-0">
                 {m.team2?.logoUrl ? (
                   <img
@@ -104,6 +120,10 @@ function SwissPool({
   );
 }
 
+// ============================================================
+// FinalSelection: Viser de 8 kvalificerede eller eliminerede hold
+// isWinner bestemmer farverne (grøn = kvalificeret, rød = elimineret)
+// ============================================================
 function FinalSelection({
   teams,
   isWinner,
@@ -111,18 +131,21 @@ function FinalSelection({
   teams: Team[];
   isWinner: boolean;
 }) {
+  // Farver skifter baseret på om holdene er kvalificeret eller elimineret
   const borderColor = isWinner ? "border-green-500/30" : "border-red-500/20";
   const glowShadow = isWinner ? "shadow-[0_0_20px_rgba(34,197,94,0.05)] bg-gradient-to-b from-winner to-background" : "shadow-none bg-card/40";
   const badgeColor = isWinner ? "bg-green-500/10 text-green-400 border-green-500/20" : "bg-red-500/10 text-red-500 border-red-500/20";
 
   return (
     <div className={`border ${borderColor} ${glowShadow} rounded-2xl p-4 w-full shadow-2xl`}>
+      {/* Status-badge: "Kvalificeret • LAN" eller "Elimineret" */}
       <div className="text-center mb-4">
         <span className={`inline-block text-2xs font-black uppercase tracking-widest border px-2.5 py-1 rounded-full ${badgeColor}`}>
           {isWinner ? "Kvalificeret • LAN" : "Elimineret"}
         </span>
       </div>
 
+      {/* 4-kolonne grid med holdlogoer */}
       <div className="grid grid-cols-4 gap-3 justify-center items-center">
         {teams.map((t, i) => (
           <div
@@ -146,6 +169,9 @@ function FinalSelection({
   );
 }
 
+// ============================================================
+// StandingTable: Viser standings-tabel for én division
+// ============================================================
 function StandingTable({
   title,
   standings,
@@ -164,8 +190,10 @@ function StandingTable({
         </span>
       </div>
 
+      {/* Standings-tabel med overskriftsrække og datarrækker */}
       <div className="border border-orange-brand/10 rounded-xl overflow-hidden bg-gradient-to-b from-card/80 to-medium/80 shadow-2xl">
         <table className="w-full text-left text-xs">
+          {/* Overskriftsrække */}
           <thead className="text-orange-brand uppercase border-b border-orange-brand/10 bg-orange-brand/5 select-none">
             <tr>
               <th className="p-3 w-10 text-center font-black">#</th>
@@ -182,9 +210,11 @@ function StandingTable({
                 key={i}
                 className="border-b border-white/[0.02] hover:bg-orange-brand/5 transition-colors duration-200"
               >
+                {/* Placering */}
                 <td className="p-3 text-center font-black text-orange-brand">
                   {i + 1}
                 </td>
+                {/* Holdnavn med logo */}
                 <td className="p-3 flex items-center gap-3">
                   <div className="h-6 w-6 flex items-center justify-center shrink-0">
                     <img
@@ -210,13 +240,17 @@ function StandingTable({
   );
 }
 
-// ==================================================
-// MAIN PAGE WITH MOBILE TAB RESPONSIVENESS
-// ==================================================
+// ============================================================
+// SwissStillinger: Hoved-sidkomponent
+// ============================================================
 export default function SwissStillinger() {
   const [state, setState] = useState<FetchState>({ status: "loading" });
-  const [mobileRound, setMobileRound] = useState(0); // 0 = R1, 1 = R2, 2 = R3, 3 = R4, 4 = Finaler
+  // mobileRound tracker hvilken runde der vises på mobil (0=R1, 1=R2, osv.)
+  const [mobileRound, setMobileRound] = useState(0);
 
+  // ============================================================
+  // Datahentning: Henter hold- og divisionsdata fra API'et
+  // ============================================================
   useEffect(() => {
     async function fetchData() {
       try {
@@ -225,11 +259,13 @@ export default function SwissStillinger() {
 
         const allSeasons: any[] = json.data || [];
 
+        // Finder Grundspil-sæsonen (ikke CEPTER)
         const grundspil = allSeasons.find((s: any) =>
           s.name.toLowerCase().includes("grundspil") &&
           !s.name.toLowerCase().includes("cepter")
         );
 
+        // Hjælpefunktioner til at konvertere API-objekter til typer
         const toTeam = (t: any): Team => ({
           _id: t._id || "",
           name: t.name || "Ukendt",
@@ -239,12 +275,13 @@ export default function SwissStillinger() {
 
         const toStanding = (t: any): Standing => ({
           team: toTeam(t),
-          matches: 0, wins: 0, losses: 0, rd: 0, points: 0,
+          matches: 0, wins: 0, losses: 0, rd: 0, points: 0, // Placeholder-værdier
         });
 
+        // Alle 16 Grundspil-hold bruges til Swiss Bracket
         const grundspilTeams: Team[] = (grundspil?.teams || []).map(toTeam);
 
-        // CEPTER division-sæsoner til leaderboards
+        // Finder alle CEPTER division-sæsoner til leaderboards
         const divisionSeasons = allSeasons.filter((s: any) =>
           s.name.toLowerCase().includes("cepter") && (s.teams?.length ?? 0) > 0
         );
@@ -253,7 +290,7 @@ export default function SwissStillinger() {
 
         if (divisionSeasons.length > 0) {
           divisions = divisionSeasons.map((s: any) => {
-            // Udtræk kortere navn: "CEPTER Divisionerne Sæson 31 - 1 Division - Grundspil • Sæson 31" → "1 Division"
+            // Forkorter divisionsnavnet: Fjerner "CEPTER Divisionerne Sæson XX - " og "- Grundspil..."
             const shortName = s.name
               .replace(/cepter divisionerne sæson \d+\s*[-–]\s*/i, "")
               .replace(/\s*[-–]\s*grundspil.*$/i, "")
@@ -264,7 +301,7 @@ export default function SwissStillinger() {
             };
           });
         } else {
-          // Fallback: opdel grundspil-hold i grupper
+          // Fallback: Opdeler grundspil-hold i grupper på 8 hvis ingen CEPTER-divisioner
           const chunk = <T,>(arr: T[], size: number): T[][] =>
             Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
               arr.slice(i * size, i * size + size)
@@ -284,6 +321,7 @@ export default function SwissStillinger() {
     fetchData();
   }, []);
 
+  // Loading-tilstand
   if (state.status === "loading") {
     return (
       <main className="min-h-screen bg-background flex items-center justify-center">
@@ -295,6 +333,7 @@ export default function SwissStillinger() {
     );
   }
 
+  // Fejl-tilstand
   if (state.status === "error") {
     return (
       <main className="min-h-screen bg-background flex items-center justify-center p-8">
@@ -303,8 +342,13 @@ export default function SwissStillinger() {
     );
   }
 
+  // t er et alias til grundspilTeams for kortere kode
   const t = state.grundspilTeams;
 
+  // ============================================================
+  // dummyMatch: Hjælpefunktion til at oprette kamp-par fra hold-array
+  // idx1 og idx2 er indeks i grundspilTeams-arrayet
+  // ============================================================
   const dummyMatch = (idx1: number, idx2: number) => ({
     team1: t[idx1] || null,
     team2: t[idx2] || null,
@@ -312,14 +356,15 @@ export default function SwissStillinger() {
 
   return (
     <main className="min-h-screen bg-background text-white font-sans overflow-hidden relative">
+      {/* Dekorative glow-cirkler i baggrunden */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-20 right-10 h-96 w-96 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
         <div className="absolute bottom-10 left-10 h-72 w-72 rounded-full bg-orange-brand opacity-[0.03] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-10">
-        
-        {/* HEADER */}
+
+        {/* Sektionsoverskrift */}
         <header className="mb-12">
           <p className="mb-1 text-label font-black uppercase tracking-widest text-orange-brand sm:text-xs">
             Power Ligaen • {SEASON_NAME}
@@ -330,7 +375,9 @@ export default function SwissStillinger() {
           <div className="mt-2 h-0.5 w-16 rounded-full bg-orange-brand sm:w-20" />
         </header>
 
-        {/* SWISS SYSTEM BRACKET */}
+        {/* ============================================================ */}
+        {/* Swiss Bracket                                                  */}
+        {/* ============================================================ */}
         <section className="mb-20">
           <div className="mb-6">
             <h2 className="text-xs font-black uppercase tracking-widest text-orange-brand sm:text-sm">
@@ -338,7 +385,10 @@ export default function SwissStillinger() {
             </h2>
           </div>
 
-          {/* MOBIL MENU (Kun synlig på mobile enheder under md-skærmstørrelse) */}
+          {/* ============================================================ */}
+          {/* MOBIL TAB-NAVIGATION: Viser én runde ad gangen               */}
+          {/* overflow-x-auto tillader horisontal scrolling af tabs        */}
+          {/* ============================================================ */}
           <div className="flex md:hidden overflow-x-auto gap-2 pb-4 mb-6 select-none border-b border-white/5 scrollbar-none">
             {["Runde 1", "Runde 2", "Runde 3", "Runde 4", "Playoff"].map((roundName, idx) => (
               <button
@@ -346,8 +396,8 @@ export default function SwissStillinger() {
                 onClick={() => setMobileRound(idx)}
                 className={`flex-shrink-0 px-4 py-2.5 rounded-lg text-xs font-black uppercase tracking-wide transition-all border ${
                   mobileRound === idx
-                    ? "bg-orange-brand text-background border-orange-brand"
-                    : "bg-input text-orange-soft/45 border-orange-brand/10 hover:border-orange-brand/30"
+                    ? "bg-orange-brand text-background border-orange-brand"  // Aktiv tab
+                    : "bg-input text-orange-soft/45 border-orange-brand/10 hover:border-orange-brand/30" // Inaktiv tab
                 }`}
               >
                 {roundName}
@@ -355,19 +405,25 @@ export default function SwissStillinger() {
             ))}
           </div>
 
-          {/* MOBIL VISNING (Viser kun den aktuelt tilvalgte runde) */}
+          {/* ============================================================ */}
+          {/* MOBIL VISNING: Kun den aktuelt valgte runde vises             */}
+          {/* Betinget rendering via mobileRound-state                     */}
+          {/* ============================================================ */}
           <div className="flex md:hidden w-full">
             {mobileRound === 0 && (
+              // Runde 1: 8 kampe, alle hold starter 0:0
               <SwissPool title="Runde 1 • 0:0" matches={Array(8).fill(null).map((_, i) => dummyMatch(i, i + 8))} />
             )}
             {mobileRound === 1 && (
               <div className="flex flex-col gap-6 w-full">
+                {/* Runde 2: 1:0-pulje (4 kampe) og 0:1-pulje (4 kampe) */}
                 <SwissPool title="Runde 2 • 1:0" matches={Array(4).fill(null).map((_, i) => dummyMatch(i, i + 1))} />
                 <SwissPool title="Runde 2 • 0:1" matches={Array(4).fill(null).map((_, i) => dummyMatch(i + 4, i + 5))} />
               </div>
             )}
             {mobileRound === 2 && (
               <div className="flex flex-col gap-6 w-full">
+                {/* Runde 3: Tre puljer (2:0, 1:1 og 0:2) */}
                 <SwissPool title="Runde 3 • 2:0" matches={Array(2).fill(null).map((_, i) => dummyMatch(i, i + 1))} />
                 <SwissPool title="Runde 3 • 1:1" matches={Array(4).fill(null).map((_, i) => dummyMatch(i + 2, i + 3))} />
                 <SwissPool title="Runde 3 • 0:2" matches={Array(2).fill(null).map((_, i) => dummyMatch(i + 6, i + 7))} />
@@ -375,12 +431,14 @@ export default function SwissStillinger() {
             )}
             {mobileRound === 3 && (
               <div className="flex flex-col gap-6 w-full">
+                {/* Runde 4: To puljer (2:1 og 1:2) */}
                 <SwissPool title="Runde 4 • 2:1" matches={Array(3).fill(null).map((_, i) => dummyMatch(i, i + 1))} />
                 <SwissPool title="Runde 4 • 1:2" matches={Array(3).fill(null).map((_, i) => dummyMatch(i + 3, i + 4))} />
               </div>
             )}
             {mobileRound === 4 && (
               <div className="flex flex-col gap-6 w-full">
+                {/* Finaler: Top 8 kvalificerede, 3 decider-kampe, bundhold elimineret */}
                 <FinalSelection teams={t.slice(0, 8)} isWinner={true} />
                 <SwissPool title="2:2 • Decider" matches={Array(3).fill(null).map((_, i) => dummyMatch(i, i + 1))} />
                 <FinalSelection teams={t.slice(8, 16)} isWinner={false} />
@@ -388,103 +446,62 @@ export default function SwissStillinger() {
             )}
           </div>
 
-          {/* DESKTOP VISNING (Hele det brede sidelayout indlæses – skjult på mobil) */}
+          {/* ============================================================ */}
+          {/* DESKTOP VISNING: Hele bracketet side om side                  */}
+          {/* hidden md:flex — skjult på mobil, flex på desktop             */}
+          {/* ============================================================ */}
           <div className="hidden md:flex gap-10 items-start overflow-x-auto pb-6 select-none leading-none px-0">
-            {/* RUNDE 1 */}
+
+            {/* RUNDE 1: 8 kampe, alle starter 0:0 */}
             <div className="flex flex-col pt-16 flex-shrink-0">
               <SwissPool
                 title="0:0"
-                matches={Array(8)
-                  .fill(null)
-                  .map((_, i) => dummyMatch(i, i + 8))}
+                matches={Array(8).fill(null).map((_, i) => dummyMatch(i, i + 8))}
               />
             </div>
 
-            {/* RUNDE 2 */}
+            {/* RUNDE 2: To puljer (1:0 vindere og 0:1 tabere) */}
             <div className="flex flex-col gap-6 flex-shrink-0">
-              <SwissPool
-                title="1:0"
-                matches={Array(4)
-                  .fill(null)
-                  .map((_, i) => dummyMatch(i, i + 1))}
-              />
-              <SwissPool
-                title="0:1"
-                matches={Array(4)
-                  .fill(null)
-                  .map((_, i) => dummyMatch(i + 4, i + 5))}
-              />
+              <SwissPool title="1:0" matches={Array(4).fill(null).map((_, i) => dummyMatch(i, i + 1))} />
+              <SwissPool title="0:1" matches={Array(4).fill(null).map((_, i) => dummyMatch(i + 4, i + 5))} />
             </div>
 
-            {/* RUNDE 3 */}
+            {/* RUNDE 3: Tre puljer */}
             <div className="flex flex-col gap-6 flex-shrink-0">
-              <SwissPool
-                title="2:0"
-                matches={Array(2)
-                  .fill(null)
-                  .map((_, i) => dummyMatch(i, i + 1))}
-              />
-              <SwissPool
-                title="1:1"
-                matches={Array(4)
-                  .fill(null)
-                  .map((_, i) => dummyMatch(i + 2, i + 3))}
-              />
-              <SwissPool
-                title="0:2"
-                matches={Array(2)
-                  .fill(null)
-                  .map((_, i) => dummyMatch(i + 6, i + 7))}
-              />
+              <SwissPool title="2:0" matches={Array(2).fill(null).map((_, i) => dummyMatch(i, i + 1))} />
+              <SwissPool title="1:1" matches={Array(4).fill(null).map((_, i) => dummyMatch(i + 2, i + 3))} />
+              <SwissPool title="0:2" matches={Array(2).fill(null).map((_, i) => dummyMatch(i + 6, i + 7))} />
             </div>
 
-            {/* RUNDE 4 */}
+            {/* RUNDE 4: To puljer */}
             <div className="flex flex-col gap-6 pt-20 flex-shrink-0">
-              <SwissPool
-                title="2:1"
-                matches={Array(3)
-                  .fill(null)
-                  .map((_, i) => dummyMatch(i, i + 1))}
-              />
-              <SwissPool
-                title="1:2"
-                matches={Array(3)
-                  .fill(null)
-                  .map((_, i) => dummyMatch(i + 3, i + 4))}
-              />
+              <SwissPool title="2:1" matches={Array(3).fill(null).map((_, i) => dummyMatch(i, i + 1))} />
+              <SwissPool title="1:2" matches={Array(3).fill(null).map((_, i) => dummyMatch(i + 3, i + 4))} />
             </div>
 
-            {/* FINALER / STATUS BRACKET */}
+            {/* FINALER: Kvalificerede, decider-kampe og eliminerede */}
             <div className="flex flex-col gap-6 flex-shrink-0">
-              <FinalSelection
-                teams={t.slice(0, 8)}
-                isWinner={true}
-              />
-
+              {/* Top 8 (hold 0-7) er kvalificeret til LAN */}
+              <FinalSelection teams={t.slice(0, 8)} isWinner={true} />
               <div>
-                <SwissPool
-                  title="2:2 • Decider"
-                  matches={Array(3)
-                    .fill(null)
-                    .map((_, i) => dummyMatch(i, i + 1))}
-                />
+                {/* Tre 2:2-hold spiller decider for den last chance */}
+                <SwissPool title="2:2 • Decider" matches={Array(3).fill(null).map((_, i) => dummyMatch(i, i + 1))} />
               </div>
-
-              <FinalSelection
-                teams={t.slice(8, 16)}
-                isWinner={false}
-              />
+              {/* Bundhold (8-15) er elimineret */}
+              <FinalSelection teams={t.slice(8, 16)} isWinner={false} />
             </div>
           </div>
         </section>
 
-        {/* DIVISIONER - STANDINGSTABELLER */}
+        {/* ============================================================ */}
+        {/* CEPTER Divisions-standings: 2-kolonne grid                    */}
+        {/* ============================================================ */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-16">
           {state.divisions.map((div, idx) => (
             <StandingTable key={idx} title={div.name} standings={div.standings} />
           ))}
         </section>
-        
+
       </div>
     </main>
   );
