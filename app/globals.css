@@ -27,11 +27,6 @@
   --bg-player: #141414;
   --bg-player-rgb: 20, 20, 20;
   --bg-winner: #1a2d1d;
-
-  /*
-    Fixed nav i TheNav: py-8 + logo h-20 (ca. 9rem samlet).
-    Bruges til padding-top på sidens indhold, så det ikke ligger under navbaren.
-  */
   --nav-height: 9rem;
 }
 
@@ -72,7 +67,19 @@
 }
 
 /* =========================================
-   3) Globale base styles
+   3) Mobil typografi — minimum 16px
+   Unlayered CSS har højere prioritet end Tailwinds @layer utilities,
+   så denne regel overskriver text-xs, text-sm osv. på mobil.
+   max-width: 639px = under Tailwinds "sm" breakpoint (640px).
+   ========================================= */
+@media (max-width: 639px) {
+  :not(h1, h2, h3, h4, h5, h6, span) {
+    font-size: 1rem; /* 16px */
+  }
+}
+
+/* =========================================
+   4) Globale base styles
    ========================================= */
 @layer base {
   /*
